@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import Results from './components/Results';
+import Edit from './components/Edit';
 import './index.css';
 
 import {Provider} from 'react-redux';
@@ -25,8 +26,9 @@ ReactDOM.render(
 				<Header />
 				<main>
 					<Switch>
-						<Route path="/results" component={Results} />
-						<Route path="/" component={Home} />
+						<Route path="/edit" component={ Edit } />
+						<Route path="/results" component={ Results } />
+						<Route path="/" component={ Home } />
 					</Switch>
 				</main>
 				<Footer />
