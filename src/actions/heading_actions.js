@@ -1,6 +1,6 @@
-import { FETCH_PLAYERS} from './action_types';
+import { FETCH_HEADINGS } from './action_types';
 import * as firebase from 'firebase';
-//import database from '../database.js';
+// import firebase from './player_actions.js';
 // const initialState = {
 // 						"348239847293847": {firstName: "Belinda", "lastName":  "Berthins", "birthYear": 2004}, 
 // 						"454354243542435": {firstName: "Orwell", "lastName": "Rights", "birthYear": 1985}, 
@@ -8,20 +8,8 @@ import * as firebase from 'firebase';
 // 					}
 
 
-  // Initialize Firebase
-  var config = {
-    apiKey: "AIzaSyBUFYaNTBSu5bkFcK5dsxaDIuagON__To4",
-    authDomain: "nhl-players-f43b3.firebaseapp.com",
-    databaseURL: "https://nhl-players-f43b3.firebaseio.com",
-    projectId: "nhl-players-f43b3",
-    storageBucket: "nhl-players-f43b3.appspot.com",
-    messagingSenderId: "428887673172"
-  };
-  firebase.initializeApp(config);
-
-export const database = firebase.database();
-
-const ref = database.ref('/')
+const database = firebase.database();
+const ref = database.ref('/headings')
 
 
 // let nextTodoId = 0;
@@ -33,11 +21,11 @@ const ref = database.ref('/')
 // 	}
 // }
 
-export function fetchPlayers() {
+export function fetchHeadings() {
 	return dispatch => {
 		ref.on('value', snapshot => {
 			dispatch({
-				type: FETCH_PLAYERS,
+				type: FETCH_HEADINGS,
 				payload: snapshot.val()
 			})
 		})
@@ -55,12 +43,12 @@ export function fetchPlayers() {
 //   }
 // }
 
-export function addPlayer(player){
-  return dispatch => ref.push(player)
-}
-export function deletePlayer(key) {
-	return dispatch => ref.child(key).remove();
-}
+// export function addPlayer(player){
+//   return dispatch => ref.push(player)
+// }
+// export function deletePlayer(key) {
+// 	return dispatch => ref.child(key).remove();
+// }
 
 // export function deletePlayer(key){
 // 	return {

@@ -126,7 +126,7 @@ header, footer {
 	letter-spacing: -2px;
 	font-size: 13px;
 }
-header span.reg, footer span.reg{
+span.reg{
 	font-family: 'Roboto Condensed', sans-serif;
 	letter-spacing: inherit;
 	font-size: 18px;
@@ -196,4 +196,33 @@ section.search .svg-container {
 
 section.search svg path {
 	fill: #FFF;
+}
+
+/*----------------------------  Title  ---------------------------*/
+
+div.title{
+	padding: 40px 5px;
+}
+
+h1{
+	font-family: 'Glyphter', sans-serif;
+	color: #FD9C47;
+	letter-spacing: -32px;
+	margin: 0;
+	padding: 0;
+}
+
+h1, h1 span.reg{
+	font-size: 80px;
+    line-height: 56px;
+}
+h1 span.reg{
+	padding: 0 12px 0 20px;
+}
+h1.flipped{
+	color: #000000;
+    -moz-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
+    -o-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
+    -webkit-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
+    transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
 }
