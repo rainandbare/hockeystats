@@ -21,8 +21,7 @@ class PlayerList extends Component {
 	render(){
 		const players = this.props.players;
 		const keys = Object.keys(this.props.players);
-		const rowHeadings = ["Name", "Birth City", "Birth ProvinceState", "Birth Country", "Birth Date", "Birth Year", "Death City", "Death ProvinceState", "Death Country", "Death Date", "Death Year", "Age at Death", "Age as Fraction", "Cause of Death", "Post-Career Work Summary", "Era", "NHL Career"];
-		
+		const rowHeadings = Object.values(this.props.headings);
 		return(
 			<div className="playerList">
 		      	<table>
@@ -40,7 +39,6 @@ class PlayerList extends Component {
 			                  </tr>
 			                );
 			              })}
-		      			{console.log(this.props.edit)}
 		      		</tbody>
 		      	</table>
 	      	</div>
@@ -50,7 +48,8 @@ class PlayerList extends Component {
 
 function mapStateToProps(state){
 	return {
-		players: state.players
+		players: state.players,
+		headings: state.headings
 	}
 }
 

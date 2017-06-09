@@ -56,10 +56,10 @@ export function fetchPlayers() {
 // }
 
 export function addPlayer(player){
-  return dispatch => ref.push(player)
+  return dispatch => database.ref('/playersList').push(player)
 }
 export function deletePlayer(key) {
-	return dispatch => ref.child(key).remove();
+	return dispatch => database.ref('/playersList').child(key).remove();
 }
 
 // export function deletePlayer(key){

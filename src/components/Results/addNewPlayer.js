@@ -23,7 +23,7 @@ class AddPlayerForm extends Component {
 		
 	}
 	onSubmit(values){
-		console.log(values);
+		// console.log(values);
 		this.props.addPlayer(values);
 		this.props.showForm(false);
 	}
@@ -33,18 +33,18 @@ class AddPlayerForm extends Component {
 		return(
 			<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 				<Field
-					name="firstName"
-					label="First Name"
+					name="name"
+					label="Name"
 					component={this.renderField}
 				/>
 				<Field
-					name="lastName"
-					label="Last Name"
+					name="birthCity"
+					label="Birth City"
 					component={this.renderField}
 				/>
 				<Field 
-					name="birthyear"
-					label="Birth Year"
+					name="birthDate"
+					label="Birth Date"
 					component={this.renderField}
 				/>
 				<button type="submit">Add Player</button>
@@ -56,14 +56,14 @@ class AddPlayerForm extends Component {
 function validate(values){
 	const errors = {};
 
-	if (!values.firstName) {
-		errors.firstName = "Enter the players First Name."
+	if (!values.name) {
+		errors.name = "Enter the player's Name. (LastName, FirstName)";
 	}
-	if (!values.lastName) {
-		errors.lastName = "Enter the players Last Name."
+	if (!values.birthCity) {
+		errors.birthCity = "Enter the players Birth City.";
 	}
-	if (!values.birthyear) {
-		errors.birthyear = "Enter the players Birth Year."
+	if (!values.birthDate) {
+		errors.birthDate = "Enter the players Birth Date.";
 	}
 
 	return errors;

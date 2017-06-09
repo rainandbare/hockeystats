@@ -4,7 +4,7 @@ import { FETCH_HEADINGS } from '../actions/action_types.js'
 export function headingReducer(state = {}, action) {
 	switch(action.type){
 		case FETCH_HEADINGS:
-		console.log(action.payload, 'from HEADING REDUCER')
+		//console.log(action.payload, 'from HEADING REDUCER')
 			return action.payload
 		// case ADD_HEADING:
 		// 	const newState = {
