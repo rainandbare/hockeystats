@@ -182,11 +182,24 @@ section.socialFooter{
 section.socialFooter > *{
 	padding: 10px;
 }
+
+/*----------------------------  HOME ---------------------------*/
+.home{
+	margin: 0;
+	padding: 30px 30px 90px;
+	width: 100%;
+	height: 100vh;
+	background-image: url(assets/bobbyorrdive.png);
+	background-size: cover;
+}
+
+
 /*----------------------------  MAIN ---------------------------*/
 
-main {
-	margin-top: 30px;
+main > div.page {
+	margin: 30px 30px 90px;
 }
+
 
 /*----------------------------  SEARCH ---------------------------*/
 
@@ -198,7 +211,7 @@ section.search svg path {
 	fill: #FFF;
 }
 
-/*----------------------------  Title  ---------------------------*/
+/*----------------------------  TITLE  ---------------------------*/
 
 div.title{
 	padding: 40px 5px;
@@ -226,3 +239,33 @@ h1.flipped{
     -webkit-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
     transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
 }
+
+/*
+----------------------- PLAYER LIST -------------------------------------*/
+div.playerList{
+	display: flex;
+	user-select: none;
+}
+
+
+th, td {
+	white-space: nowrap;
+	text-align: left;
+	padding-right: 15px;
+	border-bottom: 1px solid grey;
+	height: 28px;
+}
+
+table.scrollableTable {
+	overflow-x: scroll;
+    width: 100%;
+    display: block;
+    position: relative;
+    padding-bottom: 25px;
+}
+
+
+
+/*table tr:first-child { 
+	width: 20% 
+} */

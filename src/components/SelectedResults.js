@@ -4,15 +4,16 @@ import Title from './title.js';
 import PlayerList from './playerList.js';
 
 
-class Results extends Component {
+class SelectedResults extends Component {
 	render() {
 	    return (
-	      <div className="results page">
+	      <div className="selectedresults results page">
 	      	<Title />
+	      	<div>Selected Results!</div>
 	      	<PlayerList/>
 	      </div>
 	    );
 	}
 }
 
-export default Results;
+export default SelectedResults;

@@ -9,6 +9,7 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import Results from './components/Results';
+import SelectedResults from './components/SelectedResults';
 import Edit from './components/Edit';
 import './index.css';
 
@@ -26,6 +27,7 @@ ReactDOM.render(
 				<Header />
 				<main>
 					<Switch>
+						<Route path="/info/*" component={ SelectedResults } />
 						<Route path="/edit" component={ Edit } />
 						<Route path="/results" component={ Results } />
 						<Route path="/" component={ Home } />

@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { fetchPlayers, deletePlayer } from '../actions/player_actions.js';
+import { fetchPlayers, deletePlayer, editPlayer } from '../actions/player_actions.js';
 import { fetchHeadings } from '../actions/heading_actions.js';
+import EditPlayerForm from './Results/editPlayer';
+
 
 class PlayerList extends Component {
 		constructor(props){
 		super(props);
 		this.state = {
 			name: '',
-			showForm: false
+			showEditForm: false,
+			editPlayerID: ''
 		}
 	}
 	componentDidMount(){
@@ -18,29 +21,90 @@ class PlayerList extends Component {
 	onDeletePlayer(e){
 		this.props.deletePlayer(e.target.id)
 	}
+	onEditPlayer(e){
+		const info = {
+						name: "Joe Dimajio",
+						age: 12,
+					};
+		this.props.editPlayer(e.target.id, info)
+		console.log("edit this player");
+	}
+	onToggleEditForm(e){
+		this.setState({
+			showEditForm: true,
+			editPlayerID: e.target.id
+		})
+	}
 	render(){
+		console.log(this.props)
 		const players = this.props.players;
 		const keys = Object.keys(this.props.players);
 		const rowHeadings = Object.values(this.props.headings);
+		//const rowHeadingsName = rowHeadingsArray.map(function(a) {return a.name;});
+		//const rowHeadingsLabel = rowHeadingsArray.map(function(a){return a.label})
 		return(
 			<div className="playerList">
-		      	<table>
+				<table>
+					<thead>
+						<tr>
+							<th>
+							Name
+							</th>
+						</tr>
+					</thead>
+					<tbody>
+						{keys.map((index) => {
+			                return (
+			                  <tr key={"row" + index}>
+			                    {rowHeadings.map((a) => {
+			                    	if(a.name === rowHeadings[0].name){
+			                    		return(
+			                     			<th key={a.name + index}>{players[index][a.name]}</th>
+			                     		);
+			                    	}
+			                	})} 
+			                </tr>
+			                );
+			              })}
+					</tbody>
+				</table>
+		      	<table className="scrollableTable">
+		      		<div className="overlay">
 		      		<thead>
 		      			<tr>
-		      			{rowHeadings.map((heading) => <th key={heading}>{heading}</th>)}
+		      			{rowHeadings.map((a) => {
+		      				if(a.name === rowHeadings[0].name){
+								return;
+			                }
+			                return(
+		      					<th key={a.name} id={a.name}>{a.label}</th>
+		      				);
+		      			})}
 		      			</tr>
 		      		</thead>
 		      		<tbody>
 		      			{keys.map((index) => {
 			                return (
-			                  <tr key={index}>
-			                    {rowHeadings.map((heading) => <td key={heading + index}>{players[index][heading]}</td>)} 
+			                  <tr key={"row" + index}>
+			                  {console.log(rowHeadings[0].name)}
+			                    {rowHeadings.map((a) => {
+			                    	if(a.name === rowHeadings[0].name){
+										return;
+			                    	}
+			                     return(
+			                     		<td key={a.name + index}>{players[index][a.name]}</td>
+			                     	);
+			                   
+			                	})} 
 			                    <td>{this.props.edit ? <button id={index} onClick={this.onDeletePlayer.bind(this)}>Delete Player</button> : ""}</td>
+			                    <td>{this.props.edit ? <button id={index} onClick={this.onToggleEditForm.bind(this)}>Edit Player</button> : ""}</td>
 			                  </tr>
 			                );
 			              })}
 		      		</tbody>
+		      		</div>
 		      	</table>
+		      	  {this.state.showEditForm ? <EditPlayerForm playerID={this.state.editPlayerID}/> : ""}
 	      	</div>
 		);
 	}
@@ -54,4 +118,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, deletePlayer, fetchHeadings })(PlayerList);
+export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings })(PlayerList);

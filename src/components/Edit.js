@@ -24,7 +24,7 @@ class Edit extends Component {
 	}
 	render() {
 	    return (
-	      <div className="results">
+	      <div className="results page">
 	      	<Title />
 	      	<PlayerList edit="true"/>
 	      	{this.state.showForm ? <AddPlayerForm showForm={this.onToggleForm.bind(this)}/> : <button onClick={() => this.onToggleForm(true)}>+</button>}
