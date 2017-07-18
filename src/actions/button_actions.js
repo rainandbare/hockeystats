@@ -1,5 +1,6 @@
 import { FETCH_BUTTONS } from './action_types';
 import * as firebase from 'firebase';	
+import slug from '../functions/slug'
 
   var config = {
     apiKey: "AIzaSyBUFYaNTBSu5bkFcK5dsxaDIuagON__To4",
@@ -26,8 +27,15 @@ export function fetchButtons() {
 
  }
 
-export function addButton(button){
-  return dispatch => ref.push(button);
+export function addButton(values){
+  const buttonObject = {};
+  buttonObject.buttonName = values.buttonName;
+  buttonObject.buttonLabel = slug(values.buttonName);
+  delete values.buttonName;
+  const columns = values;
+  buttonObject.columns = columns;
+
+  return dispatch => ref.push(buttonObject);
 }
 export function deleteButton(key) {
 	return dispatch => ref.child(key).remove();

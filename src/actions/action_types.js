@@ -5,3 +5,4 @@ export const DELETE_PLAYER = 'DELETE_PLAYER';
 export const FETCH_HEADINGS = 'FETCH_HEADINGS';
 
 export const FETCH_BUTTONS = 'FETCH_BUTTONS';
+export const ADD_BUTTON = 'ADD_BUTTON'

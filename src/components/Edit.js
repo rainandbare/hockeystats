@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { addPlayer } from '../actions/player_actions.js';
 
-import AddPlayerForm from './Results/addNewPlayer.js';
+import AddPlayerForm from './Results/addNewPlayer';
+import QuerySelector from './querySelector';
 import Title from './title.js';
 import PlayerList from './playerList.js';
 
@@ -26,6 +27,7 @@ class Edit extends Component {
 	    return (
 	      <div className="results page">
 	      	<Title />
+	      	<QuerySelector edit="true" />
 	      	<PlayerList edit="true"/>
 	      	{this.state.showForm ? <AddPlayerForm showForm={this.onToggleForm.bind(this)}/> : <button onClick={() => this.onToggleForm(true)}>+</button>}
 	      </div>

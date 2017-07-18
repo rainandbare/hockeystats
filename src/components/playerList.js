@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { fetchPlayers, deletePlayer, editPlayer } from '../actions/player_actions.js';
 import { fetchHeadings } from '../actions/heading_actions.js';
+import { fetchButtons } from '../actions/button_actions.js';
 import EditPlayerForm from './Results/editPlayer';
 
 
 class PlayerList extends Component {
-		constructor(props){
+	constructor(props){
 		super(props);
+		this.parsePathname = this.parsePathname.bind(this);
 		this.state = {
 			name: '',
 			showEditForm: false,
@@ -17,6 +19,8 @@ class PlayerList extends Component {
 	componentDidMount(){
 		this.props.fetchPlayers();
 		this.props.fetchHeadings();
+		this.props.fetchButtons();
+
 	}
 	onDeletePlayer(e){
 		this.props.deletePlayer(e.target.id)
@@ -27,7 +31,6 @@ class PlayerList extends Component {
 						age: 12,
 					};
 		this.props.editPlayer(e.target.id, info)
-		console.log("edit this player");
 	}
 	onToggleEditForm(e){
 		this.setState({
@@ -35,13 +38,58 @@ class PlayerList extends Component {
 			editPlayerID: e.target.id
 		})
 	}
+	parsePathname(path){
+		const splitPath = path.split('/selected/');
+		splitPath.shift();
+		const categories = splitPath[0].split('-');
+		//console.log(categories)
+		const buttons = this.props.buttons;
+		const buttonKeys = Object.keys(this.props.buttons);
+		const rowHeadings = [];
+		buttonKeys.map((key) => {
+			categories.map((category) =>{
+				if(buttons[key].buttonLabel === category){
+					const columnKeys = Object.keys(buttons[key].columns);
+					const columns = buttons[key].columns;
+					columnKeys.map((columnKey) => {
+						if (columns[columnKey] === true){
+							rowHeadings.push(columnKey);
+						}
+					}) //column keys map
+				};
+			}); //categories mapp
+			
+		}); //buttons map
+		// console.log(rowHeadings);
+
+		return rowHeadings;
+	}
 	render(){
-		console.log(this.props)
+		
+
 		const players = this.props.players;
-		const keys = Object.keys(this.props.players);
-		const rowHeadings = Object.values(this.props.headings);
-		//const rowHeadingsName = rowHeadingsArray.map(function(a) {return a.name;});
-		//const rowHeadingsLabel = rowHeadingsArray.map(function(a){return a.label})
+		const keys = Object.keys(this.props.players);		
+		
+	
+
+		let rowHeadings = Object.values(this.props.headings);
+		const rowHeadingsFinal = [];
+		if (location.pathname.indexOf('selected') !== -1) {
+			const rowHeadingsChosen = this.parsePathname(location.pathname);
+			console.log(rowHeadingsChosen, "chosen");
+			rowHeadings.map((rowHeading) => {
+				if(rowHeadingsChosen.indexOf(rowHeading.name) !== -1){
+					rowHeadingsFinal.push(rowHeading);
+				}
+			});
+		} else {
+			rowHeadingsFinal.push(...rowHeadings);
+		}
+
+
+		
+
+	
 		return(
 			<div className="playerList">
 				<table>
@@ -53,15 +101,23 @@ class PlayerList extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{keys.map((index) => {
+						{
+						//for every player in the list	
+						keys.map((index) => {
 			                return (
 			                  <tr key={"row" + index}>
-			                    {rowHeadings.map((a) => {
+
+			                    {
+			                    //if the rowHeading is === to Name
+			                    rowHeadings.map((a) => {
 			                    	if(a.name === rowHeadings[0].name){
+
 			                    		return(
 			                     			<th key={a.name + index}>{players[index][a.name]}</th>
 			                     		);
-			                    	}
+			                    	} else { 
+			                    		return <div key={a.name + index}></div>
+			                    	};
 			                	})} 
 			                </tr>
 			                );
@@ -72,10 +128,10 @@ class PlayerList extends Component {
 		      		<div className="overlay">
 		      		<thead>
 		      			<tr>
-		      			{rowHeadings.map((a) => {
+		      			{rowHeadingsFinal.map((a) => {
 		      				if(a.name === rowHeadings[0].name){
-								return;
-			                }
+								return(<th key={a}></th>);
+			                } 
 			                return(
 		      					<th key={a.name} id={a.name}>{a.label}</th>
 		      				);
@@ -86,10 +142,9 @@ class PlayerList extends Component {
 		      			{keys.map((index) => {
 			                return (
 			                  <tr key={"row" + index}>
-			                  {console.log(rowHeadings[0].name)}
-			                    {rowHeadings.map((a) => {
+			                    {rowHeadingsFinal.map((a) => {
 			                    	if(a.name === rowHeadings[0].name){
-										return;
+										return(<th key={a}></th>);
 			                    	}
 			                     return(
 			                     		<td key={a.name + index}>{players[index][a.name]}</td>
@@ -104,8 +159,8 @@ class PlayerList extends Component {
 		      		</tbody>
 		      		</div>
 		      	</table>
-		      	  {this.state.showEditForm ? <EditPlayerForm playerID={this.state.editPlayerID}/> : ""}
-	      	</div>
+			 {this.state.showEditForm ? <EditPlayerForm playerID={this.state.editPlayerID}/> : ""}
+			</div>
 		);
 	}
 }
@@ -113,9 +168,10 @@ class PlayerList extends Component {
 function mapStateToProps(state){
 	return {
 		players: state.players,
-		headings: state.headings
+		headings: state.headings,
+		buttons: state.buttons
 	}
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings })(PlayerList);
+export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings, fetchButtons })(PlayerList);

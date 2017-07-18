@@ -9,9 +9,10 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Home from './components/Home';
 import Results from './components/Results';
+import Intro from './components/Intro';
 import SelectedResults from './components/SelectedResults';
 import Edit from './components/Edit';
-import './index.css';
+;import './index.css';
 
 import {Provider} from 'react-redux';
 import reducers from './reducers'
@@ -27,9 +28,10 @@ ReactDOM.render(
 				<Header />
 				<main>
 					<Switch>
-						<Route path="/info/*" component={ SelectedResults } />
+						<Route path="/selected/*" component={ SelectedResults } />
 						<Route path="/edit" component={ Edit } />
 						<Route path="/results" component={ Results } />
+						<Route path="/intro" component={ Intro }/>
 						<Route path="/" component={ Home } />
 					</Switch>
 				</main>
