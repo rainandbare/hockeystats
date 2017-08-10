@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { addPlayer } from '../actions/player_actions.js';
+import { addPlayer } from '../../actions/player_actions.js';
 
-import AddPlayerForm from './Results/addNewPlayer';
-import QuerySelector from './querySelector';
-import Title from './title.js';
-import PlayerList from './playerList.js';
+import AddPlayerForm from '../Sections/AddNewPlayer';
+import QuerySelector from '../Sections/QuerySelector';
+import Title from '../Bits/title.js';
+import PlayerList from '../Sections/PlayerList';
 
 import _ from 'lodash';
 

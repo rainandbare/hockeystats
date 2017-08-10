@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import Search from './search.js'
+import Search from '../Bits/search.js'
 
 class Header extends Component {
 	render(){

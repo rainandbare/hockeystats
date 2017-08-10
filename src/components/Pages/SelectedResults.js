@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-import Title from './title.js';
-import PlayerList from './playerList.js';
+import Title from '../Bits/title.js';
+import PlayerList from '../Sections/PlayerList.js';
 
 
 class SelectedResults extends Component {
@@ -9,7 +9,6 @@ class SelectedResults extends Component {
 	    return (
 	      <div className="selectedresults results page">
 	      	<Title />
-	      	<div>Selected Results!</div>
 	      	<PlayerList/>
 	      </div>
 	    );

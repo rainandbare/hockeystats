@@ -53,12 +53,22 @@ class AddEditButtons extends Component {
 									name={headings[i].name}
 									label={headings[i].label}
 									type="checkbox"
-									component={this.renderField}   
+									component={this.renderField}  
 								/>
 							);
-						} else {
-							return <div key={headings[i].name}></div>
+						} else if (headings[i].name === "name"){
+							return (
+								<Field
+									key={headings[i].name}
+									name={headings[i].name}
+									label={headings[i].label}
+									type="checkbox"
+									component={this.renderField}   
+									class="hide"
+								/>
+							);
 						};
+						return(<div></div>);
 					})
 				}
 			<button type="submit">Add Button</button>
@@ -107,7 +117,11 @@ function mapDispatchToProps(dispatch){
 
 export default reduxForm({
 	validate,
-	form: "AddButton"
+	form: "AddButton",
+	initialValues:{
+		name: true
+	}
+
 })(
 	connect(mapStateToProps,  mapDispatchToProps)(AddEditButtons)
 );

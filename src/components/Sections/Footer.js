@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import TwitterSVG from '../assets/svg_twitter.js';
-import MailSVG from '../assets/svg_mailto.js';
+import TwitterSVG from '../../assets/svg_twitter.js';
+import MailSVG from '../../assets/svg_mailto.js';
 
 
 class Footer extends Component {

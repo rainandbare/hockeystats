@@ -5,13 +5,13 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
 //import database from './database.js';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import Home from './components/Home';
-import Results from './components/Results';
-import Intro from './components/Intro';
-import SelectedResults from './components/SelectedResults';
-import Edit from './components/Edit';
+import Header from './components/Sections/Header';
+import Footer from './components/Sections/Footer';
+import Home from './components/Pages/Home';
+import Results from './components/Pages/Results';
+import Intro from './components/Pages/Intro';
+import SelectedResults from './components/Pages/SelectedResults';
+import Edit from './components/Pages/Edit';
 ;import './index.css';
 
 import {Provider} from 'react-redux';

@@ -33,16 +33,15 @@ export function fetchHeadings() {
 
  }
 
-// export function addPlayer(firstName, lastName, birthYear) {
-//   return {
-//     type: ADD_PLAYER,
-//     id: nextTodoId++,
-//     firstName,
-//     lastName,
-//     birthYear
-//   }
-// }
+export function addHeading(heading) {
+	return dispatch => database.ref('/headings').push(heading)
+}
 
+export function deleteHeading(key) {
+	return dispatch => database.ref('/headings').child(key).remove();
+}
+
+  	 
 // export function addPlayer(player){
 //   return dispatch => ref.push(player)
 // }

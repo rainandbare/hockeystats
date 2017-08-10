@@ -8,3 +8,4 @@ export default (name) => {
 	const slug = noSpaces.join('');
 	return slug; 
 }
+

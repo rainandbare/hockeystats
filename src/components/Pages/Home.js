@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
 
-import Title from './title';
-import QuerySelector from './querySelector';
+import Title from '../Bits/title';
+import QuerySelector from '../Sections/QuerySelector';
 
 class Home extends Component {
   render() {

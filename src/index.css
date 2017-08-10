@@ -108,8 +108,8 @@ body {
 }
 
 a:hover svg path, a:hover {
-	fill: yellow;
-	color: yellow;
+	fill: #FD9C47;
+	color: #FD9C47;
 }	
 
 /*----------------------------  HEADER & FOOTER ---------------------------*/
@@ -264,7 +264,9 @@ table.scrollableTable {
     padding-bottom: 25px;
 }
 
-
+.hide {
+	display: none;
+}
 
 
 /*table tr:first-child { 

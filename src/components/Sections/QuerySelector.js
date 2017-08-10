@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 
-import AddEditButtons from './Results/addButtons';
-import DeleteButton from './Results/deleteButton';
+import AddEditButtons from '../Bits/addButtons';
+import DeleteButton from '../Bits/deleteButton';
 
-import { fetchButtons } from '../actions/button_actions';
+import { fetchButtons } from '../../actions/button_actions';
 
 class QuerySelector extends Component {
 	constructor(props){
@@ -35,7 +35,7 @@ class QuerySelector extends Component {
 		this.setState({
 			buttons: currentButtons,
 		});
-		console.log(this.state.buttons)
+		//console.log(this.state.buttons)
 	}
 	render(){
 		const buttons = this.props.buttons;
@@ -49,15 +49,26 @@ class QuerySelector extends Component {
 		return(
 			<section className="querySelector">
 				{ keys.map((key) => {
-						return(
-							<div key={key}>
-								<label id="" onChange={(e) => this.onSelectionChange(e)}>{buttons[key]['buttonName']}
-									<input name={key} type="checkbox"/>
-								</label>
-								{this.props.edit ? <DeleteButton index={key} /> : ""}
-							</div>
-						);
-					}) 
+						//console.log(buttons[key]);
+						if(buttons[key]['buttonLabel'] === "all"){
+							return(
+								<div key={key}>
+									<label id="" onChange={(e) => this.onSelectionChange(e)}>{buttons[key]['buttonName']}
+										<input name={key} type="checkbox"/>
+									</label>
+								</div>
+							);
+						} else {
+							return(
+								<div key={key}>
+									<label id="" onChange={(e) => this.onSelectionChange(e)}>{buttons[key]['buttonName']}
+										<input name={key} type="checkbox"/>
+									</label>
+									{this.props.edit ? <DeleteButton index={key} /> : ""}
+								</div>
+							);
+						}
+					})
 				}
 				<button><Link to={`/selected/${url}`}>GO</Link></button>
 
