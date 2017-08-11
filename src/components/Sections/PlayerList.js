@@ -1,12 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import $ from 'jquery';
+
+
 import { fetchPlayers, deletePlayer, editPlayer } from '../../actions/player_actions.js';
 import { fetchHeadings, addHeading, deleteHeading } from '../../actions/heading_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
 import EditPlayerForm from '../Bits/editPlayer';
 //import PlayerNames from '../Bits/playerNames';
 //import PlayerInfo from '../Bits/playerInfo';
-import sortRows from '../../functions/sortRow.js'
+//import sortRows from '../../functions/sortRow.js'
+import sortByMultiple from '../../functions/sortRow2.js'
 import slug from '../../functions/slug.js'
 
 
@@ -19,7 +23,8 @@ class PlayerList extends Component {
 		this.state = {
 			name: '',
 			showEditForm: false,
-			editPlayerID: ''
+			editPlayerID: '',
+			sortColumn: []
 		};
 	}
 	componentDidMount(){
@@ -27,9 +32,87 @@ class PlayerList extends Component {
 		this.props.fetchHeadings();
 		this.props.fetchButtons();
 
+		
+
+	}
+	componentDidUpdate(){
+		this.handleColumns();
+
 	}
 	onSort(e){
-		sortRows(e);
+		const previousColumn = this.state.sortColumn;
+		const incomingColumn = e.target.parentNode.id;
+
+		if (previousColumn.includes(incomingColumn)) {
+			//console.log('toggle column off')
+			const i = previousColumn.indexOf(incomingColumn);
+			previousColumn.splice(i, 1);
+			this.setState({ previousColumn });
+		} else if (previousColumn.length < 2) {
+			// 	console.log('new single sort')
+			previousColumn.push(incomingColumn);
+			this.setState({ previousColumn });
+		} else {
+			console.log("Sorry! You can only sort by two rows at a time!")
+		}
+
+		//sortRows(e);
+
+
+
+		// if (previousColumn === incomingColumn){
+		// 	//toggle sort on and off
+		// 	console.log('turn off column sort');
+		// 	this.setState({ sortColumn: false })
+		// } else if (previousColumn === false) {
+		// 	console.log('new single sort')
+		// 	//add class to sorted column
+		// 	this.setState({ sortColumn: incomingColumn });
+		// } else if (previousColumn.includes(incomingColumn)) {
+		// 	console.log('remove one row');
+		// 	const i = previousColumn.indexOf(incomingColumn);
+		// 	console.log(i)
+
+		// } else if (previousColumn.length === 2) {
+		// 	console.log("Sorry! You can only sort by two rows at a time!")
+		// } else {
+		// 	console.log('double sort')
+		// 	this.setState({ sortColumn: [ previousColumn, incomingColumn ] });
+		// }
+
+		//if sort is already true and another column sort is pressed then 
+		//sortDoubleRows(e)
+	}
+	handleColumns(){
+		const sortColumnArray = this.state.sortColumn;
+		//console.log(sortColumnArray);
+		
+		//remove any sortingBy classes on the table
+		$('table#playerInfo').find('*').removeClass("sortingBy").removeClass("sortingBy-2");
+				
+		sortColumnArray.map((id) => {
+			//find index of column
+			const column = document.querySelector('th#' + id);
+			const headerRow = Array.from(column.parentNode.children);
+			const columnIndex = headerRow.indexOf(column);
+
+			//add class to the column
+			const i = sortColumnArray.indexOf(id);
+			if (i === 0){
+				$('th#' + id).closest('table')
+					.find("tr td:nth-child(" + (columnIndex+1) + ")")
+					.addClass("sortingBy")
+				$('th#' + id).addClass("sortingBy");
+			} else if (i === 1){
+				$('th#' + id).closest('table')
+					.find("tr td:nth-child(" + (columnIndex+1) + ")")
+					.addClass("sortingBy-2")
+				$('th#' + id).addClass("sortingBy-2");
+			}
+		});
+		sortByMultiple(sortColumnArray);
+
+
 	}
 	onAddColumn(e){
 		const label = e.target.previousSibling.value;
