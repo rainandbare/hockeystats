@@ -1,37 +1,9 @@
 import { FETCH_PLAYERS} from './action_types';
 import * as firebase from 'firebase';
-//import database from '../database.js';
-// const initialState = {
-// 						"348239847293847": {firstName: "Belinda", "lastName":  "Berthins", "birthYear": 2004}, 
-// 						"454354243542435": {firstName: "Orwell", "lastName": "Rights", "birthYear": 1985}, 
-// 						"454394243542435": {firstName: "Mary", "lastName": "Merry", "birthYear": 1342}, 
-// 					}
-
-
-  // Initialize Firebase
-  // var config = {
-  //   apiKey: "AIzaSyBUFYaNTBSu5bkFcK5dsxaDIuagON__To4",
-  //   authDomain: "nhl-players-f43b3.firebaseapp.com",
-  //   databaseURL: "https://nhl-players-f43b3.firebaseio.com",
-  //   projectId: "nhl-players-f43b3",
-  //   storageBucket: "nhl-players-f43b3.appspot.com",
-  //   messagingSenderId: "428887673172"
-  // };
-  // firebase.initializeApp(config);
 
 export const database = firebase.database();
 
 const ref = database.ref('/')
-
-
-// let nextTodoId = 0;
-
-// export function fetchPlayers() {
-// 	return {
-// 		type: FETCH_PLAYERS,
-// 		payload: initialState
-// 	}
-// }
 
 export function fetchPlayers() {
 	return dispatch => {
@@ -45,34 +17,13 @@ export function fetchPlayers() {
 
  }
 
-// export function addPlayer(firstName, lastName, birthYear) {
-//   return {
-//     type: ADD_PLAYER,
-//     id: nextTodoId++,
-//     firstName,
-//     lastName,
-//     birthYear
-//   }
-// }
-
 export function addPlayer(player){
   return dispatch => database.ref('/playersList').push(player)
 }
 export function deletePlayer(key) {
 	return dispatch => database.ref('/playersList').child(key).remove();
 }
-export function editPlayer(key, info) {
+export function editPlayer(info, key) {
+  // console.log(info, key)
   return dispatch => database.ref('/playersList/' + key).set(info);
 }
-// ref('users/' + userId).set({
-//     username: name,
-//     email: email,
-//     profile_picture : imageUrl
-//   });
-
-// export function deletePlayer(key){
-// 	return {
-// 		type: DELETE_PLAYER,
-// 		payload: key
-// 	}
-// }

@@ -9,17 +9,13 @@ import { fetchButtons } from '../../actions/button_actions.js';
 import EditPlayerForm from '../Bits/editPlayer';
 //import PlayerNames from '../Bits/playerNames';
 //import PlayerInfo from '../Bits/playerInfo';
-//import sortRows from '../../functions/sortRow.js'
-import sortByMultiple from '../../functions/sortRow2.js'
+import sortByMultiple from '../../functions/sortRow.js'
 import slug from '../../functions/slug.js'
 
 
 class PlayerList extends Component {
 	constructor(props){
 		super(props);
-		this.parsePathname = this.parsePathname.bind(this);
-		//this.onSort = this.onSort.bind(this);
-		
 		this.state = {
 			name: '',
 			showEditForm: false,
@@ -31,13 +27,9 @@ class PlayerList extends Component {
 		this.props.fetchPlayers();
 		this.props.fetchHeadings();
 		this.props.fetchButtons();
-
-		
-
 	}
 	componentDidUpdate(){
 		this.handleColumns();
-
 	}
 	onSort(e){
 		const previousColumn = this.state.sortColumn;
@@ -55,38 +47,9 @@ class PlayerList extends Component {
 		} else {
 			console.log("Sorry! You can only sort by two rows at a time!")
 		}
-
-		//sortRows(e);
-
-
-
-		// if (previousColumn === incomingColumn){
-		// 	//toggle sort on and off
-		// 	console.log('turn off column sort');
-		// 	this.setState({ sortColumn: false })
-		// } else if (previousColumn === false) {
-		// 	console.log('new single sort')
-		// 	//add class to sorted column
-		// 	this.setState({ sortColumn: incomingColumn });
-		// } else if (previousColumn.includes(incomingColumn)) {
-		// 	console.log('remove one row');
-		// 	const i = previousColumn.indexOf(incomingColumn);
-		// 	console.log(i)
-
-		// } else if (previousColumn.length === 2) {
-		// 	console.log("Sorry! You can only sort by two rows at a time!")
-		// } else {
-		// 	console.log('double sort')
-		// 	this.setState({ sortColumn: [ previousColumn, incomingColumn ] });
-		// }
-
-		//if sort is already true and another column sort is pressed then 
-		//sortDoubleRows(e)
 	}
 	handleColumns(){
 		const sortColumnArray = this.state.sortColumn;
-		//console.log(sortColumnArray);
-		
 		//remove any sortingBy classes on the table
 		$('table#playerInfo').find('*').removeClass("sortingBy").removeClass("sortingBy-2");
 				
@@ -95,7 +58,6 @@ class PlayerList extends Component {
 			const column = document.querySelector('th#' + id);
 			const headerRow = Array.from(column.parentNode.children);
 			const columnIndex = headerRow.indexOf(column);
-
 			//add class to the column
 			const i = sortColumnArray.indexOf(id);
 			if (i === 0){
@@ -121,22 +83,25 @@ class PlayerList extends Component {
 			name,
 			label
 		}
-		//console.log(heading);
 		this.props.addHeading(heading);
 	}
 	onDeleteColumn(e){
-		//console.log(e.target.id);
 		this.props.deleteHeading(e.target.id)
 	}
 	onDeletePlayer(e){
 		this.props.deletePlayer(e.target.id)
 	}
-	onEditPlayer(e){
-		const info = {
-						name: "Joe Dimajio",
-						age: 12,
-					};
-		this.props.editPlayer(e.target.id, info)
+	// onEditPlayer(e){
+	// 	const info = {
+	// 					name: "Joe Dimajio",
+	// 					age: 12,
+	// 				};
+	// 	this.props.editPlayer(e.target.id, info)
+	// }
+	onHideEditForm(){
+		this.setState({
+			showEditForm: false
+		})
 	}
 	onToggleEditForm(e){
 		this.setState({
@@ -180,10 +145,7 @@ class PlayerList extends Component {
 		//console.log(rowHeadings, "rowHeadings");
 		const rowHeadingsFinal = [];
 		if (location.pathname.indexOf('selected') !== -1) {
-
-			const rowHeadingsChosen = this.parsePathname(location.pathname);
-			//console.log(rowHeadingsChosen, "chosen");
-
+			const rowHeadingsChosen = this.parsePathname(location.pathname).bind(this);
 			//for each row heading if it's name is in the list of rowHeadingsChosen than push the whole item into the final array
 			rowHeadings.map((rowHeading) => {
 				if(rowHeadingsChosen.indexOf(rowHeading.name) !== -1){
@@ -191,15 +153,9 @@ class PlayerList extends Component {
 				}
 			});
 		} else {
-
 			rowHeadingsFinal.push(...rowHeadings);
 		}
 		//console.log(rowHeadingsFinal, "rowHeadingsFinal");
-
-
-		
-
-	
 		return(
 			<div className="playerList">
 				{/*<PlayerNames keys={keys} rowHeadings={rowHeadings} players={players}/>*/}
@@ -208,10 +164,7 @@ class PlayerList extends Component {
 		      		<thead>
 		      			<tr>
 		      			{rowHeadingsFinal.map((a) => {
-		      				// console.log(row)
-		      				// console.log(rowHeadings);
 		      				const headingIndex = rowHeadings.indexOf(a);
-		      				//console.log(rowIndex);
 		      				const rowIndex = rowKeys[headingIndex];
 			                return(
 		      					<th key={a.name} id={a.name}>{a.label}
@@ -257,7 +210,7 @@ class PlayerList extends Component {
 		      		</tbody>
 		      		</div>
 		      	</table>
-			 {this.state.showEditForm ? <EditPlayerForm playerID={this.state.editPlayerID}/> : ""}
+			 {this.state.showEditForm ? <EditPlayerForm playerID={this.state.editPlayerID} hideForm={this.onHideEditForm.bind(this)}/> : ""}
 			</div>
 		);
 	}

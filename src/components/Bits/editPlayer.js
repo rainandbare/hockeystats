@@ -6,10 +6,17 @@ import { editPlayer } from '../../actions/player_actions.js';
 import PlayerForm from './playerForm';
 
 class EditPlayerForm extends Component {
+	componentDidMount() {
+  		this.handleInitialize();
+	}
+	handleInitialize() {
+		const playerData = this.props.players[this.props.playerID];
+	  	this.props.initialize(playerData);
+	}
 	onSubmit(values){
-		// console.log(values);
-		this.props.addPlayer(values);
-		this.props.showForm(false);
+		console.log(values);
+		this.props.editPlayer(values, this.props.playerID);
+		this.props.hideForm();
 	}
 	render(){
 		const { handleSubmit } = this.props;
@@ -17,10 +24,10 @@ class EditPlayerForm extends Component {
 			<PlayerForm 
 				onSubmit={handleSubmit(this.onSubmit.bind(this))}
 				headings={this.props.headings}
-				playerID={this.props.playerID}
+				buttonLabel="Edit Player"
 			/>
+
 			);
-		
 	}
 }
 function validate(values){
@@ -42,17 +49,15 @@ function validate(values){
 
 function mapStateToProps(state){
 	return {
-		headings: state.headings
+		headings: state.headings,
+		players: state.players
 	}
 }
 
 
 export default reduxForm({
 	validate,
-	form: "EditPlayerForm",
-	initialValues: {
-      name: "EDIT ME",
-    }
+	form: "EditPlayer"
 })(
 	connect(mapStateToProps, { editPlayer })(EditPlayerForm)
 );
