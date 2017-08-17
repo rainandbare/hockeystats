@@ -7,4 +7,7 @@ export const ADD_HEADINGS = 'ADD_HEADINGS';
 export const DELETE_HEADINGS = 'DELETE_HEADINGS';
 
 export const FETCH_BUTTONS = 'FETCH_BUTTONS';
-export const ADD_BUTTON = 'ADD_BUTTON'
+export const ADD_BUTTON = 'ADD_BUTTON';
+
+export const FETCH_CERTIFICATES = 'FETCH_CERTIFICATES';
+// export const ADD_BUTTON = 'ADD_BUTTON'

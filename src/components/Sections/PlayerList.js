@@ -5,6 +5,7 @@ import $ from 'jquery';
 
 import { fetchPlayers, deletePlayer, editPlayer } from '../../actions/player_actions.js';
 import { fetchHeadings, addHeading, deleteHeading } from '../../actions/heading_actions.js';
+import { fetchCertificates } from '../../actions/certificate_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
 import EditPlayerForm from '../Bits/editPlayer';
 //import PlayerNames from '../Bits/playerNames';
@@ -16,6 +17,7 @@ import slug from '../../functions/slug.js'
 class PlayerList extends Component {
 	constructor(props){
 		super(props);
+		this.parsePathname = this.parsePathname.bind(this)
 		this.state = {
 			name: '',
 			showEditForm: false,
@@ -27,6 +29,7 @@ class PlayerList extends Component {
 		this.props.fetchPlayers();
 		this.props.fetchHeadings();
 		this.props.fetchButtons();
+		this.props.fetchCertificates();
 	}
 	componentDidUpdate(){
 		this.handleColumns();
@@ -73,8 +76,6 @@ class PlayerList extends Component {
 			}
 		});
 		sortByMultiple(sortColumnArray);
-
-
 	}
 	onAddColumn(e){
 		const label = e.target.previousSibling.value;
@@ -91,13 +92,6 @@ class PlayerList extends Component {
 	onDeletePlayer(e){
 		this.props.deletePlayer(e.target.id)
 	}
-	// onEditPlayer(e){
-	// 	const info = {
-	// 					name: "Joe Dimajio",
-	// 					age: 12,
-	// 				};
-	// 	this.props.editPlayer(e.target.id, info)
-	// }
 	onHideEditForm(){
 		this.setState({
 			showEditForm: false
@@ -145,7 +139,7 @@ class PlayerList extends Component {
 		//console.log(rowHeadings, "rowHeadings");
 		const rowHeadingsFinal = [];
 		if (location.pathname.indexOf('selected') !== -1) {
-			const rowHeadingsChosen = this.parsePathname(location.pathname).bind(this);
+			const rowHeadingsChosen = this.parsePathname(location.pathname);
 			//for each row heading if it's name is in the list of rowHeadingsChosen than push the whole item into the final array
 			rowHeadings.map((rowHeading) => {
 				if(rowHeadingsChosen.indexOf(rowHeading.name) !== -1){
@@ -155,7 +149,11 @@ class PlayerList extends Component {
 		} else {
 			rowHeadingsFinal.push(...rowHeadings);
 		}
-		//console.log(rowHeadingsFinal, "rowHeadingsFinal");
+		console.log(this.props.certificates, "from PlayerList");
+		//for each item in certificates.name 
+		//go get rowBirth or rowDeath (depending on certificates.type) 
+		//and add a class of hasCert 
+		//and use certificates[i].url for the image
 		return(
 			<div className="playerList">
 				{/*<PlayerNames keys={keys} rowHeadings={rowHeadings} players={players}/>*/}
@@ -191,19 +189,51 @@ class PlayerList extends Component {
 			                return (
 			                  <tr key={"row" + index}>
 			                    {rowHeadingsFinal.map((a) => {
+			                    	//if a.name is equal to one of the photos in the birth or death folders 
+			                    	//then 
+			                    	//for each item in this.props.certificates 
+			                    	//if this.props.certificates.name is === a.name 
+			                    	//then 
+			                    		//if this.props.certificates.type === "birth"
+			                    			//then add the class of "hasBirtCert" to the row (the td "birthdate")
+			                    		//if this.props.certificates.type === "death"	
+			                    			//then add the class of "hasDeathCert" to the row (the td "deathdate")
+			                    	//*** in another file?  CSS? Jquery?
+			                    	//.birthDate.hasBirthCert:after{
+			                    		//content: "";
+			                    		//width: 10px;
+			                    		//height: 10px;
+			                    		//background: pink;
+			                    	//}
+			                    	//onHover = showCert(url);
+			                    	//function show cert(url){
+			                    		//show lightbox with the photo of the url
+			                    	//}
+			                    	 
 			                    	if(a.name === rowHeadings[0].name){
 										return(
 											<td className="nameRow" key={a.name + index}>{players[index][a.name]}</td>
 										);
-			                    	} else {
+			 
+			                    // } else if(a.name === "birthDate") {
+			                    	// 	return(
+			                     // 			<td className={hasBirthCert ? a.name + " birthCert" : a.name} key={a.name + index}>{players[index][a.name]}</td>
+			                     // 		);
+			                     // 	} else if(a.name === "deathDate") {
+			                    		
+			                    	// 	return(
+			                     // 			<td className={hasDeathCert ? a.name + " deathCert" : a.name} key={a.name + index}>{players[index][a.name]}</td>
+			                     // 		);	
+			                     	} else {
+			                    		
 			                    		return(
-			                     			<td key={a.name + index}>{players[index][a.name]}</td>
-			                     		);
+			                     			<td className={a.name} key={a.name + index}>{players[index][a.name]}</td>
+			                     		);	
 			                    	}
 			                     
 			                   
 			                	})} 
-			                    <td>{this.props.edit ? <div><button id={index} onClick={this.onDeletePlayer.bind(this)}>Delete Player</button><button id={index} onClick={this.onToggleEditForm.bind(this)}>Edit Player</button></div> : ""}</td>
+			                    <td>{ this.props.edit ? <div><button id={index} onClick={this.onDeletePlayer.bind(this)}>Delete Player</button><button id={index} onClick={this.onToggleEditForm.bind(this)}>Edit Player</button></div> : "" }</td>
 			                  </tr>
 			                );
 			              })}
@@ -220,9 +250,10 @@ function mapStateToProps(state){
 	return {
 		players: state.players,
 		headings: state.headings,
-		buttons: state.buttons
+		buttons: state.buttons,
+		certificates: state.certificates
 	}
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings, fetchButtons, addHeading, deleteHeading })(PlayerList);
+export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings, fetchButtons, addHeading, deleteHeading, fetchCertificates })(PlayerList);
