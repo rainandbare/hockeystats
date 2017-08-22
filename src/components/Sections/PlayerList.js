@@ -5,7 +5,7 @@ import $ from 'jquery';
 
 import { fetchPlayers, deletePlayer, editPlayer } from '../../actions/player_actions.js';
 import { fetchHeadings, addHeading, deleteHeading } from '../../actions/heading_actions.js';
-import { fetchCertificates } from '../../actions/certificate_actions.js';
+import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
 import EditPlayerForm from '../Bits/editPlayer';
 //import PlayerNames from '../Bits/playerNames';
@@ -18,6 +18,9 @@ class PlayerList extends Component {
 	constructor(props){
 		super(props);
 		this.parsePathname = this.parsePathname.bind(this)
+		this.openCert = this.openCert.bind(this)
+		this.closeCert = this.closeCert.bind(this)
+
 		this.state = {
 			name: '',
 			showEditForm: false,
@@ -25,7 +28,10 @@ class PlayerList extends Component {
 			sortColumn: []
 		};
 	}
+	componentWillMount(){
+	}
 	componentDidMount(){
+		createCertificateObject()
 		this.props.fetchPlayers();
 		this.props.fetchHeadings();
 		this.props.fetchButtons();
@@ -74,6 +80,7 @@ class PlayerList extends Component {
 					.addClass("sortingBy-2")
 				$('th#' + id).addClass("sortingBy-2");
 			}
+			return true;
 		});
 		sortByMultiple(sortColumnArray);
 	}
@@ -103,6 +110,26 @@ class PlayerList extends Component {
 			editPlayerID: e.target.id
 		})
 	}
+	openCert(playerName, type){
+		let url;
+		if (type === "deathDate"){
+		 	url = this.props.certificates.death[slug(playerName)].url;
+		} else if(type === "birthDate"){
+			url = this.props.certificates.birth[slug(playerName)].url;
+		} else {
+			return;
+		}
+		const lightbox = document.getElementById('certLightbox');
+		const img = lightbox.getElementsByTagName('img')
+		img[0].src = url;
+		lightbox.classList.add('lightboxOn');
+	}
+	closeCert(){
+		const lightbox = document.getElementById('certLightbox');
+		const img = lightbox.getElementsByTagName('img')
+		img[0].src = "#";
+		lightbox.classList.remove('lightboxOn');
+	}
 	parsePathname(path){
 		const splitPath = path.split('/selected/');
 		splitPath.shift();
@@ -120,10 +147,12 @@ class PlayerList extends Component {
 						if (columns[columnKey] === true){
 							rowHeadings.push(columnKey);
 						}
+						return true;
 					}) //column keys map
 				};
+				return true;
 			}); //categories mapp
-			
+			return true;
 		}); //buttons map
 		// console.log(rowHeadings);
 
@@ -133,7 +162,7 @@ class PlayerList extends Component {
 		const players = this.props.players;
 		const keys = Object.keys(this.props.players);		
 		
-		const row = this.props.headings;
+		//const row = this.props.headings;
 		const rowKeys = Object.keys(this.props.headings);
 		let rowHeadings = Object.values(this.props.headings);
 		//console.log(rowHeadings, "rowHeadings");
@@ -145,12 +174,24 @@ class PlayerList extends Component {
 				if(rowHeadingsChosen.indexOf(rowHeading.name) !== -1){
 					rowHeadingsFinal.push(rowHeading);
 				}
+				return true;
 			});
 		} else {
 			rowHeadingsFinal.push(...rowHeadings);
 		}
-		console.log(this.props.certificates, "from PlayerList");
-		//for each item in certificates.name 
+
+		let certificates = this.props.certificates;
+		const certificateDeathKeys = Object.keys(this.props.certificates);		
+		let hasBirthCert, hasDeathCert;
+		if (certificates.birth){
+			hasBirthCert = Object.keys(certificates.birth);		
+		}
+		if (certificates.death){
+			hasDeathCert = Object.keys(certificates.death);		
+		}
+		//for each item in certificates.name
+
+		
 		//go get rowBirth or rowDeath (depending on certificates.type) 
 		//and add a class of hasCert 
 		//and use certificates[i].url for the image
@@ -158,7 +199,6 @@ class PlayerList extends Component {
 			<div className="playerList">
 				{/*<PlayerNames keys={keys} rowHeadings={rowHeadings} players={players}/>*/}
 		      	<table id="playerInfo" className="scrollableTable">
-		      		<div className="overlay">
 		      		<thead>
 		      			<tr>
 		      			{rowHeadingsFinal.map((a) => {
@@ -171,61 +211,32 @@ class PlayerList extends Component {
 		      					</th>
 		      				);
 		      			})}
-		      			<td>{ this.props.edit 
+		      			{ this.props.edit 
 		      					? 
-		      				<div>	
+		      				<td>	
 			      				<input id="newColumnLabel" type="text"></input>
 			      				<button onClick={this.onAddColumn.bind(this)}>Add Column</button> 
-		      				</div>
+		      				</td>
 
 		      				:
-		      				""
-		      			}</td>
+		      				<td></td>
+		      			}
 
 		      			</tr>
 		      		</thead>
 		      		<tbody>
 		      			{keys.map((index) => {
+		      				const nameSlug = slug(players[index].name);
+		      				// const birthCertIndex = hasBirthCert.indexOf(nameSlug);
+		      				// const deathCertIndex = hasDeathCert.indexOf(nameSlug)
 			                return (
 			                  <tr key={"row" + index}>
 			                    {rowHeadingsFinal.map((a) => {
-			                    	//if a.name is equal to one of the photos in the birth or death folders 
-			                    	//then 
-			                    	//for each item in this.props.certificates 
-			                    	//if this.props.certificates.name is === a.name 
-			                    	//then 
-			                    		//if this.props.certificates.type === "birth"
-			                    			//then add the class of "hasBirtCert" to the row (the td "birthdate")
-			                    		//if this.props.certificates.type === "death"	
-			                    			//then add the class of "hasDeathCert" to the row (the td "deathdate")
-			                    	//*** in another file?  CSS? Jquery?
-			                    	//.birthDate.hasBirthCert:after{
-			                    		//content: "";
-			                    		//width: 10px;
-			                    		//height: 10px;
-			                    		//background: pink;
-			                    	//}
-			                    	//onHover = showCert(url);
-			                    	//function show cert(url){
-			                    		//show lightbox with the photo of the url
-			                    	//}
-			                    	 
-			                    	if(a.name === rowHeadings[0].name){
+			                    	if((a.name === "birthDate" && hasBirthCert.indexOf(nameSlug) !== -1) || (a.name === "deathDate" && hasDeathCert.indexOf(nameSlug) !== -1)){
 										return(
-											<td className="nameRow" key={a.name + index}>{players[index][a.name]}</td>
+											<td className={a.name + " hasCert"} key={a.name + index} onClick={() => this.openCert(players[index].name, a.name)}>{players[index][a.name]}</td>
 										);
-			 
-			                    // } else if(a.name === "birthDate") {
-			                    	// 	return(
-			                     // 			<td className={hasBirthCert ? a.name + " birthCert" : a.name} key={a.name + index}>{players[index][a.name]}</td>
-			                     // 		);
-			                     // 	} else if(a.name === "deathDate") {
-			                    		
-			                    	// 	return(
-			                     // 			<td className={hasDeathCert ? a.name + " deathCert" : a.name} key={a.name + index}>{players[index][a.name]}</td>
-			                     // 		);	
 			                     	} else {
-			                    		
 			                    		return(
 			                     			<td className={a.name} key={a.name + index}>{players[index][a.name]}</td>
 			                     		);	
@@ -233,14 +244,17 @@ class PlayerList extends Component {
 			                     
 			                   
 			                	})} 
-			                    <td>{ this.props.edit ? <div><button id={index} onClick={this.onDeletePlayer.bind(this)}>Delete Player</button><button id={index} onClick={this.onToggleEditForm.bind(this)}>Edit Player</button></div> : "" }</td>
+			                    { this.props.edit ? <td><button id={index} onClick={this.onDeletePlayer.bind(this)}>Delete Player</button><button id={index} onClick={this.onToggleEditForm.bind(this)}>Edit Player</button></td> : <td></td>}
 			                  </tr>
 			                );
 			              })}
 		      		</tbody>
-		      		</div>
 		      	</table>
 			 {this.state.showEditForm ? <EditPlayerForm playerID={this.state.editPlayerID} hideForm={this.onHideEditForm.bind(this)}/> : ""}
+			<div id="certLightbox">
+				<img src="#" alt="Birth or Death Certificate for Player clicked on"/>
+				<div className="closeLightbox" onClick={this.closeCert}>X</div>
+			</div>
 			</div>
 		);
 	}
@@ -256,4 +270,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings, fetchButtons, addHeading, deleteHeading, fetchCertificates })(PlayerList);
+export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings, fetchButtons, addHeading, deleteHeading, fetchCertificates})(PlayerList);

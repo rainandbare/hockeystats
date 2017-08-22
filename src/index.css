@@ -276,7 +276,55 @@ table.scrollableTable {
 	background: red;
 }
 
+td.hasCert{
+	position: relative;
+}	
 
+td.hasCert:after{
+	content: '';
+	display: block;
+	width: 10px;
+	height: 10px;
+	border-radius: 50%;
+	position: absolute;
+	right: 15px;
+    top: 8px;
+}
+
+td.birthDate.hasCert:after{
+	background-color: pink;
+
+}
+
+td.deathDate.hasCert:after{
+	background-color: green;
+}
+
+
+#certLightbox{
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 1;
+	background: rgba(0,0,0,0.5);
+	visibility: hidden;
+	opacity: 0;
+}
+
+#certLightbox.lightboxOn{
+	visibility: visible;
+	opacity: 1;
+}
+
+.closeLightbox{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 20px;
+	color: white;
+}
 /*table tr:first-child { 
 	width: 20% 
 } */

@@ -42,7 +42,7 @@ export default (columns) => {
 	function sortByTwoColumns(row1, row2) {
 		console.log("sortByTwo")
 		 // columns[0].index)	    
-		var v1, v2, r;
+		var v1, v2;
 	    v1 = $(row1).children("td.sortingBy").text().toLowerCase();
 	    v2 = $(row2).children("td.sortingBy").text().toLowerCase();
 	    if (v1 === v2) {
