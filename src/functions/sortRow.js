@@ -10,7 +10,7 @@ export default (columns) => {
 		status = "doubleSort"
 	}
 
-	var rows = $("table#playerInfo tbody tr").detach().get();
+	var rows = $("#playerInfo tbody tr").detach().get();
 
     switch  (status) {
       case "singleSort":

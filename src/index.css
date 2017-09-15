@@ -112,6 +112,11 @@ a:hover svg path, a:hover {
 	color: #FD9C47;
 }	
 
+.flexMe{
+	display: flex;
+	flex-flow: row wrap;
+}
+
 /*----------------------------  HEADER & FOOTER ---------------------------*/
 
 header, footer {
@@ -125,6 +130,7 @@ header, footer {
 	text-transform: uppercase;
 	letter-spacing: -2px;
 	font-size: 13px;
+	z-index: 9;
 }
 span.reg{
 	font-family: 'Roboto Condensed', sans-serif;
@@ -219,8 +225,9 @@ div.title{
 
 h1{
 	font-family: 'Glyphter', sans-serif;
-	color: #FD9C47;
+	color: #F29C39;
 	letter-spacing: -32px;
+	text-shadow: 4px 5px 0px black;
 	margin: 0;
 	padding: 0;
 }
@@ -234,6 +241,7 @@ h1 span.reg{
 }
 h1.flipped{
 	color: #000000;
+	text-shadow: 0px 0px 0px black;
     -moz-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
     -o-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
     -webkit-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
@@ -246,22 +254,64 @@ div.playerList{
 	display: flex;
 	user-select: none;
 }
+.sticky-table .cell {
+	min-width: 167px
+}
+
+
+table.scrollableTable {
+  	/*position: relative;
+  	width: 1200px;
+  	overflow: hidden;
+  	border-collapse: collapse;
+  	table-layout: fixed*/
+}
+thead {
+  /*position: relative;
+  display: block; seperates the header from the body allowing it to be positioned
+  width: 1200px;
+  overflow: visible;*/
+}
+/*thead th, tbody td  {
+	min-width: 168px;
+}*/
+
+thead tr, td.name, th#name {
+	/*background: #F29C39;
+	color: #252323;
+	font-weight: bold;*/
+}
+
+
+
 
 
 th, td {
-	white-space: nowrap;
+	/*white-space: nowrap;
 	text-align: left;
 	padding-right: 15px;
-	border-bottom: 1px solid grey;
-	height: 28px;
+	height: 28px;*/
 }
 
-table.scrollableTable {
-	overflow-x: scroll;
-    width: 100%;
-    display: block;
-    position: relative;
-    padding-bottom: 25px;
+/*tbody*/
+tbody {
+ /* position: relative;
+  display: block; seperates the tbody from the header
+  width: 1200px;
+  height: 90vh;
+  overflow: scroll;*/
+}
+tbody:before{
+/*	content: '';
+	position: absolute;*/
+
+}
+
+tbody tr td:nth-child(1), thead tr th:nth-child(1) {  /*the first cell in each tr*/
+ /* position: relative;
+  display: block; seperates the first column from the tbody
+  height: 40px;
+  z-index: 3;*/
 }
 
 .hide {
@@ -328,3 +378,87 @@ td.deathDate.hasCert:after{
 /*table tr:first-child { 
 	width: 20% 
 } */
+
+span.search-highlight{
+	background-color: #F4D022;
+}
+
+span.search-highlight.currentSearch{
+	background-color: #F30C86;
+}
+
+section.search {
+	color: black;
+}
+/*
+----------------------- Query Selector -------------------------------------*/
+
+ul.queryOptions {
+    text-transform: uppercase;
+    text-align: center;
+    color: #1E1E24;
+    margin: 25px;
+    justify-content: flex-end;
+}
+
+ul.queryOptions li {
+	width: 50%;
+}
+ul.queryOptions li:first-of-type{
+	width: 100%;
+}
+ul.queryOptions li label{
+	background: #F29C39;
+	display: block;
+}
+ul.queryOptions li label input{
+	display: none;
+}
+ul.queryOptions li label:hover{
+	cursor: pointer;
+}
+
+ul.queryOptions button a, ul.queryOptions li label{
+	border-radius: 2px;
+	padding: 10px 25px;
+	margin: 5px;
+	box-shadow: 0 2px 4px 0 #000000;
+	transition: all 0.1s ease;
+	border: solid 1px #000000;
+
+}
+ul.queryOptions button a{
+	margin: 0 auto;
+	background-color: #1E1E24;
+	border: none;
+    align-self: flex-end;
+    display: block;
+}
+ul.queryOptions button{
+	background-color: transparent;
+	border: none;
+	margin: 10px auto;
+}
+ul.queryOptions button a{
+	color: #F29C39;
+	text-decoration: none;
+}
+ul.queryOptions li label.checked{
+	cursor: pointer;
+	background: #BABEC5;
+	border: solid 1px #BABEC5;
+	/*//color: #fff;*/
+	box-shadow: 0 0px 0px 0 #000000;
+}
+
+/*
+----------------------- Selected Results -------------------------------------*/
+
+div.results section.querySelector{
+	width: 30%;
+}
+
+div.results div.title {
+	width: 60%;
+}
+

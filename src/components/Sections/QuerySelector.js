@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
+import $ from 'jquery';
 
 import AddEditButtons from '../Bits/addButtons';
 import DeleteButton from '../Bits/deleteButton';
@@ -11,6 +12,7 @@ class QuerySelector extends Component {
 	constructor(props){
 		super(props);
 		this.onSelectionChange = this.onSelectionChange.bind(this);
+		this.addClassToButtons = this.addClassToButtons.bind(this);
 
 		this.state = {
 			buttons : [],
@@ -20,12 +22,14 @@ class QuerySelector extends Component {
 	componentDidMount(){
 		this.props.fetchButtons();
 	}
+	componentWillUpdate(){
+		this.addClassToButtons();
+	}
 	onSelectionChange(e){
-		//console.log(e.target.name);
 		const buttonsAll = this.props.buttons;
 		const newButton = buttonsAll[e.target.name].buttonLabel;
-		//console.log(buttonLabel);
 		const currentButtons = this.state.buttons;
+
 		if(currentButtons.indexOf(newButton) !== -1){
 			const position = currentButtons.indexOf(newButton);
 			currentButtons.splice(position, 1);
@@ -35,7 +39,19 @@ class QuerySelector extends Component {
 		this.setState({
 			buttons: currentButtons,
 		});
-		//console.log(this.state.buttons)
+	}
+	addClassToButtons(){
+		const currentSelection = this.state.buttons
+		console.log(currentSelection)
+		$("[id^='button-']").removeClass('checked')
+		currentSelection.map((button) => {
+			$('#button-' + button).addClass('checked')
+		})
+	// 	console.log($('ul.queryOptions input'))
+	// 	$('ul.queryOptions input').on('change', function(){
+	// 		console.log('listening')
+	// 	})
+	// 		// .parent('label').addClass('checked')
 	}
 	render(){
 		const buttons = this.props.buttons;
@@ -48,29 +64,26 @@ class QuerySelector extends Component {
 		//return a button with tht name of the label
 		return(
 			<section className="querySelector">
+				<ul className="queryOptions flexMe">
 				{ keys.map((key) => {
-						//console.log(buttons[key]);
-						if(buttons[key]['buttonLabel'] === "all"){
-							return(
-								<div key={key}>
-									<label id="" onChange={(e) => this.onSelectionChange(e)}>{buttons[key]['buttonName']}
-										<input name={key} type="checkbox"/>
-									</label>
-								</div>
-							);
-						} else {
-							return(
-								<div key={key}>
-									<label id="" onChange={(e) => this.onSelectionChange(e)}>{buttons[key]['buttonName']}
-										<input name={key} type="checkbox"/>
-									</label>
-									{this.props.edit ? <DeleteButton index={key} /> : ""}
-								</div>
-							);
-						}
+						return(
+							<li key={key}>
+								<label id={"button-" + buttons[key]['buttonLabel']} onChange={(e) => this.onSelectionChange(e)}>{buttons[key]['buttonName']}
+									<input name={key} type="checkbox"/>
+								</label>
+								{ 
+									buttons[key]['buttonLabel'] !== 'all'
+									?
+									this.props.edit ? <DeleteButton index={key} /> : ""
+									:
+									""
+								}
+							</li>
+						);
 					})
 				}
-				<button><Link to={`/selected/${url}`}>GO</Link></button>
+					<button><Link onClick={this.props.findPathName} to={`/selected/${url}`}>GO</Link></button>
+				</ul>
 
 				{
 					//on form submit

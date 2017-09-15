@@ -1,0 +1,6 @@
+span.search-highlight{
+	background-color: green;
+}
+div.searchResult{
+	background-color: pink !important;
+}

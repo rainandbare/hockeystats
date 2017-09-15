@@ -8,9 +8,9 @@ import thunk from 'redux-thunk';
 import Header from './components/Sections/Header';
 import Footer from './components/Sections/Footer';
 import Home from './components/Pages/Home';
-import Results from './components/Pages/Results';
 import Intro from './components/Pages/Intro';
 import SelectedResults from './components/Pages/SelectedResults';
+import TrialResults from './components/Pages/TrialResults.js';
 import Edit from './components/Pages/Edit';
 ;import './index.css';
 
@@ -29,8 +29,8 @@ ReactDOM.render(
 				<main>
 					<Switch>
 						<Route path="/selected/*" component={ SelectedResults } />
+						<Route path="/trial-results" component={ TrialResults } />
 						<Route path="/edit" component={ Edit } />
-						<Route path="/results" component={ Results } />
 						<Route path="/intro" component={ Intro }/>
 						<Route path="/" component={ Home } />
 					</Switch>

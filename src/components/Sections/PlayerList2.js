@@ -6,11 +6,6 @@ import reactStringReplace from 'react-string-replace';
 import { StickyTable, Row, Cell } from 'react-sticky-table';
 import 'react-sticky-table/dist/react-sticky-table.css';
 
-
-
-
-
-
 import { fetchPlayers, deletePlayer, editPlayer } from '../../actions/player_actions.js';
 import { fetchHeadings, addHeading, deleteHeading } from '../../actions/heading_actions.js';
 import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
@@ -21,7 +16,7 @@ import sortByMultiple from '../../functions/sortRow.js'
 import slug from '../../functions/slug.js'
 
 
-class PlayerList extends Component {
+class PlayerList2 extends Component {
 	constructor(props){
 		super(props);
 
@@ -49,9 +44,9 @@ class PlayerList extends Component {
 		this.handleColumns();
 	}
 	onSort(e){
+		console.log("column sort")
 		const previousColumn = this.state.sortColumn;
 		const incomingColumn = e.target.parentNode.id;
-
 		if (previousColumn.includes(incomingColumn)) {
 			//console.log('toggle column off')
 			const i = previousColumn.indexOf(incomingColumn);
@@ -68,13 +63,16 @@ class PlayerList extends Component {
 	handleColumns(){
 		const sortColumnArray = this.state.sortColumn;
 		//remove any sortingBy classes on the table
-		$('table#playerInfo').find('*').removeClass("sortingBy").removeClass("sortingBy-2");
+		$('#playerInfo').find('*').removeClass("sortingBy").removeClass("sortingBy-2");
 				
 		sortColumnArray.map((id) => {
 			//find index of column
-			const column = document.querySelector('th#' + id);
+			const column = document.querySelector("#" + id);
+			console.log(column)
+
 			const headerRow = Array.from(column.parentNode.children);
 			const columnIndex = headerRow.indexOf(column);
+			
 			//add class to the column
 			const i = sortColumnArray.indexOf(id);
 			if (i === 0){
@@ -179,25 +177,27 @@ class PlayerList extends Component {
 		}
 		return rowHeadingsObjectsFinal;
 	}
-	fixedHeaders(){
-		console.log('listening for that body scroll');
-	 	$('thead').css("left", -$("tbody").scrollLeft()); //fix the thead relative to the body scrolling
-	    $('thead th:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first cell of the header
-	    $('tbody td:nth-child(1)').css("left", $("tbody").scrollLeft()); //fix the first column of tdbody
-	}
 	render(){
 		const players = this.props.players;
 		const keys = Object.keys(this.props.players);		
 		const rowKeys = Object.keys(this.props.headings);
 		const rowHeadings = Object.values(this.props.headings);
 		const rowHeadingsFinal = this.chosenRowHeadings();
+		const certificates = this.props.certificates;
+		let hasBirthCert, hasDeathCert;
+
+
+		if (certificates.birth){
+			hasBirthCert = Object.keys(certificates.birth);		
+		}
+		if (certificates.death){
+			hasDeathCert = Object.keys(certificates.death);		
+		}
 		return(
 			<div>
 			<div className="playerList" style={{width: '100%', height: '400px'}}>
 		      	<StickyTable stickyColumnCount={1} id="playerInfo" className="scrollableTable">
 		      			<Row className="heading-row">
-		      			
-
 		      			{
 		      				rowHeadingsFinal.map((a) => {
 			      				const headingIndex = rowHeadings.indexOf(a);
@@ -217,50 +217,70 @@ class PlayerList extends Component {
 			      				<button onClick={this.onAddColumn.bind(this)}>Add Column</button> 
 		      				</Cell>
 		      				:
-		      				<Cell></Cell> }
+		      				<Cell></Cell>}
 		      			</Row>
 		      			{
 		      				keys.map((index) => {
-			      				//if it is the death page
-			      				/* if(this.props.deathPage === true){
+		      				//if it is the death page
+			      			if(this.props.deathPage === true){
 				      				//only return the players that are alive
 				      				const status = players[index].status;
 				      				if (status === "DECEASED"){
-					      				return (
-						                		<PlayerRow 
-						                			players={players}
-						                			certificates={this.props.certificates}
-						                			searchTerm={this.props.searchTerm}
-
-						                			onDeletePlayer={this.onDeletePlayer.bind(this)}
-						                			onToggleEditForm={this.onToggleEditForm.bind(this)}
-
-						                			key={"row" + index}
-						                			index={index}
-						                			rowHeadingsFinal={rowHeadingsFinal}
-						                			edit={this.props.edit}
-						                		/>
-					                			);
+					      				const nameSlug = slug(players[index].name);
+						                return (
+						                  	<Row key={"row" + index}>
+						                    {
+						                    	rowHeadingsFinal.map((a) => {
+							                    	if((a.name === "birthDate" && hasBirthCert.indexOf(nameSlug) !== -1) || (a.name === "deathDate" && hasDeathCert.indexOf(nameSlug) !== -1)){
+														return(
+															<Cell className={a.name + " hasCert"} key={a.name + index} onClick={() => this.openCert(players[index].name, a.name)}>{players[index][a.name]}</Cell>
+														);
+							                     	} else {
+							                    		return(
+							                     			<Cell className={a.name} key={a.name + index}>{players[index][a.name]}</Cell>
+							                     		);	
+							                    	}
+							                	})
+						                	} 
+						                    { this.props.edit ? <Cell><button id={index} onClick={this.onDeletePlayer.bind(this)}>Delete Player</button><button id={index} onClick={this.onToggleEditForm.bind(this)}>Edit Player</button></Cell> : ""}
+						            		</Row>
+						                );
 				      				}
-				      				} else { //if it is not the death page return all players*/
-					                return (
-					                	<PlayerRow 
-					                			players={players}
-					                			certificates={this.props.certificates}
-					                			searchTerm={this.props.searchTerm}
-
-					                			onDeletePlayer={this.onDeletePlayer.bind(this)}
-					                			onToggleEditForm={this.onToggleEditForm.bind(this)}
-
-					                			key={"row" + index}
-					                			index={index}
-					                			rowHeadingsFinal={rowHeadingsFinal}
-					                			edit={this.props.edit}
-					                	/>
-					                );
-				            	//}
-				              })
-			      		}
+				      		} else { //if it is not the death page return all players*/
+			      				const nameSlug = slug(players[index].name);
+				                return (
+				                  	<Row key={"row" + index}>
+				                    {
+				                    	rowHeadingsFinal.map((a) => {
+				                    		const content = players[index][a.name];
+					                    	if((a.name === "birthDate" && hasBirthCert.indexOf(nameSlug) !== -1) || (a.name === "deathDate" && hasDeathCert.indexOf(nameSlug) !== -1)){
+												return(
+													<Cell className={a.name + " hasCert"} key={a.name + index} onClick={() => this.openCert(players[index].name, a.name)}>
+													{
+														reactStringReplace(content, this.props.searchTerm, (match, i) => (
+											          		<span key={i} className="search-highlight">{match}</span>
+											        	))
+													}
+													</Cell>
+												);
+					                     	} else {
+					                    		return(
+					                     			<Cell className={a.name} key={a.name + index}>
+					                     			{
+											        	reactStringReplace(content, this.props.searchTerm, (match, i) => (
+											          		<span key={i} className="search-highlight">{match}</span>
+											        	))
+											        }
+					                     			</Cell>
+					                     		);	
+					                    	}
+					                	})
+				                	} 
+				                    { this.props.edit ? <Cell><button id={index} onClick={this.onDeletePlayer.bind(this)}>Delete Player</button><button id={index} onClick={this.onToggleEditForm.bind(this)}>Edit Player</button></Cell> : <Cell></Cell>}
+				            		</Row>
+				                );
+				            }
+			              })}
 		      	</StickyTable>
 
 
@@ -288,4 +308,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings, fetchButtons, addHeading, deleteHeading, fetchCertificates})(PlayerList);
+export default connect(mapStateToProps, { fetchPlayers, deletePlayer, editPlayer, fetchHeadings, fetchButtons, addHeading, deleteHeading, fetchCertificates})(PlayerList2);

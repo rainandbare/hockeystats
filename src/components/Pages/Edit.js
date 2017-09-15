@@ -5,7 +5,7 @@ import { addPlayer } from '../../actions/player_actions.js';
 import AddPlayerForm from '../Sections/AddNewPlayer';
 import QuerySelector from '../Sections/QuerySelector';
 import Title from '../Bits/title.js';
-import PlayerList from '../Sections/PlayerList';
+import PlayerList2 from '../Sections/PlayerList2';
 
 import _ from 'lodash';
 
@@ -28,7 +28,7 @@ class Edit extends Component {
 	      <div className="results page">
 	      	<Title />
 	      	<QuerySelector edit="true" />
-	      	<PlayerList edit="true"/>
+	      	<PlayerList2 edit="true"/>
 	      	{this.state.showForm ? <AddPlayerForm showForm={this.onToggleForm.bind(this)}/> : <button onClick={() => this.onToggleForm(true)}>+</button>}
 	      </div>
 	    );
