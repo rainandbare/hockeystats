@@ -1,4 +1,4 @@
-import { FETCH_PLAYERS, SORT_PLAYERS } from '../actions/action_types.js'
+import { FETCH_PLAYERS, SORT_PLAYERS, FILTER_PLAYERS } from '../actions/action_types.js'
 
 
 export function playerReducer(state = { list: {}, sortRules: {} }, action) {
@@ -18,8 +18,10 @@ export function playerReducer(state = { list: {}, sortRules: {} }, action) {
 		// 	newState[action.id] = {firstName: action.firstName, "lastName": action.lastName, "birthYear": action.birthYear}
 		// 	return newState
 		case SORT_PLAYERS:
+		case FILTER_PLAYERS:
 			const newSortState = state;
 			newSortState.sortRules = action.payload;
+			console.log(newSortState)
 			return newSortState
 		default:
 			return state

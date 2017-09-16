@@ -98,7 +98,7 @@ svg {
 
 body {
 	font-family: 'Roboto Condensed', sans-serif;
-	color: #999;
+	color: black;
 }
 
 
@@ -108,9 +108,10 @@ body {
 }
 
 a:hover svg path, a:hover {
-	fill: #FD9C47;
-	color: #FD9C47;
-}	
+    fill: #F71735;
+    color: #F71735;
+}
+
 
 .flexMe{
 	display: flex;
@@ -130,7 +131,7 @@ header, footer {
 	text-transform: uppercase;
 	letter-spacing: -2px;
 	font-size: 13px;
-	z-index: 9;
+	z-index: 999;
 }
 span.reg{
 	font-family: 'Roboto Condensed', sans-serif;
@@ -392,7 +393,7 @@ section.search {
 }
 /*
 ----------------------- Query Selector -------------------------------------*/
-
+/*
 ul.queryOptions {
     text-transform: uppercase;
     text-align: center;
@@ -447,18 +448,19 @@ ul.queryOptions li label.checked{
 	cursor: pointer;
 	background: #BABEC5;
 	border: solid 1px #BABEC5;
-	/*//color: #fff;*/
+
 	box-shadow: 0 0px 0px 0 #000000;
 }
-
+*/
 /*
 ----------------------- Selected Results -------------------------------------*/
 
 div.results section.querySelector{
-	width: 30%;
+	width: 40%;
 }
 
 div.results div.title {
-	width: 60%;
+	width: 55%;
+    margin-right: 4%;
 }
 

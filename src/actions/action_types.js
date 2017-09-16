@@ -1,7 +1,8 @@
 export const ADD_PLAYER = 'ADD_PLAYER';
 export const FETCH_PLAYERS = 'FETCH_PLAYERS';
 export const DELETE_PLAYER = 'DELETE_PLAYER';
-export const SORT_PLAYERS = 'SORT_PLAYERS'
+export const SORT_PLAYERS = 'SORT_PLAYERS';
+export const FILTER_PLAYERS = 'FILTER_PLAYERS';
 
 export const FETCH_HEADINGS = 'FETCH_HEADINGS';
 export const ADD_HEADINGS = 'ADD_HEADINGS';

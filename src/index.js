@@ -29,6 +29,7 @@ ReactDOM.render(
 				<main>
 					<Switch>
 						<Route path="/selected/*" component={ SelectedResults } />
+						<Route path="/trial-results/*" component={ TrialResults } />
 						<Route path="/trial-results" component={ TrialResults } />
 						<Route path="/edit" component={ Edit } />
 						<Route path="/intro" component={ Intro }/>

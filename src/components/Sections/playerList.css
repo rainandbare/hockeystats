@@ -1,6 +1,36 @@
-span.search-highlight{
-	background-color: green;
+
+
+input.search {
+    position: relative;
+    left: -8px;
+    font-size: small;
+    top: 12px;
+    width: calc(100% + 16px);
+    padding: 5px 4px;
+    background: black;
+    border: black;
+    outline: none;
+    color: white;
 }
-div.searchResult{
-	background-color: pink !important;
+.public_fixedDataTable_header, .public_fixedDataTable_header .public_fixedDataTableCell_main {
+    background-color: RGBA(242, 156, 57, 1.00);
+    color: black;
+    background-image: none;
+}
+.public_fixedDataTableCell_columnResizerKnob {
+    background-color: #034596;
+}
+.public_fixedDataTableCell_main {
+    background-color: #fff;
+    border-color: black;
+}
+.public_fixedDataTable_main, .public_fixedDataTable_header, .public_fixedDataTable_hasBottomBorder {
+    border-color: black;
+}
+.public_fixedDataTableRow_fixedColumnsDivider {
+    border-color: black;
+}
+.fixedDataTableLayout_main {
+    border-width: 2px;
+    user-select: none;
 }

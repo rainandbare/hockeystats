@@ -1,4 +1,4 @@
-import { FETCH_PLAYERS, SORT_PLAYERS } from './action_types';
+import { FETCH_PLAYERS, SORT_PLAYERS, FILTER_PLAYERS } from './action_types';
 import * as firebase from 'firebase';
 
 export const database = firebase.database();
@@ -52,6 +52,49 @@ export function sortPlayers(columnKey, sortDir, keysArray, players){
   	return {
 		type: SORT_PLAYERS,
 		payload: sortIndexes
+	};
+}
+
+export function filterPlayers(term, keysArray, players, columnKey, multiple){
+
+		let filteredIndexes = [];
+
+    	if(multiple){
+ 			let midfilteredIndexes = [];
+    		let beginningKeysArray = keysArray
+     		for (var index = 0; index < columnKey.length; index++) {
+
+   //  			//for each column that has a search term in it -> columnKey[index] = "position"
+    			for (var jindex = 0; jindex < beginningKeysArray.length; jindex++) {
+   //  				//go through each of the keys in the Keys array
+					const columnData = players[beginningKeysArray[jindex]][columnKey[index]];
+    				const filterBy = term[index].toLowerCase()
+    				//console.log(columnData.toLowerCase().indexOf(filterBy))
+					if (columnData.toLowerCase().indexOf(filterBy) !== -1) {
+						midfilteredIndexes.push(beginningKeysArray[jindex]);
+			     	}
+				}
+				beginningKeysArray = midfilteredIndexes;
+				midfilteredIndexes = [];
+    		}
+ 			filteredIndexes = beginningKeysArray;
+    	} else {
+			const filterBy = term.toLowerCase();
+		 	if (term === '') {
+		      	filteredIndexes = keysArray;
+		    } else {
+			    for (var index = 0; index < keysArray.length; index++) {
+					const columnData = players[keysArray[index]][columnKey];
+			      	if (columnData.toLowerCase().indexOf(filterBy) !== -1) {
+			        	filteredIndexes.push(keysArray[index]);
+			      	}
+				}
+		    }
+		}
+
+	return {
+		type: FILTER_PLAYERS,
+		payload: filteredIndexes
 	};
 }
 
