@@ -99,6 +99,7 @@ svg {
 body {
 	font-family: 'Roboto Condensed', sans-serif;
 	color: black;
+	font-size: 12px;
 }
 
 
@@ -228,7 +229,6 @@ h1{
 	font-family: 'Glyphter', sans-serif;
 	color: #F29C39;
 	letter-spacing: -32px;
-	text-shadow: 4px 5px 0px black;
 	margin: 0;
 	padding: 0;
 }
@@ -242,12 +242,25 @@ h1 span.reg{
 }
 h1.flipped{
 	color: #000000;
-	text-shadow: 0px 0px 0px black;
     -moz-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
     -o-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
     -webkit-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
-    transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
+    transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(17px, 14px);
 }
+
+.results h1{
+
+	font-size: 52px;
+    line-height: 43px;
+    letter-spacing: -19px;
+
+
+}
+.results h1.flipped{
+	transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(15px, 14px);
+
+}
+
 
 /*
 ----------------------- PLAYER LIST -------------------------------------*/
@@ -352,16 +365,16 @@ td.deathDate.hasCert:after{
 }
 
 
-#certLightbox{
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	z-index: 1;
-	background: rgba(0,0,0,0.5);
-	visibility: hidden;
-	opacity: 0;
+/*#certLightbox {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.7);
+    visibility: hidden;
+    opacity: 0;
 }
 
 #certLightbox.lightboxOn{
@@ -375,7 +388,7 @@ td.deathDate.hasCert:after{
 	right: 10px;
 	font-size: 20px;
 	color: white;
-}
+}*/
 /*table tr:first-child { 
 	width: 20% 
 } */
@@ -460,7 +473,10 @@ div.results section.querySelector{
 }
 
 div.results div.title {
-	width: 55%;
-    margin-right: 4%;
+	width: 40%;
+}
+section.topOPage{
+	justify-content: space-between;
+	align-items: center;
 }
 

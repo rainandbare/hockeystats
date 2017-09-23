@@ -1,10 +1,10 @@
-import { FETCH_CERTIFICATES } from './action_types';
+import { FETCH_CERTIFICATES, ADD_CERTIFICATE } from './action_types';
 import * as firebase from 'firebase';
 
 import slug from '../functions/slug.js';
 
-var storage = firebase.storage();
-var storageRef = storage.ref();
+const storage = firebase.storage();
+const storageRef = storage.ref();
 
 
 const database = firebase.database();
@@ -38,10 +38,10 @@ export function createCertificateObject(){
 			function recordCertificates(name){
 				const nameFormatted = slug(name);
 				//console.log(nameFormatted);
-				storageRef.child("birth/" + nameFormatted + "-birth.jpg")
+				storageRef.child("birth/" + nameFormatted + "-B.jpg")
 					.getDownloadURL()
 					.then(onResolveBirth, onReject);
-				storageRef.child("death/" + nameFormatted + "-death.jpg")
+				storageRef.child("death/" + nameFormatted + "-D1.jpg")
 					.getDownloadURL()
 					.then(onResolveDeath, onReject);
 				
@@ -67,7 +67,11 @@ export function createCertificateObject(){
 	}
 
 };
-
+function writeCertificateData(name, type, imageUrl) {
+				  database.ref('certificates/' + type + "/" + name).set({
+				    url : imageUrl
+				  });
+			}
 	
 export function fetchCertificates() {
 	return dispatch => {
@@ -81,19 +85,22 @@ export function fetchCertificates() {
 
  }
 
-/*
-{
-	sefksjf : { url: http://google.com,
-				name: Smith,
-				type: birth
-			 },
-	sefksjf : { url: http://google.com,
-				name: Smith,
-				type: birth
-			 },
-	sefksjf : { url: http://google.com,
-				name: Smith,
-				type: birth
-			 }		 
+export function addCertificate(file, type, nameFormatted) {
+	const typeCodes = {
+		"B" : "birth",
+		"D" : "death"
+	}
+	const filepath = typeCodes[type] + '/' + nameFormatted + '-' + type + '.jpg';
+	const certStorageRef = storage.ref(filepath);
+	var task = certStorageRef.put(file).then(function(snapshot) {
+  		if (snapshot.f === "success"){
+  			console.log(snapshot.a.downloadURLs[0]);
+  			const imageUrl = snapshot.a.downloadURLs[0]
+  			database.ref('certificates/' + typeCodes[type] + '/' + nameFormatted).set({ url : imageUrl });
+  		}
+	});
+
+
+
 }
-*/
+

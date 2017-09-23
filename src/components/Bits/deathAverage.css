@@ -1,0 +1,21 @@
+section.deathAverage{
+	width: calc(20% - 60px);
+    margin: 0px 30px;
+    padding: 20px 0px;
+    border-radius: 20px;
+    border: 2px solid #808080;
+    text-align: center;
+    background: #F6F7F8;
+}
+
+section.deathAverage h2{
+	font-size: 13px;
+	font-weight: 300;
+	text-transform: uppercase;
+
+}
+
+h4.deathAverage-number{
+	font-size: 50px;
+	margin: 0;
+}

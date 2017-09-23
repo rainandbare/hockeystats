@@ -8,7 +8,7 @@ class Home extends Component {
   render() {
     return (
       <div className="home">
-      	<Title />
+      	<Title text="HelloAndrew" />
       	<QuerySelector />
       </div>
     );

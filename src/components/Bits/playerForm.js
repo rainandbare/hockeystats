@@ -1,13 +1,10 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
-//import { connect } from 'react-redux';
-//import { addPlayer } from '../../actions/player_actions.js';
-// import { fetchHeadings } from '../actions/heading_actions.js';
+
 
 class PlayerForm extends Component {
 	renderField(field){
 		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
-		//console.log(field.playerID, "plaeyer ID from Player form Render field");
 		return(
 			<div className={className} key={field.key}>
 				<label>{field.label}: </label>
@@ -40,7 +37,7 @@ class PlayerForm extends Component {
 				/>
 				);
 			})}
-				<button type="submit">{this.props.buttonLabel}</button>
+				<button className="button" type="submit">{this.props.buttonLabel}</button>
 			</form>
 			);
 	}

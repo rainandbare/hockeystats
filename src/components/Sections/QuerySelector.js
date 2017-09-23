@@ -41,12 +41,10 @@ class QuerySelector extends Component {
 		}
 		let nextSetOfButtons = currentButtons;
 		if(nextSetOfButtons.includes('all')){
-			console.log('ALL IS PRESENT YOU DUMMY');
 			nextSetOfButtons = ["all"];
 			$('input').prop('checked', false); 
 			$('input.all').prop('checked', true)
 		}
-		console.log(nextSetOfButtons)
 		this.setState({
 			buttons: nextSetOfButtons,
 		});
@@ -73,17 +71,17 @@ class QuerySelector extends Component {
 								<label htmlFor={key}>Toggle</label>
 
 								{ 
-									// buttons[key]['buttonLabel'] !== 'all'
-									// ?
-									// this.props.edit ? <DeleteButton index={key} /> : ""
-									// :
-									// ""
+									 buttons[key]['buttonLabel'] !== 'all'
+									 ?
+									 this.props.edit ? <DeleteButton index={key} /> : ""
+									 :
+									 ""
 								}
 							</li>
 						);
 					})
 				}
-					<button><Link onClick={this.props.findPathName} to={`/trial-results/${url}`}>GO</Link></button>
+					<button><Link onClick={this.props.findPathName} to={`/results/${url}`}>GO</Link></button>
 				</ul>
 
 				{
@@ -92,7 +90,6 @@ class QuerySelector extends Component {
 					//at selectedresults.js - get url (ie buttonNames) and get an array of all the columns that those buttons include
 					//display chart with only those columns
 				}
-				{this.props.edit ? <AddEditButtons/> : ""}
 
 			</section>
 		);

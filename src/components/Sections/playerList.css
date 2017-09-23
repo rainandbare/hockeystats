@@ -1,10 +1,10 @@
 
 
 input.search {
-    position: relative;
-    left: -8px;
+    position: absolute;
+    left: 0px;
     font-size: small;
-    top: 12px;
+    top: 44px;;
     width: calc(100% + 16px);
     padding: 5px 4px;
     background: black;
@@ -18,7 +18,7 @@ input.search {
     background-image: none;
 }
 .public_fixedDataTableCell_columnResizerKnob {
-    background-color: #034596;
+    background-color: #2611E1;
 }
 .public_fixedDataTableCell_main {
     background-color: #fff;
@@ -33,4 +33,47 @@ input.search {
 .fixedDataTableLayout_main {
     border-width: 2px;
     user-select: none;
+}
+
+
+.retired{
+    color: #2611E1;
+/*    background: lightblue;*/
+}
+.active{
+    color: #105504;
+/*    background: lightgreen;*/
+}
+.deceased{
+    color: #EC2B2B;
+/*    background: lightpink*/
+
+}
+.name .public_fixedDataTableCell_cellContent {
+    padding-left: 30px;
+}
+
+
+.playerNumber{
+    position: absolute;
+    font-size: 9px;
+    top: 20px;
+    left:2px;
+    color:grey;
+}
+
+.certDot {
+    color: grey;
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+
+
+.public_fixedDataTable_header .fixedDataTableCellLayout_wrap3 {
+    vertical-align: top;
+}
+
+.public_fixedDataTable_header .public_fixedDataTableCell_cellContent {
+    padding: 14px 8px 8px;
 }

@@ -71,7 +71,7 @@ class AddEditButtons extends Component {
 						return(<div></div>);
 					})
 				}
-			<button type="submit">Add Button</button>
+			<button className="button" type="submit">Add Button</button>
 			</form>
 			);
 	}

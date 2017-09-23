@@ -1,27 +1,30 @@
-
-
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {Table, Column, Cell}  from 'fixed-data-table';
 import FontAwesome from 'react-fontawesome';
 
+import Lightbox from '../Bits/certificationsLightbox.js'
 
-import searchResultPresent from '../../functions/customStringReplace.js'
+import slug from '../../functions/slug.js'
 
 import { fetchPlayers, sortPlayers, filterPlayers } from '../../actions/player_actions.js';
 import { fetchHeadings } from '../../actions/heading_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
+import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
 
 import 'fixed-data-table/dist/fixed-data-table.min.css';
 import './playerList.css';
+import './editList.css';
+
 
 class SortExample extends Component {
   constructor(props) {
     super(props);
+    // createCertificateObject()
 	this.props.fetchPlayers();
 	this.props.fetchHeadings();
   this.props.fetchButtons();
+  this.props.fetchCertificates();
 
 	this.state = {
       colSortDirs: {},
@@ -76,33 +79,27 @@ class SortExample extends Component {
     });
   }
   isDeathPage(playersKeys, players){
-    //const columnData = players[keysArray[index]][columnKey];
     let filteredIndexes = [];
-    if(players){
-      console.log(playersKeys, players)
-      for (var index = 0; index < playersKeys.length; index++) {
-        if(players[playersKeys[index]]['status'] === "DECEASED"){
-          filteredIndexes.push(playersKeys[index]);
-        };
-      }
-      console.log(filteredIndexes)
-    }
-        
 
+      for (var index = 0; index < playersKeys.length; index++) {
+         if(players[playersKeys[index]]['status'] === "DECEASED"){
+           filteredIndexes.push(playersKeys[index]);
+         };
+    }
     return filteredIndexes;
   }
   getPlayerKeys(players){
     let playersKeys = [];
-
-    // if(this.props.deathPage){
-    //   playersKeys = this.isDeathPage(playersKeys, players)      
-    // }
-
-
     if (Object.keys(this.props.players.sortRules).length === 0){
       playersKeys = Object.keys(players);
+      if(this.props.deathPage){
+          playersKeys = this.isDeathPage(playersKeys, players)      
+      }
     } else {
       playersKeys = this.props.players.sortRules;
+      if(this.props.deathPage){
+          playersKeys = this.isDeathPage(playersKeys, players)      
+      }
     }    
   	return playersKeys;
   }
@@ -142,7 +139,7 @@ class SortExample extends Component {
 
     //if this is NOT the all page
     let possibleRowHeadings = Object.values(this.props.headings);
-    if (location.pathname.indexOf('trial-results') !== -1) {
+    if (location.pathname.indexOf('results') !== -1) {
       //for each row heading if it's name is in the list of rowHeadingsChosen than push the whole item into the final array
       possibleRowHeadings.map((rowHeading) => {
         if(rowHeadingsChosen.indexOf(rowHeading.name) !== -1){
@@ -160,13 +157,72 @@ class SortExample extends Component {
     
     return rowHeadingsObjectsFinal;
   }
+  openCert(certificates, playerName, type){
+    //find out if there is more than one image
+
+    let urls;
+    if (type === "deathDate"){
+      
+      urls = getImageCount("death");
+
+
+      //url = certificates.death[playerName].url;
+    } else if(type === "birthDate"){
+
+      urls = getImageCount("birth")
+    } 
+
+    const lightbox = document.getElementById('certLightbox');
+
+    for (var index = 0; index < urls.length; index++) {
+      const img = document.createElement('img')
+      img.setAttribute("src", urls[index]);
+      const imageWrapper = document.getElementById('lightBoxImageWrapper')
+      imageWrapper.appendChild(img);
+    }
+
+
+      // const img = lightbox.getElementsByTagName('img')
+      // img[0].src = url;
+      lightbox.classList.add('lightboxOn');      
+    
+
+    function getImageCount(type){
+      const nameArray = Object.keys(certificates[type]).map((cert) => { const name = cert.split('-'); return name[0] });
+      const imageCount = getOccurrence( nameArray, playerName);
+
+      let imageUrl =[];
+      if(imageCount === 1){
+        imageUrl.push(certificates[type][playerName].url);
+      } else {
+
+       
+        for (var index = 0; index < imageCount; index++) {
+          let multiImageUrl;
+          if(index === 0){
+            multiImageUrl = certificates[type][playerName].url;
+          } else {
+            multiImageUrl = certificates[type][playerName + "-" + (index + 1)].url
+          }
+        
+          imageUrl.push(multiImageUrl)
+        }
+      }
+      return imageUrl;
+    }
+
+    function getOccurrence(array, value) {
+          return array.filter((v) => (v === value)).length;
+      }
+ 
+  }
+
   render() {
     
   	const players = this.props.players.list
     const headings = this.adjustHeadingsPerUrl(this.props.headings, this.props.buttons);
   	const playersKeys = this.getPlayerKeys(players);
   	const rowsCount = playersKeys.length;
-
 
    	var {colSortDirs, columnWidths} = this.state;
 
@@ -178,70 +234,78 @@ class SortExample extends Component {
 
     if (rowsCount !== 0){
     return (
-      <Table
-        rowHeight={50}
-        rowsCount={rowsCount}
-        headerHeight={70}
-        onColumnResizeEndCallback={this.onColumnResizeEndCallback}
-        isColumnResizing={false}
-        width={1200}
-        height={650}
-        {...this.props}>
-        {
-        	headings.map((heading) => {
-        		if (heading.name === "name"){
-        			return( 
-        				<Column
-        				  key={heading.name}
-				          columnKey={heading.name}
-				          fixed="true"
-                  isResizable={true}
-                  minWidth={70}
-                  maxWidth={500}
-                  flexGrow={1}
-				          header={
-				            <SortHeaderCell
-				              onSortChange={this.onSortChange}
-                      onFilter={this.onFilter}
-				              sortDir={colSortDirs[heading.name]}
-				              playersKeys={playersKeys}
-                      >
-				              {heading.label}
-				            </SortHeaderCell>
-				          }
-				          cell={<TextCell data={players} keys={playersKeys}/>}
-				          width={columnWidths[heading.name]}
-				        />
-        			);
-        		} else {
-        		
-	        		return(
-	        			<Column
-	        		    key={heading.name}
-				          columnKey={heading.name}
-                  isResizable={true}
-                  minWidth={70}
-                  maxWidth={500}
-                  flexGrow={1}
-				          header={
-				            <SortHeaderCell
-				              onSortChange={this.onSortChange}
-                      onFilter={this.onFilter}
-				              sortDir={colSortDirs[heading.name]}
-				              playersKeys={playersKeys}>
+      <div>
+        <Table
+          rowHeight={40}
+          rowsCount={rowsCount}
+          headerHeight={70}
+          onColumnResizeEndCallback={this.onColumnResizeEndCallback}
+          isColumnResizing={false}
+          width={1200}
+          height={650}
+          {...this.props}>
+          {
+          	headings.map((heading) => {
+          		if (heading.name === "name"){
 
-				              {heading.label}
-				            </SortHeaderCell>
-				          }
-				          cell={<TextCell data={players} keys={playersKeys} />}
-				          width={columnWidths[heading.name]}
-				        />
+          			return( 
+          				<Column
+          				  key={heading.name}
+  				          columnKey={heading.name}
+  				          fixed="true"
+                    isResizable={true}
+                    minWidth={70}
+                    maxWidth={500}
+                    flexGrow={1}
+  				          header={
+  				            <SortHeaderCell
+  				              onSortChange={this.onSortChange}
+                        onFilter={this.onFilter}
+  				              sortDir={colSortDirs[heading.name]}
+  				              playersKeys={playersKeys}
+                        >
+  				              {heading.label}
+  				            </SortHeaderCell>
+  				          }
+  				          cell={<NameCell data={players} keys={playersKeys}/>}
+  				          width={columnWidths[heading.name]}
+  				        />
+          			);
+          		} else {
+  	        		return(
+  	        			<Column
+  	        		    key={heading.name}
+  				          columnKey={heading.name}
+                    isResizable={true}
+                    minWidth={70}
+                    maxWidth={500}
+                    flexGrow={1}
+  				          header={
+  				            <SortHeaderCell
+  				              onSortChange={this.onSortChange}
+                        onFilter={this.onFilter}
+  				              sortDir={colSortDirs[heading.name]}
+  				              playersKeys={playersKeys}>
 
-	        		);
-        	}
-        	})
-        }
-      </Table>
+  				              {heading.label}
+  				            </SortHeaderCell>
+  				          }
+  				          cell={<TextCell 
+                            data={players} 
+                            keys={playersKeys} 
+                            openCert={this.openCert}
+                            certificates={this.props.certificates}
+                            />
+                          }
+  				          width={columnWidths[heading.name]}
+  				        />
+  	        		);
+          	  }
+          	})
+          }
+        </Table>
+        <Lightbox />
+      </div>
     );
 	}	else {
 		return(
@@ -270,16 +334,15 @@ class SortHeaderCell extends Component {
   render() {
     var {sortDir, children, playersKeys, ...props} = this.props;
     return (
-      <div>
+
         
         <Cell {...props}>
           <a onClick={this.onSortChange}>
             {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''} 
           </a>
-          <input className="search" onChange={this.onFilter} placeholder={"Filter by " + children}/>
+          <input className="search" onChange={this.onFilter} placeholder="Search"/>
         </Cell>
 
-      </div>
     );
   }
   onFilter(e){
@@ -297,11 +360,22 @@ class SortHeaderCell extends Component {
   }
 }
 
-const TextCell = ({rowIndex, data, columnKey, keys, ...props}) => (
-  <Cell {...props}>
+const TextCell = ({rowIndex, data, columnKey, keys, openCert, certificates, ...props}) => {
+  return(
+    <Cell {...props} className={data[keys[rowIndex]]["status"].toLowerCase()}>
+      {data[keys[rowIndex]][columnKey]}
+      { (columnKey === "birthDate") && (Object.keys(certificates.birth).includes(slug(data[keys[rowIndex]]['name']))) ? <span className="certDot" onClick={() => openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="camera"/></span> : "" }
+      { (columnKey === "deathDate") && (Object.keys(certificates.death).includes(slug(data[keys[rowIndex]]['name']))) ? <span className="certDot" onClick={() => openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="camera"/></span> : "" }
+    </Cell>
+  )};
 
-    {data[keys[rowIndex]][columnKey]}
-  </Cell>
+const NameCell = ({rowIndex, data, columnKey, playerNumber, keys, ...props}) => (
+  <div className="name">
+    <div className="playerNumber">{rowIndex + 1}</div>
+    <Cell {...props} className={data[keys[rowIndex]]["status"].toLowerCase()}>
+      {data[keys[rowIndex]][columnKey]}
+    </Cell>
+  </div>
 );
 
 
@@ -310,9 +384,9 @@ function mapStateToProps(state){
 		players: state.players,
 		headings: state.headings,
 		buttons: state.buttons,
-		// certificates: state.certificates,
+		certificates: state.certificates,
 	}
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, sortPlayers, filterPlayers, fetchHeadings, fetchButtons })(SortExample);
+export default connect(mapStateToProps, { fetchPlayers, sortPlayers, filterPlayers, fetchHeadings, fetchButtons, fetchCertificates })(SortExample);

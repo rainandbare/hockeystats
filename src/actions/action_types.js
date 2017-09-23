@@ -12,6 +12,6 @@ export const FETCH_BUTTONS = 'FETCH_BUTTONS';
 export const ADD_BUTTON = 'ADD_BUTTON';
 
 export const FETCH_CERTIFICATES = 'FETCH_CERTIFICATES';
-// export const ADD_BUTTON = 'ADD_BUTTON'
+export const ADD_CERTIFICATE = 'ADD_CERTIFICATE'
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH';

@@ -3,13 +3,14 @@ import { connect } from 'react-redux';
 
 
 import Title from '../Bits/title.js';
-import MyTable from '../Sections/PlayerList3.js';
+import Table from '../Sections/PlayerList.js';
 import QuerySelector from '../Sections/QuerySelector.js';
+import DeathAverage from '../Bits/deathAverage.js';
 
 
 import { fetchHeadings } from '../../actions/heading_actions.js';
 
-class TrialResults extends Component {
+class Results extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
@@ -18,15 +19,16 @@ class TrialResults extends Component {
 		}
 
 
-		this.findPathName = this.findPathName.bind(this)
+		this.findPathName = this.findPathName.bind(this);
+
 	}
 	componentWillMount(){
 		this.findPathName(location.pathname);
 	}
 	findPathName(path){
-		if (path.includes('trial-results')) {
+		if (path.includes('results')) {
 			//find out what categories the user requested
-			const splitPath = path.split('/trial-results/');
+			const splitPath = path.split('/results/');
 			splitPath.shift();
 			const categories = splitPath[0].split('-');
 
@@ -50,11 +52,14 @@ class TrialResults extends Component {
 	    return (
 	      	<div className="selectedresults results page">
 	      		<section className="topOPage flexMe">
-			      	<Title />
+			      	<Title/>
+			      	{this.state.deathPage ? <DeathAverage /> : ""}
 			      	<QuerySelector
 			      		findPathName={this.findPathName} />
+			      	
 		      	</section>
-	      		<MyTable 
+		      	
+	      		<Table 
 	      			categories={this.state.categories}
 	      	 		deathPage={this.state.deathPage}/>
 	      	</div>
@@ -62,4 +67,4 @@ class TrialResults extends Component {
 	}
 }
 
-export default connect(null, { fetchHeadings })(TrialResults);
+export default connect(null, { fetchHeadings })(Results);

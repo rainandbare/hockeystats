@@ -1,0 +1,37 @@
+#certLightbox {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 9999;
+    background: rgba(0,0,0,0.7);
+    visibility: hidden;
+    opacity: 0;
+    overflow: scroll;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: center;
+    padding: 80px;
+}
+
+/*#certlightbox .imageWrapper{
+
+}*/
+
+#certLightbox.lightboxOn{
+	visibility: visible;
+	opacity: 1;
+}
+
+.closeLightbox{
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	font-size: 20px;
+	color: white;
+}
+
+#certLightbox img:last-of-type{
+    padding-bottom: 90px;
+}

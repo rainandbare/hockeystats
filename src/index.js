@@ -9,8 +9,8 @@ import Header from './components/Sections/Header';
 import Footer from './components/Sections/Footer';
 import Home from './components/Pages/Home';
 import Intro from './components/Pages/Intro';
-import SelectedResults from './components/Pages/SelectedResults';
-import TrialResults from './components/Pages/TrialResults.js';
+
+import Results from './components/Pages/Results.js';
 import Edit from './components/Pages/Edit';
 ;import './index.css';
 
@@ -28,9 +28,8 @@ ReactDOM.render(
 				<Header />
 				<main>
 					<Switch>
-						<Route path="/selected/*" component={ SelectedResults } />
-						<Route path="/trial-results/*" component={ TrialResults } />
-						<Route path="/trial-results" component={ TrialResults } />
+						<Route path="/results/*" component={ Results } />
+						<Route path="/results" component={ Results } />
 						<Route path="/edit" component={ Edit } />
 						<Route path="/intro" component={ Intro }/>
 						<Route path="/" component={ Home } />
