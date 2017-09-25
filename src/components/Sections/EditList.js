@@ -12,9 +12,13 @@ import { fetchHeadings } from '../../actions/heading_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
 import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
 
+import EditPlayerForm from '../Bits/editPlayer';
+import TextCell from '../Bits/textCell.js';
+import SortHeaderCell from '../Bits/sortHeaderCell.js';
+
 import 'fixed-data-table/dist/fixed-data-table.min.css';
 import './playerList.css';
-import './editList.css';
+
 
 
 class SortExample extends Component {
@@ -30,6 +34,8 @@ class SortExample extends Component {
       colSortDirs: {},
       colLocked: [],
       columnWidths: {},
+      toggleEditForm: false,
+      editPlayerID: ''
   };
 
     this.onSortChange = this.onSortChange.bind(this);
@@ -38,7 +44,14 @@ class SortExample extends Component {
     this.adjustHeadingsPerUrl = this.adjustHeadingsPerUrl.bind(this);
     this.onColumnResizeEndCallback = this.onColumnResizeEndCallback.bind(this);
     this.isDeathPage = this.isDeathPage.bind(this);
+    this.toggleForm = this.toggleForm.bind(this);
 
+  }
+  toggleForm(){
+    this.setState({
+      toggleEditForm: true,
+      editPlayerID: this.props.editPlayer.playerID
+    });
   }
   onSortChange(columnKey, sortDir, keysArray) {
   	this.props.sortPlayers(columnKey, sortDir, keysArray, this.props.players.list)
@@ -181,10 +194,7 @@ class SortExample extends Component {
       imageWrapper.appendChild(img);
     }
 
-
-      // const img = lightbox.getElementsByTagName('img')
-      // img[0].src = url;
-      lightbox.classList.add('lightboxOn');      
+    lightbox.classList.add('lightboxOn');      
     
 
     function getImageCount(type){
@@ -214,15 +224,17 @@ class SortExample extends Component {
     function getOccurrence(array, value) {
           return array.filter((v) => (v === value)).length;
       }
- 
   }
-
   render() {
-    
   	const players = this.props.players.list
     const headings = this.adjustHeadingsPerUrl(this.props.headings, this.props.buttons);
   	const playersKeys = this.getPlayerKeys(players);
   	const rowsCount = playersKeys.length;
+
+    const editPlayer = this.props.editPlayer.showPlayerEdit;
+    const editPlayerID = this.props.editPlayer.playerID;
+    console.log(editPlayer)
+
 
    	var {colSortDirs, columnWidths} = this.state;
 
@@ -295,6 +307,7 @@ class SortExample extends Component {
                             keys={playersKeys} 
                             openCert={this.openCert}
                             certificates={this.props.certificates}
+                            toggleForm={this.toggleForm}
                             />
                           }
   				          width={columnWidths[heading.name]}
@@ -305,6 +318,7 @@ class SortExample extends Component {
           }
         </Table>
         <Lightbox />
+        {this.state.toggleEditForm ? <EditPlayerForm /> : ""}
       </div>
     );
 	}	else {
@@ -312,62 +326,10 @@ class SortExample extends Component {
 			<div></div>
 			);
 	}
+
   }
 }
 
-var SortTypes = {
-  ASC: 'ASC',
-  DESC: 'DESC',
-};
-
-function reverseSortDirection(sortDir) {
-  return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
-}
-
-class SortHeaderCell extends Component {
-  constructor(props) {
-    super(props);
-    this.onSortChange = this.onSortChange.bind(this);
-    this.onFilter = this.onFilter.bind(this)
-  }
-
-  render() {
-    var {sortDir, children, playersKeys, ...props} = this.props;
-    return (
-
-        
-        <Cell {...props}>
-          <a onClick={this.onSortChange}>
-            {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''} 
-          </a>
-          <input className="search" onChange={this.onFilter} placeholder="Search"/>
-        </Cell>
-
-    );
-  }
-  onFilter(e){
-     if (this.props.onFilter) {
-      this.props.onFilter(e.target.value, this.props.columnKey)
-    }
-  }
-
-  onSortChange(e) {
-    e.preventDefault();
-
-    if (this.props.onSortChange) {
-      this.props.onSortChange( this.props.columnKey, this.props.sortDir ? reverseSortDirection(this.props.sortDir) : SortTypes.DESC, this.props.playersKeys);
-    }
-  }
-}
-
-const TextCell = ({rowIndex, data, columnKey, keys, openCert, certificates, ...props}) => {
-  return(
-    <Cell {...props} className={data[keys[rowIndex]]["status"].toLowerCase()}>
-      {data[keys[rowIndex]][columnKey]}
-      { (columnKey === "birthDate") && (Object.keys(certificates.birth).includes(slug(data[keys[rowIndex]]['name']))) ? <span className="certDot" onClick={() => openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="camera"/></span> : "" }
-      { (columnKey === "deathDate") && (Object.keys(certificates.death).includes(slug(data[keys[rowIndex]]['name']))) ? <span className="certDot" onClick={() => openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="camera"/></span> : "" }
-    </Cell>
-  )};
 
 const NameCell = ({rowIndex, data, columnKey, playerNumber, keys, ...props}) => (
   <div className="name">
@@ -379,12 +341,14 @@ const NameCell = ({rowIndex, data, columnKey, playerNumber, keys, ...props}) => 
 );
 
 
+
 function mapStateToProps(state){
 	return {
 		players: state.players,
 		headings: state.headings,
 		buttons: state.buttons,
 		certificates: state.certificates,
+    editPlayer: state.editPlayer
 	}
 }
 

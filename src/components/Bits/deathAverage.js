@@ -38,6 +38,7 @@ class DeathAverage extends Component {
 			<section className="deathAverage">
 				<h2>Average Age at Death</h2>
 				<h4 className="deathAverage-number">{deathAverage}</h4>
+				<h2>(ALL DECEASED PLAYERS)</h2>
 			</section>
 		);
 	}

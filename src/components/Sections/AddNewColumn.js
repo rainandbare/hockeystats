@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { reduxForm, Field } from 'redux-form';
-
+import { reduxForm, Field, change } from 'redux-form';
+import { Resizable, ResizableBox } from 'react-resizable';
 import slug from '../../functions/slug.js';
 
 
@@ -9,6 +10,12 @@ import slug from '../../functions/slug.js';
 import { addHeading } from '../../actions/heading_actions.js';
 
 class AddNewColumn extends Component {
+	constructor(props){
+		super(props);
+		this.recordWidth = this.recordWidth.bind(this);
+
+
+	}
 	onSubmit(values){
 		const label = values.columnName;
 		const name = slug(label);
@@ -18,8 +25,13 @@ class AddNewColumn extends Component {
 		}
 		this.props.addHeading(heading);
 	}
+	recordWidth(e, data){
+		console.log(Math.round(data.size.width))
+		this.props.change("AddNewColumn", "width", Math.round(data.size.width))
+		//console.log(this.props)
+	}
 	renderField(field){
-		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
+		const className = `formfield ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
 		return(
 			<div className={className} key={field.key}>
 				<label>{field.label}: </label>
@@ -37,13 +49,26 @@ class AddNewColumn extends Component {
 	render(){
 		const { handleSubmit } = this.props;
 		return(
-			<div>
-				AddNewColumn
+			<div className="addNewColumn">
+				<h2>Fill in column title and resize header to choose default width.</h2>
 				<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+						<div className="columnNameField">
+						<ResizableBox width={150} height={48} axis={'x'} minConstraints={[42, 45]} onResizeStop={this.recordWidth}>
+							<Field
+								key="columnName"
+								name="columnName"
+								label="Name"
+								component={this.renderField}
+							/>
+						</ResizableBox>
+
+						</div>
+						
+
 				<Field
-					key="columnName"
-					name="columnName"
-					label="Name"
+					key="width"
+					name="width"
+					label="Width"
 					component={this.renderField}
 				/>
 				<button className="button" type="submit">Add Column</button>
@@ -70,10 +95,12 @@ function validate(values){
 
 }
 
+
 export default reduxForm({
-	validate,
+	validate, 
+	initialValues:{ width: 150 },
 	form: "AddNewColumn"
 })(
-	connect(null, { addHeading })(AddNewColumn)
+	connect(null, { addHeading, change })(AddNewColumn)
 );
 

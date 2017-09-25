@@ -13,10 +13,10 @@ class Lightbox extends Component {
 	render(){
 		return(
 			<div id="certLightbox">
-				<div id="lightBoxImageWrapper" className="lightBoxImageWrapper">
-					
+				<div className="lightboxAndClose">
+					<div id="lightBoxImageWrapper" className="lightBoxImageWrapper"></div>
+					<div className="closeLightbox" onClick={this.closeCert}><FontAwesome name="close"/></div>
 				</div>
-				<div className="closeLightbox" onClick={this.closeCert}><FontAwesome name="close"/></div>
 			</div>
 		);
 	}

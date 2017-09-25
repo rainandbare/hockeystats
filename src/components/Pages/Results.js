@@ -45,7 +45,7 @@ class Results extends Component {
 			})
 		}
 		function isDeathInfo(element){
-			return element === 'deathInfo';
+			return element === 'death';
 		}
 	}
 	render() {

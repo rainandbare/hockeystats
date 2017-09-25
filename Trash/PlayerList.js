@@ -221,44 +221,19 @@ class PlayerList extends Component {
 		      			</Row>
 		      			{
 		      				keys.map((index) => {
-			      				//if it is the death page
-			      				/* if(this.props.deathPage === true){
-				      				//only return the players that are alive
-				      				const status = players[index].status;
-				      				if (status === "DECEASED"){
-					      				return (
-						                		<PlayerRow 
-						                			players={players}
-						                			certificates={this.props.certificates}
-						                			searchTerm={this.props.searchTerm}
-
-						                			onDeletePlayer={this.onDeletePlayer.bind(this)}
-						                			onToggleEditForm={this.onToggleEditForm.bind(this)}
-
-						                			key={"row" + index}
-						                			index={index}
-						                			rowHeadingsFinal={rowHeadingsFinal}
-						                			edit={this.props.edit}
-						                		/>
-					                			);
-				      				}
-				      				} else { //if it is not the death page return all players*/
 					                return (
 					                	<PlayerRow 
 					                			players={players}
 					                			certificates={this.props.certificates}
 					                			searchTerm={this.props.searchTerm}
-
 					                			onDeletePlayer={this.onDeletePlayer.bind(this)}
 					                			onToggleEditForm={this.onToggleEditForm.bind(this)}
-
 					                			key={"row" + index}
 					                			index={index}
 					                			rowHeadingsFinal={rowHeadingsFinal}
 					                			edit={this.props.edit}
 					                	/>
 					                );
-				            	//}
 				              })
 			      		}
 		      	</StickyTable>

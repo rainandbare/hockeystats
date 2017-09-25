@@ -1,23 +1,27 @@
 import React, { Component } from 'react';
-import { reduxForm } from 'redux-form';
+import { reduxForm, resetForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { addPlayer } from '../../actions/player_actions.js';
 import PlayerForm from '../Bits/playerForm';
 
 
+
 class AddPlayerForm extends Component {
 	onSubmit(values){
 		this.props.addPlayer(values);
-		this.props.showForm(false);
+		this.props.actionComplete();
 	}
 	render(){
 		const { handleSubmit } = this.props;
 		return(
-			<PlayerForm 
-				onSubmit={handleSubmit(this.onSubmit.bind(this))}
-				headings={this.props.headings}
-				buttonLabel="Add Player"
-			/>
+			<div className="addNewPlayer">
+				<h2>Fill out the form to add a new player.</h2>
+				<PlayerForm 
+					onSubmit={handleSubmit(this.onSubmit.bind(this))}
+					headings={this.props.headings}
+					buttonLabel="Add Player"
+				/>
+			</div>
 			);
 	}
 }
@@ -25,14 +29,12 @@ class AddPlayerForm extends Component {
 function validate(values){
 	const errors = {};
 
+
 	if (!values.name) {
-		errors.name = "Enter the player's Name. (LastName, FirstName)";
+		errors.name = "Enter player's name. (LastName, FirstName)";
 	}
-	if (!values.birthCity) {
-		errors.birthCity = "Enter the players Birth City.";
-	}
-	if (!values.birthDate) {
-		errors.birthDate = "Enter the players Birth Date.";
+	if (!values.status) {
+		errors.name = "Choose player's status.";
 	}
 
 	return errors;

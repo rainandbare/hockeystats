@@ -2,15 +2,17 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { editPlayer } from '../../actions/player_actions.js';
-// import { fetchHeadings } from '../actions/heading_actions.js';
+
+
 import PlayerForm from './playerForm';
 
 class EditPlayerForm extends Component {
+
 	componentDidMount() {
   		this.handleInitialize();
 	}
 	handleInitialize() {
-		const playerData = this.props.players[this.props.playerID];
+		const playerData = this.props.players.list[this.props.playerID];
 	  	this.props.initialize(playerData);
 	}
 	onSubmit(values){
@@ -50,7 +52,8 @@ function validate(values){
 function mapStateToProps(state){
 	return {
 		headings: state.headings,
-		players: state.players
+		players: state.players,
+		playerID: state.editPlayer.playerID
 	}
 }
 

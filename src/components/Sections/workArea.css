@@ -39,5 +39,12 @@ section.workarea{
     margin: 25px auto;
     padding: 30px;
     border-radius: 5px;
+}
+section.workarea h2{
+    text-align: center;
+}
 
+section.workarea button.button{
+    margin: 30px calc(40% + 20px) 0;
+    display: block;
 }

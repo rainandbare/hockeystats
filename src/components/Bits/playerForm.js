@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Field } from 'redux-form';
 
+import './playerForm.css'
 
 class PlayerForm extends Component {
 	renderField(field){
@@ -20,6 +21,24 @@ class PlayerForm extends Component {
 		);
 		
 	}
+	renderSelectField(field){
+		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
+		return(
+			<div className={className} key={field.key}>
+				<label>{field.label}: </label>
+				<input 
+					id={field.name}
+					type="text"
+					{...field.input}
+				/>
+				<div className="red-text">
+					{field.meta.touched ? field.meta.error : ''}
+				</div>
+			</div>
+		);
+	}	
+
+
 
 	render(){
 		const headings = this.props.headings;
@@ -27,7 +46,6 @@ class PlayerForm extends Component {
 		return(
 			<form onSubmit={this.props.onSubmit}>
 			{headingsKeys.map((a) => {
-				//console.log(headings[a].name)
 				return (
 				<Field
 					key={headings[a].name}

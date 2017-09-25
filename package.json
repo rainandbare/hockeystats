@@ -11,6 +11,8 @@
     "react-dropzone": "^4.1.3",
     "react-fontawesome": "^1.6.1",
     "react-redux": "^5.0.4",
+    "react-resizable": "^1.7.4",
+    "react-resizable-component": "^1.0.16",
     "react-router-dom": "^4.1.1",
     "react-sticky-table": "^1.1.9",
     "react-string-replace": "^0.4.0",

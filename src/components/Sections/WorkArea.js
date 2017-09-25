@@ -13,25 +13,25 @@ class WorkArea extends Component {
 		case "addPlayer":
 			return(
 				<section className="workarea">
-					<AddNewPlayer />
+					<AddNewPlayer actionComplete={this.props.actionComplete} />
 				</section>
 			);
 		case "addColumn":
 			return(
 				<section className="workarea">
-					<AddNewColumn />
+					<AddNewColumn actionComplete={this.props.actionComplete}/>
 				</section>
 			);
 		case "editButton":
 			return(
 				<section className="workarea">
-					<EditButtons />
+					<EditButtons actionComplete={this.props.actionComplete}/>
 				</section>
 			);
 		case "addCertificate":
 			return(
 				<section className="workarea">
-					<AddNewCertificate />
+					<AddNewCertificate actionComplete={this.props.actionComplete}/>
 				</section>
 			);
 		default:

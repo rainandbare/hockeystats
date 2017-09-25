@@ -7,6 +7,8 @@ import { addCertificate } from '../../actions/certificate_actions.js';
 
 import slug from '../../functions/slug.js'
 
+import './addnewcolumn.css'
+
 const FILE_FIELD_NAME = 'file';
 
 const renderDropzoneInput = (field) => {

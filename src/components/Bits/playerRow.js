@@ -26,11 +26,6 @@ class PlayerRow extends Component {
 				<Row key={"row" + index} className={players[index].nameSlug}>
                     {
                     	this.props.rowHeadingsFinal.map((a) => {
-	       //              	if(((a.name === "birthDate") && (hasBirthCert.indexOf(nameSlug) !== -1)) || ((a.name === "deathDate") && (hasDeathCert.indexOf(nameSlug) !== -1))){
-								// return(
-								// 	<Cell className={a.name + " hasCert"} key={a.name + this.props.index} onClick={() => this.openCert(players[index].name, a.name)}>{players[index][a.name]}</Cell>
-								// );
-	       //               	} else {
 	                     		const content = players[index][a.name];
 	                    		return(
 	                     			<Cell className={a.name} key={a.name + index}>

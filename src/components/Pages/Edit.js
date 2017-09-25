@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 
 import Title from '../Bits/title.js';
-import Table from '../Sections/PlayerList.js';
+import Table from '../Sections/EditList.js';
 import QuerySelector from '../Sections/QuerySelector.js';
 import DeathAverage from '../Bits/deathAverage.js';
 import WorkArea from '../Sections/WorkArea.js';
@@ -23,6 +23,7 @@ class Results extends Component {
 
 		this.findPathName = this.findPathName.bind(this);
 		this.chooseAction = this.chooseAction.bind(this)
+		this.actionComplete = this.actionComplete.bind(this)
 
 	}
 	componentWillMount(){
@@ -57,6 +58,12 @@ class Results extends Component {
 			actionType : e.target.id
 		});
 	}
+	actionComplete(){
+		this.setState({
+			actionType: null,
+		})
+	}
+
 	render() {
 		console.log(this.state.actionType)
 	    return (
@@ -73,7 +80,7 @@ class Results extends Component {
 		      		<button className="actionType button" id="addCertificate"onClick={this.chooseAction}>Add a Certificate</button>
 		      		<button className="actionType button" id="editButton" onClick={this.chooseAction}>Edit Buttons</button>
 			    </section>
-			    <WorkArea action={this.state.actionType}/>
+			    <WorkArea action={this.state.actionType} actionComplete={this.actionComplete}/>
 		      	<h2>Edit A Player</h2>
 	      		<Table 
 	      			categories={this.state.categories}

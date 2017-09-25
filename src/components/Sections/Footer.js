@@ -8,12 +8,12 @@ class Footer extends Component {
 		return(
 			<footer>
 				<section className="externalLink">
-					<a href="http://andrewpodneiks.com">
-						andrewpodneiks<span className="reg"> . </span>com
+					<a href="http://andrewpodnieks.com">
+						andrewpodnieks<span className="reg"> . </span>com
 					</a>
 				</section>
 				<section className="socialFooter">
-					<TwitterSVG link="http://twitter.com/andrewpodneiks" />
+					<TwitterSVG link="https://twitter.com/andrewpodnieks" />
 					<MailSVG link="mailto:andrewpodneiks@gmail.com"/>
 				</section>
 			</footer>
