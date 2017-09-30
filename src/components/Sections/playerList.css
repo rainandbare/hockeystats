@@ -13,26 +13,25 @@ input.search {
     color: white;
 }
 .public_fixedDataTable_header, .public_fixedDataTable_header .public_fixedDataTableCell_main {
-    background-color: RGBA(242, 156, 57, 1.00);
-    color: black;
-    background-image: none;
+    background-color: RGBA(242, 156, 57, 1.00) !important;
+    color: black !important;
+    background-image: none !important;
 }
 .public_fixedDataTableCell_columnResizerKnob {
-    background-color: #2611e1;
+    background-color: #2611e1 !important;
 }
 .public_fixedDataTableCell_main {
-    background-color: #fff;
-    border-color: black;
+    border-color: black !important;
 }
 .public_fixedDataTable_main, .public_fixedDataTable_header, .public_fixedDataTable_hasBottomBorder {
-    border-color: black;
+    border-color: black !important;
 }
 .public_fixedDataTableRow_fixedColumnsDivider {
-    border-color: black;
+    border-color: black !important;
 }
 .fixedDataTableLayout_main {
-    border-width: 2px;
-    user-select: none;
+    border-width: 2px !important;
+    user-select: none !important;
 }
 
 
@@ -76,4 +75,16 @@ input.search {
 
 .public_fixedDataTable_header .public_fixedDataTableCell_cellContent {
     padding: 14px 8px 8px;
+}
+
+.fixedDataTableCellLayout_wrap1{
+    transition: all 0.15s ease;
+}
+
+div.edit div.public_fixedDataTable_bodyRow:hover .fixedDataTableCellLayout_wrap1{
+    background-color: #7CA67F ;
+}
+
+.fixedDataTableCellGroupLayout_cellGroupWrapper{
+    background: black;
 }

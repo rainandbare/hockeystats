@@ -17,8 +17,6 @@ class Results extends Component {
 			deathPage : false,
 			categories: ["all"]
 		}
-
-
 		this.findPathName = this.findPathName.bind(this);
 
 	}

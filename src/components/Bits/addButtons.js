@@ -25,8 +25,10 @@ class AddEditButtons extends Component {
 		
 	}
 	onSubmit(values){
-		// console.log(values);
-		this.props.addButton(values);
+		//console.log(values);
+		const order = Object.keys(this.props.buttons).length;
+		this.props.addButton(values, order);
+		this.props.actionCompleted();
 		
 	}
 	render(){
@@ -35,16 +37,19 @@ class AddEditButtons extends Component {
 		const keys = Object.keys(headings);
 		return(
 			
-			<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-				<h2>Add New Button</h2>
-				<Field
-					key='name'
-					name="buttonName"
-					label="Button Name"
-					type="text"
-					component={this.renderField}
-				/>
-				<h4>Check all the columns you want to include in Button</h4>
+			<form className='addButtonForm' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
+				<div className="half">
+					<h2>Add New Button</h2>
+					<Field
+						key='name'
+						name="buttonName"
+						label="Button Name"
+						type="text"
+						component={this.renderField}
+					/>
+					<h4>Check all the columns you want to include in Button</h4>
+				</div>
+				<div className="half flexMe">
 				{	keys.map((i) => {
 						if(headings[i].name !== "name"){
 							return (
@@ -71,7 +76,8 @@ class AddEditButtons extends Component {
 						return(<div></div>);
 					})
 				}
-			<button className="button" type="submit">Add Button</button>
+				</div>
+				<button className="button" type="submit">Add Button</button>
 			</form>
 			);
 	}
@@ -106,7 +112,8 @@ function validate(values){
 
 function mapStateToProps(state){
 	return {
-		headings: state.headings
+		headings: state.headings,
+		buttons: state.buttons
 	}
 }
 

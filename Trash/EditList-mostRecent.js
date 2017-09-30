@@ -1,17 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Table, Column }  from 'fixed-data-table-2';
+import {Table, Column, Cell}  from 'fixed-data-table';
+import FontAwesome from 'react-fontawesome';
+
+import Lightbox from '../Bits/certificationsLightbox.js'
+
+import slug from '../../functions/slug.js'
 
 import { fetchPlayers, sortPlayers, filterPlayers } from '../../actions/player_actions.js';
-import { fetchHeadings, changeWidth } from '../../actions/heading_actions.js';
+import { fetchHeadings } from '../../actions/heading_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
-//import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
-import { fetchCertificates } from '../../actions/certificate_actions.js';
+import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
 
-import { TextCell, NameCell, SortHeaderCell } from '../Bits/cells.js'
+import EditPlayerForm from '../Bits/editPlayer';
+import TextCell from '../Bits/textCell.js';
+import SortHeaderCell from '../Bits/sortHeaderCell.js';
 
-import 'fixed-data-table-2/dist/fixed-data-table.min.css';
+import 'fixed-data-table/dist/fixed-data-table.min.css';
 import './playerList.css';
+
 
 
 class SortExample extends Component {
@@ -27,16 +34,29 @@ class SortExample extends Component {
         colSortDirs: {},
         colLocked: [],
         columnWidths: {},
+        toggleEditForm: false,
+        editPlayerID: ''
     };
+    this.uniqueCellKey = 0;
 
+
+
+    this.createUniqueCellKey = this.createUniqueCellKey.bind(this)
+    this.onRowClick = this.onRowClick.bind(this)
     this.onSortChange = this.onSortChange.bind(this);
     this.onFilter = this.onFilter.bind(this);
     this.getPlayerKeys = this.getPlayerKeys.bind(this);
     this.adjustHeadingsPerUrl = this.adjustHeadingsPerUrl.bind(this);
     this.onColumnResizeEndCallback = this.onColumnResizeEndCallback.bind(this);
     this.isDeathPage = this.isDeathPage.bind(this);
-    this.onRowClick = this.onRowClick.bind(this);
+    this.toggleForm = this.toggleForm.bind(this);
 
+  }
+  toggleForm(){
+    this.setState({
+      toggleEditForm: true,
+      editPlayerID: this.props.editPlayer.playerID
+    });
   }
   onSortChange(columnKey, sortDir, keysArray) {
   	this.props.sortPlayers(columnKey, sortDir, keysArray, this.props.players.list)
@@ -102,32 +122,27 @@ class SortExample extends Component {
   	return playersKeys;
   }
   onColumnResizeEndCallback(newColumnWidth, columnKey) {
-    if(location.pathname === '/edit'){
-      const headingKeys = Object.keys(this.props.headings)
-      const headingNames = Object.values(this.props.headings).map((headingObject) => { return headingObject.name })
-      const columnID = headingKeys[headingNames.indexOf(columnKey)];
-      this.props.changeWidth(newColumnWidth, columnID);
-    }
-      this.setState({
-        columnWidths: {
-          ...this.state.columnWidths,
-          [columnKey]: newColumnWidth,
-        }
-      });
+    console.log('changed', newColumnWidth, columnKey, this.state.columnWidths)
+    this.setState({
+      columnWidths: {
+        ...this.state.columnWidths,
+        [columnKey]: newColumnWidth,
+      }
+    });
   }
   adjustHeadingsPerUrl(possibleHeadings, buttons){
-    const buttonKeys = Object.keys(buttons);
     const categories = this.props.categories;
-
+    const buttonKeys = Object.keys(buttons);
+    
+  
     const rowHeadingsChosen = [];
-    //for each possible category in each button
+    const rowHeadingsObjectsFinal = [];
+
     buttonKeys.map((key) => {
       categories.map((category) =>{
-        //if the current chosen buttons has that category in it
         if(buttons[key].buttonLabel === category){
           const columnKeys = Object.keys(buttons[key].columns);
           const columns = buttons[key].columns;
-          
           columnKeys.map((columnKey) => {
             if (columns[columnKey] === true){
               rowHeadingsChosen.push(columnKey);
@@ -141,69 +156,118 @@ class SortExample extends Component {
     }); //buttonKeys map
 
     //if this is NOT the all page
-    const rowHeadingsObjectsFinal = [];
     let possibleRowHeadings = Object.values(this.props.headings);
     if (location.pathname.indexOf('results') !== -1) {
-      if(location.pathname.indexOf('all') === -1){
-        //if the pathname does not include the word all
-        //for each row heading if it's name is in the list of rowHeadingsChosen than push the whole item into the final array
-        possibleRowHeadings.map((possibleRowHeading) => {
-          if(rowHeadingsChosen.indexOf(possibleRowHeading.name) !== -1){
-            rowHeadingsObjectsFinal.push(possibleRowHeading);
-          }
-          return true;
-        });
-      } else {
-        //if this IS the /results/all page
-        rowHeadingsObjectsFinal.push(...possibleRowHeadings);
-      }
+      //for each row heading if it's name is in the list of rowHeadingsChosen than push the whole item into the final array
+      possibleRowHeadings.map((rowHeading) => {
+        if(rowHeadingsChosen.indexOf(rowHeading.name) !== -1){
+          rowHeadingsObjectsFinal.push(rowHeading);
+        }
+        return true;
+      });
     } else {
-      //if this IS anything but the results page
+      //if this IS the all page
       rowHeadingsObjectsFinal.push(...possibleRowHeadings);
     }
-
     if(rowHeadingsObjectsFinal.length === 0){
       rowHeadingsObjectsFinal.push(...possibleRowHeadings);
     }
     
     return rowHeadingsObjectsFinal;
   }
-  onRowClick(event, rowIndex){
+  openCert(certificates, playerName, type){
+    //find out if there is more than one image
+
+    let urls;
+    if (type === "deathDate"){
+      
+      urls = getImageCount("death");
+
+
+      //url = certificates.death[playerName].url;
+    } else if(type === "birthDate"){
+
+      urls = getImageCount("birth")
+    } 
+
+    const lightbox = document.getElementById('certLightbox');
+
+    for (var index = 0; index < urls.length; index++) {
+      const img = document.createElement('img')
+      img.setAttribute("src", urls[index]);
+      const imageWrapper = document.getElementById('lightBoxImageWrapper')
+      imageWrapper.appendChild(img);
+    }
+
+    lightbox.classList.add('lightboxOn');      
     
-    const data = this.props.players.list
-    const keys = this.getPlayerKeys(data);
-    this.props.openEditForm(event, rowIndex, data, keys)
+
+    function getImageCount(type){
+      const nameArray = Object.keys(certificates[type]).map((cert) => { const name = cert.split('-'); return name[0] });
+      const imageCount = getOccurrence( nameArray, playerName);
+
+      let imageUrl =[];
+      if(imageCount === 1){
+        imageUrl.push(certificates[type][playerName].url);
+      } else {
+
+       
+        for (var index = 0; index < imageCount; index++) {
+          let multiImageUrl;
+          if(index === 0){
+            multiImageUrl = certificates[type][playerName].url;
+          } else {
+            multiImageUrl = certificates[type][playerName + "-" + (index + 1)].url
+          }
+        
+          imageUrl.push(multiImageUrl)
+        }
+      }
+      return imageUrl;
+    }
+
+    function getOccurrence(array, value) {
+          return array.filter((v) => (v === value)).length;
+      }
+  }
+  createUniqueCellKey(){
+    this.uniqueCellKey = this.uniqueCellKey + 1;
+    return this.uniqueCellKey;
+  }
+  onRowClick(){
+    console.log("row clicked")
   }
   render() {
   	const players = this.props.players.list
     const headings = this.adjustHeadingsPerUrl(this.props.headings, this.props.buttons);
   	const playersKeys = this.getPlayerKeys(players);
-  	const rowsCount = playersKeys.length;
+
+    const editPlayer = this.props.editPlayer.showPlayerEdit;
+    const editPlayerID = this.props.editPlayer.playerID;
 
    	var {colSortDirs, columnWidths} = this.state;
 
     if(Object.keys(columnWidths).length === 0){
       for (var index = 0; index < headings.length; index++) {
-       columnWidths[headings[index].name] = headings[index].width;
+       columnWidths[headings[index].name] = 150;
       }
     }
-
-    if (rowsCount !== 0){
+    if (playersKeys.length !== 0){
     return (
       <div>
-        <h2> From fixed table 2</h2>
         <Table
           rowHeight={40}
-          rowsCount={rowsCount}
+          rowsCount={playersKeys.length}
           headerHeight={70}
           onColumnResizeEndCallback={this.onColumnResizeEndCallback}
-          onRowClick={this.onRowClick}
           isColumnResizing={false}
+          onRowClick={this.onRowClick}
           width={1200}
           height={650}
           {...this.props}>
           {
-          	headings.map((heading) => {
+
+            headings.map((heading) => {
           		if (heading.name === "name"){
 
           			return( 
@@ -212,7 +276,7 @@ class SortExample extends Component {
   				          columnKey={heading.name}
   				          fixed={true}
                     isResizable={true}
-                    minWidth={40}
+                    minWidth={70}
                     maxWidth={500}
                     flexGrow={1}
   				          header={
@@ -220,7 +284,8 @@ class SortExample extends Component {
   				              onSortChange={this.onSortChange}
                         onFilter={this.onFilter}
   				              sortDir={colSortDirs[heading.name]}
-  				              playersKeys={playersKeys}>
+  				              playersKeys={playersKeys}
+                        >
   				              {heading.label}
   				            </SortHeaderCell>
   				          }
@@ -231,10 +296,10 @@ class SortExample extends Component {
           		} else {
   	        		return(
   	        			<Column
-  	        		    key={heading.name + "edit"}
+  	        		    key={heading.name}
   				          columnKey={heading.name}
                     isResizable={true}
-                    minWidth={40}
+                    minWidth={70}
                     maxWidth={500}
                     flexGrow={1}
   				          header={
@@ -243,14 +308,17 @@ class SortExample extends Component {
                         onFilter={this.onFilter}
   				              sortDir={colSortDirs[heading.name]}
   				              playersKeys={playersKeys}>
+
   				              {heading.label}
   				            </SortHeaderCell>
   				          }
   				          cell={<TextCell 
+                            key={this.createUniqueCellKey}
                             data={players} 
                             keys={playersKeys} 
-                            openCert={this.props.openCert}
+                            openCert={this.openCert}
                             certificates={this.props.certificates}
+                            toggleForm={this.toggleForm}
                             />
                           }
   				          width={columnWidths[heading.name]}
@@ -260,15 +328,30 @@ class SortExample extends Component {
           	})
           }
         </Table>
+        <Lightbox />
+        {this.state.toggleEditForm ? <EditPlayerForm /> : ""}
       </div>
     );
+    
 	}	else {
 		return(
-			<div>Loading...</div>
+			<div></div>
 			);
 	}
+
   }
 }
+
+
+const NameCell = ({rowIndex, data, columnKey, playerNumber, keys, ...props}) => (
+  <div className="name">
+    <div className="playerNumber">{rowIndex + 1}</div>
+    <Cell {...props} className={data[keys[rowIndex]]["status"].toLowerCase()}>
+      {data[keys[rowIndex]][columnKey]}
+    </Cell>
+  </div>
+);
+
 
 
 function mapStateToProps(state){
@@ -277,8 +360,9 @@ function mapStateToProps(state){
 		headings: state.headings,
 		buttons: state.buttons,
 		certificates: state.certificates,
+    editPlayer: state.editPlayer
 	}
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, sortPlayers, filterPlayers, fetchHeadings, fetchButtons, fetchCertificates, changeWidth})(SortExample);
+export default connect(mapStateToProps, { fetchPlayers, sortPlayers, filterPlayers, fetchHeadings, fetchButtons, fetchCertificates })(SortExample);

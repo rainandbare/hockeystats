@@ -7,6 +7,7 @@ const ref = database.ref('/headings')
 export function fetchHeadings() {
 	return dispatch => {
 		ref.on('value', snapshot => {
+			console.log('headings changed')
 			dispatch({
 				type: FETCH_HEADINGS,
 				payload: snapshot.val()
@@ -17,13 +18,16 @@ export function fetchHeadings() {
  }
 
 export function addHeading(heading) {
-	return dispatch => database.ref('/headings').push(heading)
+	return dispatch => database.ref('/headings').push(heading);
 }
 
 export function deleteHeading(key) {
 	return dispatch => database.ref('/headings').child(key).remove();
 }
 
+export function changeWidth(width, key) {
+	  return dispatch => database.ref('/headings/' + key + '/width').set(width);
+}
   	 
 // export function addPlayer(player){
 //   return dispatch => ref.push(player)

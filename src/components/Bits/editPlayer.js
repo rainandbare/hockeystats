@@ -3,8 +3,8 @@ import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { editPlayer } from '../../actions/player_actions.js';
 
-
 import PlayerForm from './playerForm';
+
 
 class EditPlayerForm extends Component {
 
@@ -16,19 +16,23 @@ class EditPlayerForm extends Component {
 	  	this.props.initialize(playerData);
 	}
 	onSubmit(values){
-		console.log(values);
 		this.props.editPlayer(values, this.props.playerID);
-		this.props.hideForm();
+		this.props.actionComplete();
 	}
 	render(){
 		const { handleSubmit } = this.props;
 		return(
-			<PlayerForm 
-				onSubmit={handleSubmit(this.onSubmit.bind(this))}
-				headings={this.props.headings}
-				buttonLabel="Edit Player"
-			/>
-
+			<div className="editPlayerForm">
+				<section className="workarea">
+					<h2>Edit any player information and press save</h2>
+					<PlayerForm 
+						onSubmit={handleSubmit(this.onSubmit.bind(this))}
+						headings={this.props.headings}
+						buttonLabel="Save"
+					/>
+					<button onClick={this.props.actionComplete} className="button cancel">Cancel</button>
+				</section>
+			</div>
 			);
 	}
 }

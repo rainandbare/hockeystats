@@ -20,7 +20,9 @@ class TextCell extends Component{
   render(){
     var {rowIndex, data, columnKey, keys, openCert, certificates, ...props} = this.props;
     return(
-      <Cell {...props} className={data[keys[rowIndex]]["status"].toLowerCase()} onClick={() => this.toggleEditForm([keys[rowIndex]])}>
+      <Cell {...props} 
+      className={data[keys[rowIndex]]["status"].toLowerCase()} 
+      onClick={() => this.toggleEditForm([keys[rowIndex]])}>
         {data[keys[rowIndex]][columnKey]}
         { (columnKey === "birthDate") && (Object.keys(certificates.birth).includes(slug(data[keys[rowIndex]]['name']))) ? <span className="certDot" onClick={() => openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="circle"/></span> : "" }
         { (columnKey === "deathDate") && (Object.keys(certificates.death).includes(slug(data[keys[rowIndex]]['name']))) ? <span className="certDot" onClick={() => openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="circle"/></span> : "" }

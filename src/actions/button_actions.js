@@ -27,10 +27,12 @@ export function fetchButtons() {
 
  }
 
-export function addButton(values){
+export function addButton(values, order){
   const buttonObject = {};
+
   buttonObject.buttonName = values.buttonName;
   buttonObject.buttonLabel = slug(values.buttonName);
+  buttonObject.order = order;
   delete values.buttonName;
   const columns = values;
   buttonObject.columns = columns;
@@ -39,5 +41,8 @@ export function addButton(values){
 }
 export function deleteButton(key) {
 	return dispatch => ref.child(key).remove();
+}
+export function changeOrder(key, info) {
+  return dispatch => database.ref('/buttons/' + key + '/order').set(info);
 }
 

@@ -1,4 +1,4 @@
-import { FETCH_CERTIFICATES, ADD_CERTIFICATE } from './action_types';
+import { FETCH_CERTIFICATES } from './action_types';
 import * as firebase from 'firebase';
 
 import slug from '../functions/slug.js';
@@ -67,11 +67,11 @@ export function createCertificateObject(){
 	}
 
 };
-function writeCertificateData(name, type, imageUrl) {
-				  database.ref('certificates/' + type + "/" + name).set({
-				    url : imageUrl
-				  });
-			}
+// function writeCertificateData(name, type, imageUrl) {
+// 				  database.ref('certificates/' + type + "/" + name).set({
+// 				    url : imageUrl
+// 				  });
+// 			}
 	
 export function fetchCertificates() {
 	return dispatch => {
@@ -92,7 +92,7 @@ export function addCertificate(file, type, nameFormatted) {
 	}
 	const filepath = typeCodes[type] + '/' + nameFormatted + '-' + type + '.jpg';
 	const certStorageRef = storage.ref(filepath);
-	var task = certStorageRef.put(file).then(function(snapshot) {
+	certStorageRef.put(file).then(function(snapshot) {
   		if (snapshot.f === "success"){
   			console.log(snapshot.a.downloadURLs[0]);
   			const imageUrl = snapshot.a.downloadURLs[0]

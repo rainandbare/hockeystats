@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { reduxForm, Field, change } from 'redux-form';
-import { Resizable, ResizableBox } from 'react-resizable';
+import { ResizableBox } from 'react-resizable';
+
 import slug from '../../functions/slug.js';
 
 
@@ -19,9 +19,11 @@ class AddNewColumn extends Component {
 	onSubmit(values){
 		const label = values.columnName;
 		const name = slug(label);
+		const width = values.width
 		const heading = {
 			name,
-			label
+			label,
+			width
 		}
 		this.props.addHeading(heading);
 	}

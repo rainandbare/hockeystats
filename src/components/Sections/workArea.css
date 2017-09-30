@@ -26,7 +26,7 @@ button.button:hover{
     margin-top: -30px;
     position: fixed;
     z-index: 9999;
-    right: -100px;
+    right: -309px;
     color: white;
     height: 85px;
     font-size: 30px;
@@ -40,11 +40,86 @@ section.workarea{
     padding: 30px;
     border-radius: 5px;
 }
+
 section.workarea h2{
+    font-size: 20px;
+}
+
+section.workarea h2, section.workarea p{
     text-align: center;
+    margin-bottom: 2px;
+
+}
+
+section.workarea p{
+    margin: 0;
+    padding-top:0;
 }
 
 section.workarea button.button{
     margin: 30px calc(40% + 20px) 0;
     display: block;
 }
+
+section.workarea button.button.cancel{
+    margin: 10px calc(40% + 20px) 0;
+    border: 2px solid #EC2B2B;
+    color: #EC2B2B;
+}
+
+section.workarea button.button.cancel:hover{
+    background: #EC2B2B;
+    color: white;
+}
+
+div.edit section.workarea section.querySelector {
+    margin: 0 auto;
+}
+section.workarea section.querySelector li, .sortableHelper {
+    width: 100%;
+    margin: 10px 0;
+    font-size: 20px;
+}
+section.workarea button.go {
+    display: none;
+} 
+
+button.delete {
+    color: red;
+    display: inline-block;
+    width: 100px;
+    font-size: 30px;
+} 
+button.disabled {
+    color: grey;
+}
+section.workarea button.disabled{
+    cursor: default;
+}
+form.addButtonForm {
+    border-top: 1px solid #656565;
+    margin-top:30px;
+    padding: 10px 30px 30px;
+    
+}
+
+form.addButtonForm h2{
+text-align: left;
+font-size: 20px;
+}
+
+form.addButtonForm label{
+    width: initial;
+    margin: 0 15px 15px 0px;
+    border-right: 1px ;
+}
+
+form.addButtonForm input{
+    margin-left:5px;
+
+}
+
+
+
+
+

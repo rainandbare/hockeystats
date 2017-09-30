@@ -3,32 +3,26 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom'
 import $ from 'jquery';
 
-import AddEditButtons from '../Bits/addButtons';
+
 import DeleteButton from '../Bits/deleteButton';
 
 import { fetchButtons } from '../../actions/button_actions';
-
+import sortArrays from '../../functions/sortArrays.js';
 import './querySelector.css';
 
 class QuerySelector extends Component {
 	constructor(props){
 		super(props);
 		this.onSelectionChange = this.onSelectionChange.bind(this);
-		//this.addClassToButtons = this.addClassToButtons.bind(this);
-
 		this.state = {
 			buttons : [],
 		};
-
 	}
 	componentDidMount(){
 		this.props.fetchButtons();
 	}
-	componentWillUpdate(){
-		//this.addClassToButtons();
-	}
 	onSelectionChange(e){
-		
+		//control all button vs other buttons
 		const buttonsAll = this.props.buttons;
 		const newButton = buttonsAll[e.target.name].buttonLabel;
 		const currentButtons = this.state.buttons;
@@ -53,44 +47,34 @@ class QuerySelector extends Component {
 
 	render(){
 		const buttons = this.props.buttons;
-		// console.log(buttons)
 		const keys = Object.keys(this.props.buttons);
+		const order = Object.values(this.props.buttons).map((button) => {return button.order})
+		const sortedKeys = sortArrays(keys, order);
+
 		const buttonsSelected = this.state.buttons
 		const url = buttonsSelected.join('-');
-
-		//for each item in the button array
-		//return a button with tht name of the label
 		return(
 			<section className="querySelector">
 				<ul className="queryOptions flexMe">
-				{ keys.map((key) => {
+				{ sortedKeys.map((key) => {
 						return(
 							<li key={key} className="flexMe">
-								<h6>{buttons[key]['buttonName']}</h6>
-								<input name={key} type="checkbox" id={key} className={buttons[key]['buttonLabel']} onChange={(e) => this.onSelectionChange(e)}/>
-								<label htmlFor={key}>Toggle</label>
-
 								{ 
 									 buttons[key]['buttonLabel'] !== 'all'
 									 ?
 									 this.props.edit ? <DeleteButton index={key} /> : ""
 									 :
-									 ""
+									 this.props.edit ? <DeleteButton disabled={'disabled'} index={key} /> : ""
 								}
+								<h6>{buttons[key]['buttonName']}</h6>
+								<input name={key} type="checkbox" id={key} className={buttons[key]['buttonLabel']} onChange={(e) => this.onSelectionChange(e)}/>
+								<label htmlFor={key}>Toggle</label>
 							</li>
 						);
 					})
 				}
-					<button><Link onClick={this.props.findPathName} to={`/results/${url}`}>GO</Link></button>
+					<button className="go"><Link onClick={this.props.findPathName} to={`/results/${url}`}>GO</Link></button>
 				</ul>
-
-				{
-					//on form submit
-					//go to url /selected/**buttonName&buttonName&buttonName
-					//at selectedresults.js - get url (ie buttonNames) and get an array of all the columns that those buttons include
-					//display chart with only those columns
-				}
-
 			</section>
 		);
 	}

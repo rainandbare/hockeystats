@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { reduxForm, resetForm } from 'redux-form';
+//import { reduxForm, resetForm } from 'redux-form';
+import { reduxForm } from 'redux-form';
+
 import { connect } from 'react-redux';
 import { addPlayer } from '../../actions/player_actions.js';
 import PlayerForm from '../Bits/playerForm';

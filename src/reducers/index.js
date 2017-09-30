@@ -6,6 +6,8 @@ import { buttonsReducer } from './buttons_reducer';
 import { editReducer } from './edit_reducer';
 import { certificateReducer } from './certificate_reducer.js';
 import { searchReducer } from './search_reducer.js';
+import { authReducer } from './auth_reducer.js'; 
+
 
 const rootReducer = combineReducers({
    players: playerReducer,
@@ -14,7 +16,8 @@ const rootReducer = combineReducers({
    buttons: buttonsReducer,
    certificates: certificateReducer,
    searchTerm: searchReducer, 
-   editPlayer: editReducer
+   editPlayer: editReducer,
+   loggedIn: authReducer
 });
 
 export default rootReducer;

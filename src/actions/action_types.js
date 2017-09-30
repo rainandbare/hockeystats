@@ -17,3 +17,7 @@ export const ADD_CERTIFICATE = 'ADD_CERTIFICATE'
 export const UPDATE_SEARCH = 'UPDATE_SEARCH';
 
 export const EDIT_FORM = 'EDIT_FORM';
+
+export const LOG_OUT = 'LOG_OUT';
+export const LOG_IN = 'LOG_IN';
+

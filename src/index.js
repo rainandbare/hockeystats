@@ -9,6 +9,10 @@ import Header from './components/Sections/Header';
 import Footer from './components/Sections/Footer';
 import Home from './components/Pages/Home';
 import Intro from './components/Pages/Intro';
+import Placeholder from './components/Pages/Placeholder';
+import Login from './components/Pages/Login'
+import Test from './components/Pages/routeTesting.js';
+
 
 import Results from './components/Pages/Results.js';
 import Edit from './components/Pages/Edit';
@@ -32,7 +36,10 @@ ReactDOM.render(
 						<Route path="/results" component={ Results } />
 						<Route path="/edit" component={ Edit } />
 						<Route path="/intro" component={ Intro }/>
-						<Route path="/" component={ Home } />
+						<Route path="/home" component={ Home } />
+						<Route path='/login' component={ Login } />
+						<Route path='/test' component={ Test } />
+						<Route path="/" component={ Placeholder } />
 					</Switch>
 				</main>
 				<Footer />
