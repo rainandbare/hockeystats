@@ -83,23 +83,6 @@ class AddEditButtons extends Component {
 	}
 }
 
-// class ArrayCheckbox extends Component {
-// 	render(){
-// 		const headings = this.props.headings;
-// 		const i = this.props.i;
-// 		return(
-// 			<label onChange={() => this.props.handleChange(headings[i].name)} key={headings[i].name}>{headings[i].label}
-// 				<input
-// 					name="columns"
-// 					id={headings[i].name}
-// 					value={headings[i].name}
-// 					type="checkbox"
-// 				/>
-// 			</label>
-// 		);
-// 	}
-// }
-
 function validate(values){
 	const errors = {};
 
@@ -132,28 +115,5 @@ export default reduxForm({
 })(
 	connect(mapStateToProps,  mapDispatchToProps)(AddEditButtons)
 );
-
-
-
-// AddEditButtons = reduxForm({
-//     form:'AddButtons'
-// })(AddEditButtons)
-
-
-// const selector = formValueSelector('AddButtons') // <-- same as form name
-// AddEditButtons = connect(
-  // state => ({
-  // 	headings: state.headings
-  // 	const { columns } = selector(state, 'firstName')
-  // 	return {
-  // 		fullName: `${firstName || ''} ${lastName || ''}`
-  // 	}
-    
-  // })              
-// )(AddEditButtons)
-
-// export default AddEditButtons;
-
-
 
 

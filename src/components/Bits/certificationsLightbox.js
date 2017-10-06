@@ -22,4 +22,5 @@ class Lightbox extends Component {
 	}
 }
 
-export default Lightbox;
+
+export default Lightbox

@@ -1,7 +1,7 @@
 section.selectAction{
 	justify-content: space-around;
 	width: 75%;
-    margin: 0 auto;
+    margin: 0 auto 30px;
 }
 
 button.button{
@@ -20,7 +20,7 @@ button.button:hover{
 	border-color: #105504;
 }
 
-.editDeclaration{
+/*.editDeclaration{
     width: 400px;
     background: linear-gradient(270deg, rgba(247,255,250,1) 0%, rgba(16,85,4,1) 58%, rgba(16,85,4,1) 100%); 
     margin-top: -30px;
@@ -31,8 +31,10 @@ button.button:hover{
     height: 85px;
     font-size: 30px;
     padding: 25px 20px;
+}*/
+.editDeclaration{
+    margin-top: -30px;
 }
-
 section.workarea{
     background: RGBA(234, 234, 235, 1.00);
     width: 75%;
@@ -56,18 +58,28 @@ section.workarea p{
     padding-top:0;
 }
 
-section.workarea button.button{
-    margin: 30px calc(40% + 20px) 0;
+section.workarea button.button {
+    margin: 30px auto 0;
     display: block;
 }
-
 section.workarea button.button.cancel{
+   /* margin: 10px calc(40% + 20px) 0;*/
+    border: 2px solid #3700DD;
+    color: #3700DD;
+}
+
+section.workarea button.button.cancel:hover{
+    background: #3700DD;
+    color: white;
+}
+
+section.workarea button.button.deletePlayer{
     margin: 10px calc(40% + 20px) 0;
     border: 2px solid #EC2B2B;
     color: #EC2B2B;
 }
 
-section.workarea button.button.cancel:hover{
+section.workarea button.button.deletePlayer:hover{
     background: #EC2B2B;
     color: white;
 }
@@ -85,7 +97,7 @@ section.workarea button.go {
 } 
 
 button.delete {
-    color: red;
+    color: #EC2B2B;
     display: inline-block;
     width: 100px;
     font-size: 30px;
@@ -119,7 +131,21 @@ form.addButtonForm input{
 
 }
 
+button.redText{
+    color: #EC2B2B;
+    border-color: #EC2B2B;
+}
 
+button.deleteColumn{
+    color: #EC2B2B;
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    width: initial;
+    font-size: 20px;
+}
 
-
+button.addCertificate{
+    position: absolute;
+}
 

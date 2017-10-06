@@ -1,42 +1,34 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { reduxForm, Field } from 'redux-form';
-import { signIn, isUserSignedIn, logOut } from '../../actions/signIn_actions.js';
-import { Redirect } from 'react-router-dom'
-
+import { signIn, isUserSignedIn} from '../../actions/signIn_actions.js';
+import { Redirect, Link } from 'react-router-dom'
+import FontAwesome from 'react-fontawesome';
 import './login.css';
 
 class Login extends Component {
 	constructor(props){
 		super(props);
-		this.state = {
-			email: '',
-      		password: '',
-      		name: '',
-      		error: null
-		}
 		this.onSubmit = this.onSubmit.bind(this);
-		this.logOut = this.logOut.bind(this)
+		this.state = {
+			loginClicked: false
+		}
 
 	}
 	onSubmit(values){
-		//console.log(values)
 		this.props.signIn(values);
-	}
-	logOut(){
-		this.props.logOut();
+		this.setState({loginClicked:true})
 	}
 	componentDidMount(){
 		this.props.isUserSignedIn();
 	}
 	renderField(field){
-		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
 		return(
 			<div>
 				<label>{field.label}:</label>
 				<input 
 					id={field.name}
-					type="text"
+					type={field.type}
 					{...field.input}
 				/>
 				<div className="red-text">
@@ -48,9 +40,7 @@ class Login extends Component {
 	}
 	render(){
 		const { handleSubmit } = this.props;
-		console.log(this.props.loggedIn);
-
-		if (this.props.loggedIn) {
+		if (this.props.loggedIn.loggedIn) {
 	    	return <Redirect to='/edit'/>
 	    }
 
@@ -58,19 +48,24 @@ class Login extends Component {
 		return(
 			<div>
 				<form className="logInForm" onSubmit={handleSubmit(this.onSubmit)}>
+					<h2>Hello Andrew!</h2>
 					<Field
 						name="email"
 						label="Email"
 						component={this.renderField}
+						type="email"
 					/>
 					<Field
 						name="password"
 						label="Password"
 						component={this.renderField}
+						type="password"
 					/>
-					<button type="submit">Login</button>
+					{this.state.loginClicked && !this.props.message ? <button className="button disabled" type="submit" disabled><FontAwesome name="spinner" spin/></button> : <button className="button" type="submit">Login</button>}
+					<div className="loginError">{this.props.message}</div>
+					<p>Not Andrew? Let's take you back <Link to={"/home"}>HOME</Link></p>
 				</form>
-				<button onClick={this.logOut}>Logout</button>
+				
 			</div>
 		);
 	}
@@ -92,7 +87,8 @@ function validate(values){
 
 function mapStateToProps(state){
 	return {
-		loggedIn: state.loggedIn
+		loggedIn: state.loggedIn,
+		message: state.loggedIn.message
 	}
 }
 
@@ -101,5 +97,5 @@ export default reduxForm({
 	validate,
 	form: "LoginForm"
 })(
-	connect(mapStateToProps, { signIn, isUserSignedIn, logOut })(Login)
+	connect(mapStateToProps, { signIn, isUserSignedIn })(Login)
 );

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-//import { reduxForm, resetForm } from 'redux-form';
 import { reduxForm } from 'redux-form';
 
 import { connect } from 'react-redux';
@@ -10,9 +9,29 @@ import PlayerForm from '../Bits/playerForm';
 
 class AddPlayerForm extends Component {
 	onSubmit(values){
+		if(values.nickName === ''){
+			values.name = values.lastName + ', ' + values.firstName
+		} else {
+			values.name = values.lastName + ', ' + values.firstName + ' "' + values.nickName + '"'
+		}
+
+		const newPlayer = {};
+		const headings = this.props.headings
+		const headingsKeys = Object.keys(headings);
+
+		headingsKeys.map((headingKey) => {
+			if(values[headings[headingKey].name]){
+				newPlayer[headings[headingKey].name] = values[headings[headingKey].name];
+			} else {
+				newPlayer[headings[headingKey].name] = '';
+			}
+			return newPlayer;
+		})
+
 		this.props.addPlayer(values);
 		this.props.actionComplete();
 	}
+
 	render(){
 		const { handleSubmit } = this.props;
 		return(
@@ -23,6 +42,7 @@ class AddPlayerForm extends Component {
 					headings={this.props.headings}
 					buttonLabel="Add Player"
 				/>
+				<button onClick={this.props.actionComplete} className="button cancel">Cancel</button>
 			</div>
 			);
 	}
@@ -32,13 +52,23 @@ function validate(values){
 	const errors = {};
 
 
-	if (!values.name) {
-		errors.name = "Enter player's name. (LastName, FirstName)";
-	}
 	if (!values.status) {
-		errors.name = "Choose player's status.";
+		errors.status = "Choose player's status.";
 	}
-
+	if (!values.position) {
+		errors.position = "Enter player's position";
+	}
+	if(!values.birthCity){
+		errors.birthCity = "Enter player's Birth City";
+	}
+	if(!values.birthCountry){
+		errors.birthCountry = "Enter player's Birth Country";
+	}
+	if(values.nickName){
+		if(values.nickName.indexOf('"') !== -1 || values.nickName.indexOf("'") !== -1 ){
+			errors.nickName = "Enter nickname without quotes";
+		}
+	}
 	return errors;
 
 }

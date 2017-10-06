@@ -8,7 +8,7 @@ const storageRef = storage.ref();
 
 
 const database = firebase.database();
-//const ref = database.ref('/');
+
 const certificateRef = database.ref('/certificates');
 const playersRef = database.ref('/playersList');
  
@@ -67,11 +67,7 @@ export function createCertificateObject(){
 	}
 
 };
-// function writeCertificateData(name, type, imageUrl) {
-// 				  database.ref('certificates/' + type + "/" + name).set({
-// 				    url : imageUrl
-// 				  });
-// 			}
+
 	
 export function fetchCertificates() {
 	return dispatch => {
@@ -85,22 +81,43 @@ export function fetchCertificates() {
 
  }
 
+const typeCodes = {
+	'B' : 'birth',
+	'D' : 'death'
+}
+
 export function addCertificate(file, type, nameFormatted) {
-	const typeCodes = {
-		"B" : "birth",
-		"D" : "death"
-	}
+
 	const filepath = typeCodes[type] + '/' + nameFormatted + '-' + type + '.jpg';
 	const certStorageRef = storage.ref(filepath);
-	certStorageRef.put(file).then(function(snapshot) {
+	return dispatch => { certStorageRef.put(file).then(function(snapshot){
   		if (snapshot.f === "success"){
-  			console.log(snapshot.a.downloadURLs[0]);
+
   			const imageUrl = snapshot.a.downloadURLs[0]
   			database.ref('certificates/' + typeCodes[type] + '/' + nameFormatted).set({ url : imageUrl });
   		}
 	});
+	}
+}
 
+export function removeCertificate(playerSlug, type){
+		const typeCodesReversed = {
+			'birth':'B' ,
+			'death':'D' 
+		}
+		// Create a reference to the file to delete
+		const url = type + '/' + playerSlug + '-' + typeCodesReversed[type] + '.jpg';
+		console.log(url)
+		const deleteRef = storageRef.child(type + '/' + playerSlug + '-' + typeCodesReversed[type] + '.jpg');
 
-
+		// Delete the file
+		return dispatch => deleteRef.delete().then(function() {
+			console.log('remove from database')
+			database.ref('certificates/' + type ).child(playerSlug).remove();
+		  // File deleted successfully
+		}).catch(function(error) {
+		  // Uh-oh, an error occurred!
+		  console.log(error)
+		});
 }
 

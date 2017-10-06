@@ -3,7 +3,7 @@ div.home section.querySelector{
     max-width: 600px;
     margin: 25px auto 0;
     background: white;
-    padding: 20px 70px;
+    padding: 20px 75px 20px 0px;
     border-radius: 25px;
     border: 7px black solid;
     box-shadow: 4px -2px 0px 2px #F29C39;
@@ -16,7 +16,7 @@ ul.queryOptions{
 
 ul.queryOptions li {
 	width: 50%;
-	justify-content: flex-start;
+	justify-content: flex-end;
 	align-items: center;
 	min-width: 125px;
 }
@@ -79,6 +79,9 @@ button{
     width: 100%;
     outline: none;
 }
+button.go{
+	padding-top: 25px;
+}
 button a{
 	color: #F29C39;
 	text-decoration: none;
@@ -96,60 +99,3 @@ button a:hover {
 	color: black;
 	background-color: #F29C39
 }
-/*
-ul.queryOptions {
-    text-transform: uppercase;
-    text-align: center;
-    color: #1E1E24;
-    margin: 25px;
-    justify-content: flex-end;
-}
-
-ul.queryOptions li {
-	width: 50%;
-}
-ul.queryOptions li:first-of-type{
-	width: 100%;
-}
-ul.queryOptions li label{
-	background: #F29C39;
-	display: block;
-}
-ul.queryOptions li label input{
-	display: none;
-}
-ul.queryOptions li label:hover{
-	cursor: pointer;
-}
-
-ul.queryOptions button a, ul.queryOptions li label{
-	border-radius: 2px;
-	padding: 10px 25px;
-	margin: 5px;
-	box-shadow: 0 2px 4px 0 #000000;
-	transition: all 0.1s ease;
-	border: solid 1px #000000;
-
-}
-ul.queryOptions button a{
-	margin: 0 auto;
-	background-color: #1E1E24;
-	border: none;
-    align-self: flex-end;
-    display: block;
-}
-ul.queryOptions button{
-	background-color: transparent;
-	border: none;
-	margin: 10px auto;
-}
-ul.queryOptions button a{
-	color: #F29C39;
-	text-decoration: none;
-}
-ul.queryOptions li label.checked{
-	cursor: pointer;
-	background: #BABEC5;
-	border: solid 1px #BABEC5;
-}
-	/*box-shadow: 0 0px 0px 0 #000000;*/

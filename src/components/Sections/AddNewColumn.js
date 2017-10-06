@@ -13,8 +13,6 @@ class AddNewColumn extends Component {
 	constructor(props){
 		super(props);
 		this.recordWidth = this.recordWidth.bind(this);
-
-
 	}
 	onSubmit(values){
 		const label = values.columnName;
@@ -23,14 +21,17 @@ class AddNewColumn extends Component {
 		const heading = {
 			name,
 			label,
-			width
+			width,
+			type: 'text',
+			deletable: true
+
 		}
 		this.props.addHeading(heading);
+		this.props.actionComplete();
 	}
 	recordWidth(e, data){
 		console.log(Math.round(data.size.width))
 		this.props.change("AddNewColumn", "width", Math.round(data.size.width))
-		//console.log(this.props)
 	}
 	renderField(field){
 		const className = `formfield ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
@@ -54,27 +55,25 @@ class AddNewColumn extends Component {
 			<div className="addNewColumn">
 				<h2>Fill in column title and resize header to choose default width.</h2>
 				<form onSubmit={handleSubmit(this.onSubmit.bind(this))}>
-						<div className="columnNameField">
-						<ResizableBox width={150} height={48} axis={'x'} minConstraints={[42, 45]} onResizeStop={this.recordWidth}>
-							<Field
-								key="columnName"
-								name="columnName"
-								label="Name"
-								component={this.renderField}
-							/>
-						</ResizableBox>
-
-						</div>
-						
-
-				<Field
-					key="width"
-					name="width"
-					label="Width"
-					component={this.renderField}
-				/>
+					<div className="columnNameField">
+					<ResizableBox width={150} height={48} axis={'x'} minConstraints={[42, 45]} onResizeStop={this.recordWidth}>
+						<Field
+							key="columnName"
+							name="columnName"
+							label="Name"
+							component={this.renderField}
+						/>
+					</ResizableBox>
+					</div>
+					<Field
+						key="width"
+						name="width"
+						label="Width"
+						component={this.renderField}
+					/>
 				<button className="button" type="submit">Add Column</button>
 				</form>
+				<button onClick={this.props.actionComplete} className="button cancel">Cancel</button>
 			</div>
 		);
 	}

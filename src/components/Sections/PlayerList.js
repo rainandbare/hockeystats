@@ -9,6 +9,7 @@ import { fetchButtons } from '../../actions/button_actions.js';
 import { fetchCertificates } from '../../actions/certificate_actions.js';
 
 import { TextCell, NameCell, SortHeaderCell } from '../Bits/cells.js'
+import ScrollToggle from '../Bits/scrollWithArrows.js';
 
 import 'fixed-data-table-2/dist/fixed-data-table.min.css';
 import './playerList.css';
@@ -27,6 +28,10 @@ class SortExample extends Component {
         colSortDirs: {},
         colLocked: [],
         columnWidths: {},
+        currentColumnIndex: 0,
+        currentRowIndex: 0,
+        scrollWithArrows: false,
+        maxColumn: 0
     };
 
     this.onSortChange = this.onSortChange.bind(this);
@@ -36,6 +41,18 @@ class SortExample extends Component {
     this.onColumnResizeEndCallback = this.onColumnResizeEndCallback.bind(this);
     this.isDeathPage = this.isDeathPage.bind(this);
     this.onRowClick = this.onRowClick.bind(this);
+    this.onDeleteColumn = this.onDeleteColumn.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
+    this._rowClassNameGetter= this._rowClassNameGetter.bind(this);
+    this.onScrollToggle = this.onScrollToggle.bind(this)
+
+  }
+  componentDidUpdate() {
+      if (this.state.scrollWithArrows){
+        document.addEventListener("keydown", this.onKeyDown);
+      } else {
+        document.removeEventListener("keydown", this.onKeyDown);
+      }
 
   }
   onSortChange(columnKey, sortDir, keysArray) {
@@ -75,6 +92,57 @@ class SortExample extends Component {
     this.setState({
       colLocked: locked
     });
+  }
+  onScrollToggle(status, headingLength){
+    this.setState({
+      scrollWithArrows: status,
+      maxColumn: headingLength - 1,
+    });
+  }
+  onKeyDown(e){
+
+    if(!e.repeat){
+      let rowIndex = parseInt(this.state.currentRowIndex, 10);
+      let columnIndex = parseInt(this.state.currentColumnIndex, 10);
+      if (e.keyCode === 38) { // up arrow
+          
+          e.preventDefault();
+          rowIndex -= 5;
+          if(rowIndex < 0){
+            rowIndex = 0;
+          }
+
+      }
+      else if (e.keyCode === 40) {// down arrow
+        e.preventDefault();
+         const maxRow = this.getPlayerKeys(this.props.players.list).length;
+          console.log(maxRow)
+         rowIndex += 5;
+         if(rowIndex > maxRow){
+            rowIndex = maxRow;
+          }
+      }
+      else if (e.keyCode === 37) { // left arrow
+        e.preventDefault();
+          columnIndex -= 1
+         if(columnIndex < 0){
+          columnIndex = 0;
+         }
+
+      }
+      else if (e.keyCode === 39) { // right arrow
+          e.preventDefault();
+
+          columnIndex += 1;
+          if(columnIndex > this.state.maxColumn){
+            columnIndex = this.state.maxColumn;
+          } 
+      }
+      this.setState({
+          currentColumnIndex: columnIndex,
+          currentRowIndex: rowIndex
+      });
+    }
   }
   isDeathPage(playersKeys, players){
     let filteredIndexes = [];
@@ -169,43 +237,54 @@ class SortExample extends Component {
     return rowHeadingsObjectsFinal;
   }
   onRowClick(event, rowIndex){
-    
     const data = this.props.players.list
     const keys = this.getPlayerKeys(data);
     this.props.openEditForm(event, rowIndex, data, keys)
+  }
+  onDeleteColumn(e){
+    this.props.onDeleteColumn(e.target.id);
+  }
+  _rowClassNameGetter(rowIndex) {
+    if (rowIndex === this.state.currentRowIndex) {
+      return 'active-row';
+    }
   }
   render() {
   	const players = this.props.players.list
     const headings = this.adjustHeadingsPerUrl(this.props.headings, this.props.buttons);
   	const playersKeys = this.getPlayerKeys(players);
   	const rowsCount = playersKeys.length;
-
    	var {colSortDirs, columnWidths} = this.state;
-
-    if(Object.keys(columnWidths).length === 0){
+    if(Object.keys(columnWidths).length !== headings.length ){
       for (var index = 0; index < headings.length; index++) {
        columnWidths[headings[index].name] = headings[index].width;
       }
     }
-
+    let currentColumn = false;
+    if(headings[this.state.currentColumnIndex]){
+       currentColumn = headings[this.state.currentColumnIndex].name;
+    }
     if (rowsCount !== 0){
     return (
       <div>
-        <h2> From fixed table 2</h2>
+        <ScrollToggle numheadings={headings.length} onToggle={this.onScrollToggle}/>
         <Table
           rowHeight={40}
           rowsCount={rowsCount}
           headerHeight={70}
+          rowClass
+          rowClassNameGetter={this._rowClassNameGetter}
           onColumnResizeEndCallback={this.onColumnResizeEndCallback}
           onRowClick={this.onRowClick}
           isColumnResizing={false}
+          scrollToRow={this.state.currentRowIndex}
+          scrollToColumn={this.state.currentColumnIndex}
           width={1200}
-          height={650}
+          height={550}
           {...this.props}>
           {
           	headings.map((heading) => {
           		if (heading.name === "name"){
-
           			return( 
           				<Column
           				  key={heading.name}
@@ -220,11 +299,17 @@ class SortExample extends Component {
   				              onSortChange={this.onSortChange}
                         onFilter={this.onFilter}
   				              sortDir={colSortDirs[heading.name]}
-  				              playersKeys={playersKeys}>
+  				              playersKeys={playersKeys}
+                        date={false}
+                        onDeleteColumn={false}>
   				              {heading.label}
   				            </SortHeaderCell>
   				          }
-  				          cell={<NameCell data={players} keys={playersKeys}/>}
+  				          cell={<NameCell 
+                            data={players} 
+                            keys={playersKeys}
+                            currentColumn={currentColumn}/>
+                            }
   				          width={columnWidths[heading.name]}
   				        />
           			);
@@ -242,7 +327,9 @@ class SortExample extends Component {
   				              onSortChange={this.onSortChange}
                         onFilter={this.onFilter}
   				              sortDir={colSortDirs[heading.name]}
-  				              playersKeys={playersKeys}>
+  				              playersKeys={playersKeys}
+                        date={heading.type === 'date' ? true : false}
+                        onDeleteColumn={heading.deletable && this.props.isEditPage ? this.onDeleteColumn : false}>
   				              {heading.label}
   				            </SortHeaderCell>
   				          }
@@ -251,6 +338,8 @@ class SortExample extends Component {
                             keys={playersKeys} 
                             openCert={this.props.openCert}
                             certificates={this.props.certificates}
+                            date={heading.type === 'date' ? true : false}
+                            currentColumn={currentColumn}
                             />
                           }
   				          width={columnWidths[heading.name]}

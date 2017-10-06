@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import AddNewPlayer from '../Sections/AddNewPlayer.js';
-import AddNewCertificate from '../Sections/AddNewCertificate.js';
 import EditButtons from '../Sections/EditButtons.js';
 import AddNewColumn from '../Sections/AddNewColumn.js';
 
@@ -26,12 +25,6 @@ class WorkArea extends Component {
 			return(
 				<section className="workarea">
 					<EditButtons actionComplete={this.props.actionComplete}/>
-				</section>
-			);
-		case "addCertificate":
-			return(
-				<section className="workarea">
-					<AddNewCertificate actionComplete={this.props.actionComplete}/>
 				</section>
 			);
 		default:

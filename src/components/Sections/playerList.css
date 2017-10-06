@@ -1,4 +1,11 @@
+div.playerList{
+    display: flex;
+    user-select: none;
+}
 
+.hide {
+    display: none;
+}
 
 input.search {
     position: absolute;
@@ -37,15 +44,12 @@ input.search {
 
 .retired{
     color: #2611E1;
-/*    background: lightblue;*/
 }
 .active{
     color: #105504;
-/*    background: lightgreen;*/
 }
 .deceased{
     color: #EC2B2B;
-/*    background: lightpink*/
 
 }
 .name .public_fixedDataTableCell_cellContent {
@@ -67,7 +71,9 @@ input.search {
     cursor: pointer;
 }
 
-
+.active-row .active-column{
+    background: RGBA(240, 155, 65, 0.2);
+}
 
 .public_fixedDataTable_header .fixedDataTableCellLayout_wrap3 {
     vertical-align: top;

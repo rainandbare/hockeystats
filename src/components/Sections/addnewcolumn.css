@@ -1,3 +1,23 @@
+section.manageCertificates .half{
+  width: 50%;
+  text-align: center;
+}
+section.manageCertificates .dropzone{
+  width: 200px;
+  margin: 10px auto;
+}
+section.manageCertificates .dropzone p{
+  padding: 20px;
+}
+section.manageCertificates span.error{
+  padding-top: 10px;
+  color: #EC2B2B;
+  display: block;
+}
+section.manageCertificates span.error, section.manageCertificates .dropzone ul.files{
+    padding-top: 10px;
+}
+
 div.addNewColumn input[name="columnName"]{
 	color: black;
 	border: none;
@@ -23,6 +43,8 @@ div.addNewColumn form button.button {
     margin: 30px auto;
 }
 
+
+
 .formfield{
 	padding: 14px 8px;
   text-align: center;
@@ -46,4 +68,24 @@ div.addNewColumn form button.button {
   background-origin: content-box;
   box-sizing: border-box;
   cursor: e-resize;
+}
+
+.imageContainer{
+  width: 100px;
+  position: relative;
+}
+.imageContainer div.overlay{
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom:0;
+  color: #EC2B2B;
+  font-size: 35px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.imageContainer:hover div.overlay{
+  opacity: 1;
 }

@@ -50,8 +50,6 @@ class ChangeButtonOrder extends Component {
 		})
   	}
 	render(){
-			const buttons = this.props.buttons;
-			const keys = Object.keys(this.props.buttons);
 			let buttonOrder = Object.values(this.props.buttons).map((button) => (button.order))
 			
 			if(this.state.buttonOrder !== false){

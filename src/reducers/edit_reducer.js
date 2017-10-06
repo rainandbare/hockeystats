@@ -7,7 +7,6 @@ export function editReducer(state = { showPlayerEdit: false, playerID: ''}, acti
 			const newState = state;
 			newState.showPlayerEdit = true;
 			newState.playerID = action.payload;
-			console.log(newState, 'from EDIT REDUCER');
 			return newState;
 		default:
 			return state

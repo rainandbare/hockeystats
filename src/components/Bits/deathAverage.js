@@ -11,16 +11,15 @@ class DeathAverage extends Component {
 	getDeathAverage(){
 		//select only the players who are deceased
 		let deathAverage = 76.8;
-		// let playersAgeArray = [];
-		// const players = this.props.players.list;
-		// const keys = Object.keys(players);
+		const players = this.props.players.list;
+		const keys = Object.keys(players);
 
-		// let playersAgeSum = keys.filter((index) => { return players[index].status === "DECEASED";})
-		// 					.map((index) => { return parseFloat(this.getAge(players[index].birthDate, players[index].deathDate)) });
-		// if(playersAgeSum.length > 0){
-		// 	deathAverage = playersAgeSum.reduce(function(sum, a) { return sum + a },0)/(playersAgeSum.length||1);
-		// }
-		return deathAverage.toFixed(1);;
+		let playersAgeSum = keys.filter((index) => { return players[index].status === "DECEASED";})
+							.map((index) => { return parseFloat(this.getAge(players[index].birthDate, players[index].deathDate)) });
+		if(playersAgeSum.length > 0){
+			deathAverage = playersAgeSum.reduce(function(sum, a) { return sum + a },0)/(playersAgeSum.length||1);
+		}
+		return deathAverage.toFixed(1);
 	}
 	getAge(birthDateString, deathDateString) {
 	    const deathDate = new Date(deathDateString);

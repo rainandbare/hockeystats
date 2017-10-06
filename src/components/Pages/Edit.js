@@ -7,9 +7,9 @@ import Title from '../Bits/title';
 import Table from '../Sections/PlayerList';
 import WorkArea from '../Sections/WorkArea';
 import EditPlayerForm from '../Bits/editPlayer';
-import Lightbox from '../Bits/certificationsLightbox'
+import Lightbox from '../Bits/certificationsLightbox';
 
-import { fetchHeadings } from '../../actions/heading_actions';
+import { fetchHeadings, deleteHeading } from '../../actions/heading_actions';
 import { editForm } from '../../actions/edit_actions';
 import { logOut } from '../../actions/signIn_actions.js';
 
@@ -30,14 +30,8 @@ class Edit extends Component {
 		this.openEditPlayer = this.openEditPlayer.bind(this);
 		this.onCloseEditForm = this.onCloseEditForm.bind(this);
 		this.logOut = this.logOut.bind(this)
+		this.deleteColumn = this.deleteColumn.bind(this)
 
-	}
-	componentDidMount(){
-		//if user there is a user
-		//change the state to logged in and record users name
-
-		//otherwise 
-		//browserHistory.push('/login');
 	}
 	chooseAction(e){
 		this.setState({
@@ -46,7 +40,7 @@ class Edit extends Component {
 	}
 	actionComplete(){
 		this.setState({
-			actionType: null,
+			actionType: null
 		})
 	}
 	openEditPlayer(event, rowIndex, data, keys){
@@ -64,6 +58,14 @@ class Edit extends Component {
 	      toggleEditForm: false,
 	      editPlayerID: ''
 	    });
+  	}
+  	deleteColumn(id){
+  		const result = confirm("Delete Column?");
+		if (result) {
+	  		const headingKeys = Object.keys(this.props.headings);
+	  		const deleteKey = headingKeys.filter((key) => this.props.headings[key].name === id);
+  			this.props.deleteHeading(deleteKey[0]);
+  		}
   	}
   	openLightbox(certificates, playerName, type){
   		//find out if there is more than one image
@@ -119,25 +121,25 @@ class Edit extends Component {
   	logOut(){
 		this.props.logOut();
 	}
-
 	render() {
 	 	const { loggedIn } = this.props;
-	 	console.log(loggedIn)
+
 	    if (!loggedIn) {
 	    	return <Redirect to='/login'/>
 	    }
-
 	    return (
 	      	<div className="selectedresults edit results page">
 	      		<section className="topOPage flexMe">
 			      	<Title/>
-			      	<button onClick={this.logOut}>Log Out</button>
-			      	<div className="editDeclaration">EDIT</div>
+			      	
+			      	<div className="editDeclaration">
+			      		<h2>EDIT PAGE</h2>
+			      		<button className="button logOut" onClick={this.logOut}>Log Out</button>
+			      	</div>
 		      	</section>
 		      	<section className="selectAction flexMe">
 		      		<button className="actionType button" id="addPlayer" onClick={this.chooseAction}>Add a Player</button>
 		      		<button className="actionType button" id="addColumn" onClick={this.chooseAction}>Add a Column</button>
-		      		<button className="actionType button" id="addCertificate"onClick={this.chooseAction}>Add a Certificate</button>
 		      		<button className="actionType button" id="editButton" onClick={this.chooseAction}>Edit Buttons</button>
 			    </section>
 			    <WorkArea action={this.state.actionType} actionComplete={this.actionComplete}/>
@@ -145,8 +147,10 @@ class Edit extends Component {
 	      			categories={this.state.categories}
 	      	 		deathPage={this.state.deathPage}
 	      	 		openEditForm={this.openEditPlayer}
-	      	 		openCert={this.openLightbox}/>
-	      	 	<Lightbox />
+	      	 		openCert={this.openLightbox}
+	      	 		onDeleteColumn={this.deleteColumn}
+	      	 		isEditPage={true}/>
+	      	 	<Lightbox edit={true} />
 	      	 	{ this.state.toggleEditForm ? <EditPlayerForm actionComplete={this.onCloseEditForm} /> : "" }
 	      	</div>
 	    );
@@ -155,8 +159,10 @@ class Edit extends Component {
 
 function mapStateToProps(state){
 	return {
-		loggedIn: state.loggedIn
+		loggedIn: state.loggedIn.loggedIn,
+		headings: state.headings
+
 	}
 }
 
-export default connect(mapStateToProps, { fetchHeadings, editForm, logOut })(Edit);
+export default connect(mapStateToProps, { fetchHeadings, editForm, logOut, deleteHeading })(Edit);

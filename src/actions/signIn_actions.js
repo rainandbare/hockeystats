@@ -1,24 +1,28 @@
-import { LOG_IN, LOG_OUT } from './action_types'
+import { LOG_IN, LOG_OUT, LOG_IN_FAILED } from './action_types'
 
 import * as firebase from 'firebase';
 
-// export const auth = firebase.auth();
-
-
 export function signIn(values){
-	console.log(values.email, values.password)
 	  return dispatch => firebase.auth().signInWithEmailAndPassword(values.email, values.password).catch(function(error) {
-		//   // Handle Errors here.
-		  var errorCode = error.code;
-		  var errorMessage = error.message;
-		//   // ...
+		  // Handle Errors here.
+		  // var errorCode = error.code;
+		  // var errorMessage = error.message;
+		  // console.log(error)
+		  dispatch({
+			type: LOG_IN_FAILED,
+			payload: "Your username or password is incorrect."
+			})
 		 })
 }
 export function logOut() {
-	firebase.auth().signOut().then(function() {
+	return dispatch => firebase.auth().signOut().then(function() {
 	  // Sign-out successful.
 	}).catch(function(error) {
 	  // An error happened.
+	  dispatch({
+			type: LOG_OUT,
+			payload: false
+		})
 	});
 }
 

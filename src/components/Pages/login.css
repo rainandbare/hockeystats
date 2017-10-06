@@ -1,5 +1,29 @@
 .logInForm{
-	background: green;
-	width: 500px;
-	margin: 80px auto;
+	background: #EAEAEB;
+    padding: 30px;
+    width: 500px;
+    margin: 80px auto;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.logInForm input {
+    padding: 3px;
+}
+.logInForm label {
+    width: 35%;
+    display: inline-block;
+    text-align: right;
+    margin: 10px;	
+}
+.logInForm button.button {
+	margin: 30px auto 0;
+	display: block;
+	width: 215px
+}
+
+.loginError{
+	color: #EC2B2B;
+	text-align: center;
+	padding-top: 10px;
 }

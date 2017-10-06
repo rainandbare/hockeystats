@@ -43,7 +43,7 @@ export function sortPlayers(columnKey, sortDir, keysArray, players){
 			sortVal = -1;
 		}
 		if (sortVal !== 0 && sortDir === SortTypes.ASC) {
-		  	sortVal = sortVal * -1;
+		  	sortVal *= -1;
 		}
 
 		return sortVal;
@@ -83,10 +83,10 @@ export function filterPlayers(term, keysArray, players, columnKey, multiple){
 		 	if (term === '') {
 		      	filteredIndexes = keysArray;
 		    } else {
-			    for (var index = 0; index < keysArray.length; index++) {
-					const columnData = players[keysArray[index]][columnKey];
+			    for (var kindex = 0; kindex < keysArray.length; kindex++) {
+					const columnData = players[keysArray[kindex]][columnKey].toString();
 			      	if (columnData.toLowerCase().indexOf(filterBy) !== -1) {
-			        	filteredIndexes.push(keysArray[index]);
+			        	filteredIndexes.push(keysArray[kindex]);
 			      	}
 				}
 		    }
