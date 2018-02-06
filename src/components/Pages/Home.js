@@ -8,8 +8,8 @@ class Home extends Component {
   render() {
     return (
       <div className="home">
-      	<Title text="HelloAndrew" />
-      	<QuerySelector />
+      	<Title />
+      	<QuerySelector categories={[]}/>
       </div>
     );
   }

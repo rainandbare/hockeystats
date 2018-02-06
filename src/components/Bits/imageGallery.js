@@ -16,11 +16,13 @@ class ImageGallery extends Component {
 		}
 	}
 	render(){
+
 		return(
 			<section className="imageGallery">
 				<h3>{this.props.type}</h3>
 				<div className="flexMe">
 					{this.props.certNames.map((certName) => {
+						// console.log(certName);
 						const url = this.props.certificates[this.props.type][certName].url
 						return(
 							<div key={certName} onClick={() => this.removeCertificate(certName)} className="imageContainer">

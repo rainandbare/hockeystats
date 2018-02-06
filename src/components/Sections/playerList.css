@@ -2,7 +2,12 @@ div.playerList{
     display: flex;
     user-select: none;
 }
-
+.svg-loader{
+    width: 90px;
+}
+.svg-loader-container{
+    text-align: center;
+}
 .hide {
     display: none;
 }
@@ -43,13 +48,13 @@ input.search {
 
 
 .retired{
-    color: #2611E1;
+    color: #EC2B2B;
 }
 .active{
     color: #105504;
 }
 .deceased{
-    color: #EC2B2B;
+    color: #000;
 
 }
 .name .public_fixedDataTableCell_cellContent {
@@ -60,11 +65,22 @@ input.search {
 .playerNumber{
     position: absolute;
     font-size: 9px;
-    top: 20px;
+    top: 16px;
     left:2px;
     color:grey;
 }
+.playerNumber .noPlayers {
+    position: absolute;
+    background: #A6A6A6;
+}
 
+.noPlayers{
+    background: #A6A6A6;
+}
+
+.name .noPlayers:after{
+    content: "No Players fit that description";
+}
 .certDot {
     color: grey;
     margin-left: 10px;
@@ -79,10 +95,12 @@ input.search {
     vertical-align: top;
 }
 
-.public_fixedDataTable_header .public_fixedDataTableCell_cellContent {
+/*.public_fixedDataTable_header .public_fixedDataTableCell_cellContent {
     padding: 14px 8px 8px;
+}*/
+.fixedDataTableLayout_main{
+    background-color: grey;
 }
-
 .fixedDataTableCellLayout_wrap1{
     transition: all 0.15s ease;
 }
@@ -93,4 +111,22 @@ div.edit div.public_fixedDataTable_bodyRow:hover .fixedDataTableCellLayout_wrap1
 
 .fixedDataTableCellGroupLayout_cellGroupWrapper{
     background: black;
+}
+
+a.heading-name-link{
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sorting-arrows span{
+    display: block;
+    line-height: 0.5;
+    color: #ae7029;
+    padding-left: 5px;
+    font-size: 30px;
+}
+.sorting-arrows .arrow-highlight{
+    color: #000;
 }

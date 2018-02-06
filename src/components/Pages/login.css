@@ -1,7 +1,7 @@
 .logInForm{
 	background: #EAEAEB;
     padding: 30px;
-    width: 500px;
+    max-width: 500px;
     margin: 80px auto;
     border-radius: 5px;
     font-size: 16px;
@@ -26,4 +26,14 @@
 	color: #EC2B2B;
 	text-align: center;
 	padding-top: 10px;
+}
+
+@media (max-width: 540px){
+    .logInForm{
+        margin: 80px 10px;
+        padding: 30px 20px;
+    }
+    .logInForm label {
+        margin: 7px;
+    }
 }

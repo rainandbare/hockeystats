@@ -11,6 +11,7 @@ export function playerReducer(state = { list: {}, sortRules: {} }, action) {
 			return newState
 		case SORT_PLAYERS:
 		case FILTER_PLAYERS:
+			// console.log(action.payload, 'from Player Reducer')
 			const newSortState = state;
 			newSortState.sortRules = action.payload;
 			return newSortState

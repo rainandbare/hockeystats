@@ -15,7 +15,7 @@ class QuerySelector extends Component {
 		super(props);
 		this.onSelectionChange = this.onSelectionChange.bind(this);
 		this.state = {
-			buttons : [],
+			buttons : this.props.categories,
 		};
 	}
 	componentDidMount(){
@@ -34,6 +34,7 @@ class QuerySelector extends Component {
 			currentButtons.push(newButton);
 		}
 		let nextSetOfButtons = currentButtons;
+		
 		if(nextSetOfButtons.includes('all')){
 			nextSetOfButtons = ["all"];
 			$('input').prop('checked', false); 
@@ -51,9 +52,10 @@ class QuerySelector extends Component {
 		const order = Object.values(this.props.buttons).map((button) => {return button.order})
 		const sortedKeys = sortArrays(keys, order);
 
-		const buttonsSelected = this.state.buttons
+		const buttonsSelected = this.state.buttons;
 		const url = buttonsSelected.join('-');
 		return(
+			
 			<section className="querySelector">
 				<ul className="queryOptions flexMe">
 				{ sortedKeys.map((key) => {
@@ -67,7 +69,13 @@ class QuerySelector extends Component {
 									 this.props.edit ? <DeleteButton disabled={'disabled'} index={key} /> : ""
 								}
 								<h6>{buttons[key]['buttonName']}</h6>
-								<input name={key} type="checkbox" id={key} className={buttons[key]['buttonLabel']} onChange={(e) => this.onSelectionChange(e)}/>
+								<input 	name={key} 
+										type="checkbox" 
+										id={key} 
+										className={buttons[key]['buttonLabel']} 
+										onChange={(e) => this.onSelectionChange(e)}
+										checked={buttonsSelected.includes(buttons[key]['buttonLabel']) ? 'checked' : ''}
+								/>
 								<label htmlFor={key}>Toggle</label>
 							</li>
 						);

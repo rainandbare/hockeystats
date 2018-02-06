@@ -109,10 +109,12 @@ body {
 }
 
 a:hover svg path, a:hover {
-    fill: #F71735;
-    color: #F71735;
+    fill: #F29C39;
+    color: #F29C39;
 }
-
+a.heading-name-link:hover{
+	color: #000;
+}
 
 .flexMe{
 	display: flex;
@@ -210,6 +212,7 @@ main > div.page {
 
 div.title{
 	padding: 40px 5px;
+    min-width: 470px;
 }
 
 h1{
@@ -218,6 +221,7 @@ h1{
 	letter-spacing: -32px;
 	margin: 0;
 	padding: 0;
+	margin-left: -15px;
 }
 
 h1, h1 span.reg{
@@ -227,6 +231,8 @@ h1, h1 span.reg{
 h1 span.reg{
 	padding: 0 12px 0 20px;
 }
+
+
 h1.flipped{
 	color: #000000;
     -moz-transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(18px, 14px);
@@ -247,7 +253,29 @@ h1.flipped{
 	transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(15px, 14px);
 
 }
+/*----------------------- Intro -------------------------------------*/
+main > div.intro.page{
+	max-width: 1200px;
+	margin: 30px auto 90px;
+	padding: 0px 30px;
+}
+.intro h1{ 
+	padding: 30px 0px;
+	margin-left: -30px;
+}
+h1 span.i{
+	letter-spacing: -42px;
+}
 
+.intro .querySelector {
+	max-width: 600px;
+	float: right;
+}
+
+p.no-padding{
+	padding: 0;
+	margin-top: -1em;
+}
 /*----------------------- Selected Results -------------------------------------*/
 
 div.results section.querySelector{
@@ -262,3 +290,127 @@ section.topOPage{
 	align-items: center;
 }
 
+/*-----------------------  Media Queries -------------------------------------*/
+
+@media (max-width: 1170px){
+	button.addCertificate {
+    	position: static;
+    	width: 100%;
+	}
+
+}
+
+@media (max-width: 1000px){
+div.results div.title{
+	width: 100%;
+	padding: 40px 5px 10px;
+}
+div.results section.querySelector{
+	width: 100%;
+	padding-bottom: 10px;
+}
+ul.queryOptions li{
+	width: auto;
+	padding-right: 20px;
+}
+.editDeclaration{
+	margin-bottom: 30px;
+}
+section.workarea{
+	width: 100%;
+}
+}
+
+
+
+@media (max-width: 767px){
+	.toggleCheckbox{
+		display: none;
+	}
+	h1 span.i{
+	letter-spacing: -30px;
+	}
+
+	div.results section.querySelector{
+		width: 103%;
+		margin-right: -25px;
+	}
+	section.topOPage, section.selectAction{
+		flex-flow: column nowrap;
+		justify-content: center;
+	}
+	.editDeclaration, section.selectAction button.button {
+    text-align: center;
+	}
+	section.selectAction button.button{
+		margin: 5px auto;
+	}
+	h1 {
+	    font-size: 52px;
+	    text-align: center;
+	    letter-spacing: -22px;
+	}
+	h1.flipped{
+		transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(16px, 15px);
+	}
+	main > div.selectedresults{
+		margin: 30px 30px 90px 15px;
+	}
+	div.editPlayerForm{
+		padding: 40px 10px;
+	}
+}
+@media (max-width: 540px){
+	header, footer{
+		font-size: 11px;
+	}
+	main > div.page {
+    	margin: 30px 12px 90px;
+	}
+	h1 span.i{
+		letter-spacing: -19px;
+	}
+	div.title {
+    	padding: 55px 5px 20px;
+    	min-width: auto;
+	}
+	h1, .results h1, h1 span.reg {
+	    font-size: 34px;
+	    line-height: 36px;
+	    letter-spacing: -14px;
+	}
+	.results h1.flipped, h1.flipped{
+		transform: scale(1, -1) scaleY(0.7) skew(-20deg) translate(13px, 23px);
+	}
+	ul.queryOptions{
+		flex-flow: column nowrap;
+		align-items: center;
+
+	}
+	ul.queryOptions li{
+		width: 100%;
+		justify-content: center;
+	}
+	div.home section.querySelector{
+		padding: 0px;
+	}
+	button.go {
+		padding-bottom: 20px;
+	}
+	button.go a{
+		float: none;
+		text-align: center;
+	}
+	div.results div.title{
+		padding: 40px 5px 0px;
+	}
+	section.manageCertificates .half{
+		width: 100%;
+	}
+}
+@media (max-width: 475px){
+	div.form label, div.form input{
+		text-align: left;
+		width: 100%;
+	}
+}

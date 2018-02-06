@@ -48,7 +48,6 @@ class AddNewCertificate extends Component {
 	constructor(props){
 		super(props);
 		this.getAllCertificates = this.getAllCertificates.bind(this)
-
 	}
 	onSubmit(data){
 		const typeCodes = {
@@ -56,26 +55,29 @@ class AddNewCertificate extends Component {
 			'D' : 'death'
 		}
 		let name = slug(this.props.players[this.props.playerID].name);
-		const priorEntries = this.props.certificates[typeCodes[data.type]][name];
-		if(priorEntries){
-			const allPriors = Object.keys(this.props.certificates[typeCodes[data.type]]).filter((entry) => {
+		const certificateNames = Object.keys(this.props.certificates[typeCodes[data.type]]);
+		const allPriors = certificateNames.filter((entry) => {
 			 	return entry.includes(name)
 			 });
-		 name = name + '-' + (parseInt(allPriors.length, 10) + 1);
-		}
+		console.log(allPriors);
+		const highestIndex = allPriors.map(prior => parseInt(prior.split('-')[1]));
+		const newIndex = Math.max(...highestIndex) + 1;
+		name = name + '-' + newIndex;
 		const file = data.file[0];
+		console.log(file, data.type, name);
 		this.props.addCertificate(file, data.type, name);
 		this.props.actionComplete();
 	}
 	getAllCertificates(type){
 		let name = slug(this.props.players[this.props.playerID].name);
-		const priorEntries = this.props.certificates[type][name];
-		if(priorEntries){
+		// const priorEntries = this.props.certificates[type][name];
+		// //console.log(priorEntries, type);
+		// if(true){
 			const allPriors = Object.keys(this.props.certificates[type]).filter((entry) => {
-			 	return entry.includes(name)
+			 	return entry.includes(name);
 			 });
 			return allPriors;
-		}
+		// }
 	}
 	render(){
 		const { handleSubmit } = this.props;

@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 
@@ -32,7 +32,8 @@ ReactDOM.render(
 				<main>
 					<Switch>
 						<Route path="/results/*" component={ Results } />
-						<Route path="/results" component={ Results } />
+						
+						<Route exact path="/results" render={() => (<Redirect to="/results/all"/>)}/>
 						<Route path="/edit" component={ Edit } />
 						<Route path="/intro" component={ Intro }/>
 						<Route path="/home" component={ Home } />

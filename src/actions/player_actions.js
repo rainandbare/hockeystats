@@ -17,8 +17,7 @@ export function fetchPlayers() {
 
  }
 
-export function sortPlayers(columnKey, sortDir, keysArray, players){
-
+function sortPlayerIndexes(columnKey, sortDir, keysArray, players){
 	const SortTypes = {
 	  ASC: 'ASC',
 	  DESC: 'DESC',
@@ -29,25 +28,29 @@ export function sortPlayers(columnKey, sortDir, keysArray, players){
       sortKeysArray.push(keysArray[index]);
     }
     var sortIndexes = sortKeysArray.slice();
-    
 
-    sortIndexes.sort((indexA, indexB) => {
-	  	var valueA = players[indexA][columnKey];
+	sortIndexes.sort(function(indexA, indexB) {
+		var valueA = players[indexA][columnKey];
 	    var valueB = players[indexB][columnKey];
+	    if (sortDir === SortTypes.ASC) {
+		  	if(valueA === "" || valueA === null) return -1;
+		    if(valueB === "" || valueB === null) return 1;
+		    if(valueA === valueB) return 0;
+		    return valueA > valueB ? -1 : 1;
+	 	} else {
+		    if(valueA === "" || valueA === null) return 1;
+		    if(valueB === "" || valueB === null) return -1;
+		    if(valueA === valueB) return 0;
+		    return valueA < valueB ? -1 : 1;
+	 	}
 
-		var sortVal = 0;
-		if (valueA > valueB) {
-			sortVal = 1;
-		}
-		if (valueA < valueB) {
-			sortVal = -1;
-		}
-		if (sortVal !== 0 && sortDir === SortTypes.ASC) {
-		  	sortVal *= -1;
-		}
-
-		return sortVal;
 	});
+	return sortIndexes;
+}
+
+export function sortPlayers(columnKey, sortDir, keysArray, players){
+
+	const sortIndexes = sortPlayerIndexes(columnKey, sortDir, keysArray, players);
 
   	return {
 		type: SORT_PLAYERS,
@@ -55,22 +58,26 @@ export function sortPlayers(columnKey, sortDir, keysArray, players){
 	};
 }
 
-export function filterPlayers(term, keysArray, players, columnKey, multiple){
-
+export function filterPlayers(term, keysArray, players, columnKey, multiple, sortRule){
+		const sortColumnKey = Object.keys(sortRule);
+		const sortDir = Object.values(sortRule);
+		console.log(sortColumnKey, sortDir);
 		let filteredIndexes = [];
-
+		// let sortedFilterdIndexes = [];
     	if(multiple){
+    		//if multiple rows have search terms
+    		// console.log('multiple filter rows')
  			let midfilteredIndexes = [];
     		let beginningKeysArray = keysArray
+    		// console.log(term)
      		for (var index = 0; index < columnKey.length; index++) {
-
-   //  			//for each column that has a search term in it -> columnKey[index] = "position"
+    			//for each column that has a search term in it -> columnKey[index] = "position"
     			for (var jindex = 0; jindex < beginningKeysArray.length; jindex++) {
-   //  				//go through each of the keys in the Keys array
+     				//go through each of the keys in the Keys array
 					const columnData = players[beginningKeysArray[jindex]][columnKey[index]];
     				const filterBy = term[index].toLowerCase()
-    				//console.log(columnData.toLowerCase().indexOf(filterBy))
-					if (columnData.toLowerCase().indexOf(filterBy) !== -1) {
+    				// console.log(columnData)
+					if (columnData.toString().toLowerCase().indexOf(filterBy) !== -1) {
 						midfilteredIndexes.push(beginningKeysArray[jindex]);
 			     	}
 				}
@@ -78,19 +85,25 @@ export function filterPlayers(term, keysArray, players, columnKey, multiple){
 				midfilteredIndexes = [];
     		}
  			filteredIndexes = beginningKeysArray;
+ 			// console.log(filteredIndexes)
     	} else {
+    		//if just on row has a search term
+    		// console.log('just one filter row')
+    		// console.log(term, 'term from PLAYER ACTIONS')
 			const filterBy = term.toLowerCase();
 		 	if (term === '') {
 		      	filteredIndexes = keysArray;
 		    } else {
 			    for (var kindex = 0; kindex < keysArray.length; kindex++) {
 					const columnData = players[keysArray[kindex]][columnKey].toString();
-			      	if (columnData.toLowerCase().indexOf(filterBy) !== -1) {
+			      	if (columnData.toString().toLowerCase().indexOf(filterBy) !== -1) {
 			        	filteredIndexes.push(keysArray[kindex]);
 			      	}
 				}
 		    }
 		}
+
+		filteredIndexes = sortPlayerIndexes(sortColumnKey, sortDir, filteredIndexes, players);
 
 	return {
 		type: FILTER_PLAYERS,

@@ -68,12 +68,14 @@ class Edit extends Component {
   		}
   	}
   	openLightbox(certificates, playerName, type){
+  		// console.log(certificates, playerName, type);
+  		
   		//find out if there is more than one image
 	    let urls;
 	    if (type === "deathDate"){
-	      urls = getImageCount("death");
+	      	urls = getImageCount("death");
 	    } else if(type === "birthDate"){
-	      urls = getImageCount("birth")
+	      	urls = getImageCount("birth")
 	    } 
 
 	    //add images to Lightbox
@@ -90,25 +92,23 @@ class Edit extends Component {
 	    
 
 	    function getImageCount(type){
-	      const nameArray = Object.keys(certificates[type]).map((cert) => { const name = cert.split('-'); return name[0] });
-	      const imageCount = getOccurrence( nameArray, playerName);
+	    	const certificateNames = Object.keys(certificates[type])
+	      	const nameArray = certificateNames.map((cert) => { const name = cert.split('-'); return name[0] });
+	      	const imageCount = getOccurrence(nameArray, playerName);
+
+
+		    var fileNames = [];
+			var array = nameArray;
+			var element = playerName;
+			var idx = array.indexOf(element);
+			while (idx !== -1) {
+			  fileNames.push(certificateNames[idx]);
+			  idx = array.indexOf(element, idx + 1);
+			}
 
 	      let imageUrl =[];
-	      if(imageCount === 1){
-	        imageUrl.push(certificates[type][playerName].url);
-	      } else {
-
-	       
-	        for (var index = 0; index < imageCount; index++) {
-	          let multiImageUrl;
-	          if(index === 0){
-	            multiImageUrl = certificates[type][playerName].url;
-	          } else {
-	            multiImageUrl = certificates[type][playerName + "-" + (index + 1)].url
-	          }
-	        
-	          imageUrl.push(multiImageUrl)
-	        }
+	      for (var index = 0; index < imageCount; index++) {
+	      	imageUrl.push(certificates[type][fileNames[index]].url);
 	      }
 	      return imageUrl;
 	    }

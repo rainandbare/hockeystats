@@ -9,6 +9,7 @@ import DeathAverage from '../Bits/deathAverage.js';
 import Lightbox from '../Bits/certificationsLightbox';
 
 import { fetchHeadings } from '../../actions/heading_actions.js';
+import { createCertificateObject } from '../../actions/certificate_actions.js';
 
 class Results extends Component {
 	constructor(props){
@@ -107,7 +108,8 @@ class Results extends Component {
 			      	<Title/>
 			      	{this.state.deathPage ? <DeathAverage /> : ""}
 			      	<QuerySelector
-			      		findPathName={this.findPathName} />
+			      		findPathName={this.findPathName}
+			      		categories={this.state.categories} />
 			      	
 		      	</section>
 		      	
@@ -124,4 +126,4 @@ class Results extends Component {
 	}
 }
 
-export default connect(null, { fetchHeadings })(Results);
+export default connect(null, { fetchHeadings, createCertificateObject })(Results);
