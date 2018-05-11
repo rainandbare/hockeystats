@@ -53,9 +53,16 @@ class PlayerForm extends Component {
 					return (
 					<div key="name">	
 						<Field
-							key="playerName"
-							name="name"
-							label="Player Name (commonly known & last name first)"
+							key="firstName"
+							name="firstName"
+							label="First Name (commonly known as)"
+							type="text"
+							component={this.renderField}
+						/>
+						<Field
+							key="lastName"
+							name="lastName"
+							label="Last Name"
 							type="text"
 							component={this.renderField}
 						/>

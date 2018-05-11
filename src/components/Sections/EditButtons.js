@@ -6,10 +6,12 @@ class EditButtons extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			addButtons : false
+			addButtons : false,
+			edit : false
 		}
 		this.openAddNewButton = this.openAddNewButton.bind(this);
 		this.closeAddButton = this.closeAddButton.bind(this);
+		this.openEditButton = this.openEditButton.bind(this);
 	}
 	openAddNewButton(){
 		this.setState({ addButtons: true })
@@ -17,16 +19,19 @@ class EditButtons extends Component {
 	closeAddButton(){
 		this.setState({ addButtons: false })
 	}
+	openEditButton(value){
+		this.setState({ addButtons: true, edit: value })
+	}
 
 	render(){
 		return(
 			<div>
 				<h2>Current Buttons</h2>
-				<p>Drag to change order or click the x to Delete</p>
-				<ChangeButtonOrder />
+				<p>Drag to change order, click the x to Delete or choose Edit to change columns shown</p>
+				<ChangeButtonOrder onEditButtonClick={this.openEditButton}/>
 				{this.state.addButtons 
 					? 
-					<AddButtons actionCompleted={this.closeAddButton}/> 
+					<AddButtons edit={this.state.edit} actionCompleted={this.closeAddButton}/> 
 					: 
 					<button 
 						className="button" 

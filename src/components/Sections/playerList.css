@@ -16,13 +16,15 @@ input.search {
     position: absolute;
     left: 0px;
     font-size: small;
-    top: 44px;;
-    width: calc(100% + 16px);
+    top: 44px;
+    width: 100%;
     padding: 5px 4px;
-    background: black;
-    border: black;
+    background: white;
+    border: 8px solid black;
+    border-left-width: 4px;
+    border-right-width: 4px;
     outline: none;
-    color: white;
+    color: black;
 }
 .public_fixedDataTable_header, .public_fixedDataTable_header .public_fixedDataTableCell_main {
     background-color: RGBA(242, 156, 57, 1.00) !important;
@@ -55,6 +57,7 @@ input.search {
 }
 .deceased{
     color: #000;
+    font-weight: bold;
 
 }
 .name .public_fixedDataTableCell_cellContent {
@@ -118,6 +121,7 @@ a.heading-name-link{
     flex-flow: row nowrap;
     align-items: center;
     justify-content: space-between;
+    cursor: pointer;
 }
 
 .sorting-arrows span{

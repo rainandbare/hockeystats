@@ -28,16 +28,27 @@ export function fetchButtons() {
  }
 
 export function addButton(values, order){
+  //format button object
   const buttonObject = {};
-
   buttonObject.buttonName = values.buttonName;
   buttonObject.buttonLabel = slug(values.buttonName);
   buttonObject.order = order;
   delete values.buttonName;
   const columns = values;
   buttonObject.columns = columns;
-
+  //add new button
   return dispatch => ref.push(buttonObject);
+}
+export function editButton(key, values, order){
+  //format button object
+  const buttonObject = {};
+  buttonObject.buttonName = values.buttonName;
+  buttonObject.buttonLabel = slug(values.buttonName);
+  buttonObject.order = order;
+  delete values.buttonName;
+  const columns = values;
+  buttonObject.columns = columns;
+  return dispatch => database.ref('/buttons/' + key).set(buttonObject);
 }
 export function deleteButton(key) {
 	return dispatch => ref.child(key).remove();

@@ -11,15 +11,15 @@ import sortArrays from '../../functions/sortArrays.js';
 
 
 
-const SortableItem = SortableElement(({value}) =>
-  <li>{value === 'All' ? <DeleteButton index={value} disabled='disabled'/> : <DeleteButton index={value} />} {value}</li>
+const SortableItem = SortableElement(({value, onEdit}) =>
+  <li>{value === 'All' ? <DeleteButton index={value} disabled='disabled'/> : <DeleteButton index={value} />} {value} <button onClick={() => onEdit(value)}>Edit</button></li>
 );
 
-const SortableList = SortableContainer(({items, info, all, names}) => {
+const SortableList = SortableContainer(({items, info, all, names, onEdit}) => {
   return (
     <ul>
       {items.map((value, index, names) => {
-        return (<SortableItem key={`item-${index}`} index={index} value={value} />);
+        return (<SortableItem key={`item-${index}`} index={index} value={value} onEdit={onEdit} />);
       })}
     </ul>
   );
@@ -32,7 +32,8 @@ class ChangeButtonOrder extends Component {
 		this.state = {
 			buttonOrder : false,
 		};
-		this.onSortEnd = this.onSortEnd.bind(this)
+		this.onSortEnd = this.onSortEnd.bind(this);
+		this.onEditButton = this.onEditButton.bind(this);
 	}
 	componentDidMount(){
 		this.props.fetchButtons();
@@ -45,9 +46,11 @@ class ChangeButtonOrder extends Component {
 		for (var i = newArray.length - 1; i >= 0; i--) {
 			this.props.changeOrder(newArray[i], i)
 		}
-		this.setState({
-			buttons : newArray
-		})
+		this.setState({buttons : newArray})
+  	}
+  	onEditButton(value){
+  		this.props.onEditButtonClick(value);
+		//const buttonData = this.props.players.list[this.props.playerID]
   	}
 	render(){
 			let buttonOrder = Object.values(this.props.buttons).map((button) => (button.order))
@@ -64,6 +67,7 @@ class ChangeButtonOrder extends Component {
 					<SortableList 
 						items={sortedButtonNames} 
 						onSortEnd={this.onSortEnd}
+						onEdit={this.onEditButton}
 						lockAxis='y'
 						helperClass='sortableHelper'/>
 				

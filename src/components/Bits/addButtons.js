@@ -2,10 +2,30 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { addButton } from '../../actions/button_actions.js';
+import { addButton, editButton } from '../../actions/button_actions.js';
 
 
 class AddEditButtons extends Component {
+	constructor(props){
+		super(props);
+
+		this.handleInitialize = this.handleInitialize.bind(this);
+		this.renderField = this.renderField.bind(this);
+		this.onSubmit = this.onSubmit.bind(this);
+	}
+	componentDidMount() {
+  		this.handleInitialize();
+	}
+	handleInitialize() {
+		if(this.props.edit !== false){
+			const keys = Object.keys(this.props.buttons);
+			const buttonKey = keys.filter(key => this.props.buttons[key].buttonName === this.props.edit);
+			const buttonData = this.props.buttons[buttonKey].columns;
+			buttonData['buttonName'] = this.props.edit;
+			// console.log(this.props);
+		  	this.props.initialize(buttonData);
+		}
+	}
 	renderField(field){
 		const className = `form ${field.class} ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
 		return(
@@ -26,9 +46,16 @@ class AddEditButtons extends Component {
 	}
 	onSubmit(values){
 		//console.log(values);
-		const order = Object.keys(this.props.buttons).length;
-		this.props.addButton(values, order);
-		this.props.actionCompleted();
+		if(this.props.edit === false){
+			const order = Object.keys(this.props.buttons).length;
+			this.props.addButton(values, order);
+			this.props.actionCompleted();
+		} else {
+			const buttonKey = Object.keys(this.props.buttons).filter(key => this.props.buttons[key].buttonName === this.props.edit);
+			const order = this.props.buttons[buttonKey].order;
+			this.props.editButton(buttonKey, values, order);
+			this.props.actionCompleted();
+		}
 		
 	}
 	render(){
@@ -36,10 +63,9 @@ class AddEditButtons extends Component {
 		const { handleSubmit } = this.props;
 		const keys = Object.keys(headings);
 		return(
-			
 			<form className='addButtonForm' onSubmit={handleSubmit(this.onSubmit.bind(this))}>
 				<div className="half">
-					<h2>Add New Button</h2>
+					<h2>{this.props.edit ? "Edit Button" : "Add New Button"}</h2>
 					<Field
 						key='name'
 						name="buttonName"
@@ -77,7 +103,7 @@ class AddEditButtons extends Component {
 					})
 				}
 				</div>
-				<button className="button" type="submit">Add Button</button>
+				<button className="button" type="submit">{this.props.edit ? "Edit Button" : "Add Button"}</button>
 			</form>
 			);
 	}
@@ -101,7 +127,7 @@ function mapStateToProps(state){
 }
 
 function mapDispatchToProps(dispatch){
-	return bindActionCreators({ addButton }, dispatch);
+	return bindActionCreators({ addButton, editButton }, dispatch);
 }
 
 

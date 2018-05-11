@@ -14,7 +14,7 @@ function reverseSortDirection(sortDir) {
   return sortDir === SortTypes.DESC ? SortTypes.ASC : SortTypes.DESC;
 }
 
-class SortHeaderCell extends Component {
+export default class SortHeaderCell extends Component {
   constructor(props) {
     super(props);
     this.onSortChange = this.onSortChange.bind(this);
@@ -70,9 +70,9 @@ class SortHeaderCell extends Component {
     }
   }
 }
-module.exports.SortHeaderCell = SortHeaderCell;
+// module.exports.SortHeaderCell = SortHeaderCell;
 
-class TextCell extends Component {
+export class TextCell extends Component {
   render() {
     const {rowIndex, data, columnKey, keys, openCert, certificates, currentColumn, date, ...props} = this.props;
     // console.log(columnKey);
@@ -84,25 +84,42 @@ class TextCell extends Component {
           calcPlayerAge = getAge(data[keys[rowIndex]]['birthDate'], data[keys[rowIndex]]['deathDate']);
       }
     }
+        //console.log(slug(data[keys[rowIndex]]['name']));
+        // Object.keys(certificates.death).map((certificateName) => {
+        //   if(slug(data[keys[rowIndex]]['name']) === certificateName){
+        //     //console.log(slug(data[keys[rowIndex]]['name']));
+        //   }
+        // });
+        //columnKey === 'age' ? calcPlayerAge : 
     return (
       <Cell {...props} 
-      className={keys.includes('none') ? "noPlayers" : currentColumn === columnKey ? statusClass + " active-column" : statusClass}
+      className={keys.indexOf('none') !== -1 ? "noPlayers" : currentColumn === columnKey ? statusClass + " active-column" : statusClass}
       >
-
-        { keys.includes('none') ? "-" : date ? dateToText(data[keys[rowIndex]][columnKey]) : columnKey === 'age' ? calcPlayerAge : data[keys[rowIndex]][columnKey] }
-        { keys.includes('none') ? "" : (columnKey === "birthDate") && (Object.keys(certificates.birth).map((certificateName) => certificateName.includes(slug(data[keys[rowIndex]]['name']))).includes(true)) ? <span className="certDot" onClick={() => this.props.openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="circle"/></span> : "" }
-        { keys.includes('none') ? "" : (columnKey === "deathDate") && (Object.keys(certificates.death).map((certificateName) => certificateName.includes(slug(data[keys[rowIndex]]['name']))).includes(true)) ? <span className="certDot" onClick={() => this.props.openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="circle"/></span> : "" }
+        { keys.indexOf('none') !== -1 ? "-" : date ? dateToText(data[keys[rowIndex]][columnKey]) : data[keys[rowIndex]][columnKey] }
+        { 
+          keys.indexOf('none') !== -1
+          ? "" 
+          : (columnKey === "birthDate") && (data[keys[rowIndex]]['hasBirthCert']) 
+            ? <span className="certDot" onClick={() => this.props.openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="circle"/></span> 
+            : "" 
+        }
+        { 
+          keys.indexOf('none') !== -1
+          ? "" 
+          : (columnKey === "deathDate") && (data[keys[rowIndex]]['hasDeathCert']) 
+            ? <span className="certDot" onClick={() => this.props.openCert(certificates, slug(data[keys[rowIndex]]['name']), columnKey)}><FontAwesome name="circle"/></span> 
+            : "" 
+        }
       </Cell>
     );
   }
 };
-module.exports.TextCell = TextCell;
 
-class NameCell extends Component {
+
+export class NameCell extends Component {
   render(){
     const {rowIndex, data, columnKey, playerNumber, keys, currentColumn, ...props} = this.props;
     let statusClass; 
-    // console.log(data[keys[rowIndex]])
     if(data[keys[rowIndex]]){
       statusClass = data[keys[rowIndex]]["status"].toLowerCase();  
     }
@@ -112,10 +129,10 @@ class NameCell extends Component {
         <div className="playerNumber">{rowIndex + 1}</div>
 
         <Cell {...props} 
-        className={keys.includes('none') ? "noPlayers" : currentColumn === columnKey ? statusClass + " active-column" : statusClass}
+        className={keys.indexOf('none') !== -1 ? "noPlayers" : currentColumn === columnKey ? statusClass + " active-column" : statusClass}
         >
 
-          {keys.includes('none') ? "NO PLAYERS FOUND" : data[keys[rowIndex]][columnKey]}
+          {keys.indexOf('none') !== -1 ? "NO PLAYERS FOUND" : data[keys[rowIndex]][columnKey]}
         </Cell>
       </div>
     );
@@ -123,4 +140,18 @@ class NameCell extends Component {
   }
 }
 
-module.exports.NameCell = NameCell;
+export class SimpleCell extends Component {
+  render() {
+    const {rowIndex, data, keys, column, ...props} = this.props;
+        // console.log(data[keys[rowIndex]][column]);
+        //console.log(slug(data[keys[rowIndex]]['name']));
+        //console.log(Object.keys(certificates.death).map((certificateName) => certificateName));
+    return (
+      <Cell {...props} >
+        {data[keys[rowIndex]][column]}
+      </Cell>
+    );
+  }
+};
+
+

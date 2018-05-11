@@ -6,6 +6,7 @@ import Dropzone from 'react-dropzone';
 import ImageGallery from '../Bits/imageGallery'
 
 import { addCertificate } from '../../actions/certificate_actions.js';
+import { addCertToPlayer } from '../../actions/player_actions.js';
 
 import slug from '../../functions/slug.js'
 
@@ -55,29 +56,55 @@ class AddNewCertificate extends Component {
 			'D' : 'death'
 		}
 		let name = slug(this.props.players[this.props.playerID].name);
+		//console.log(name);
+
 		const certificateNames = Object.keys(this.props.certificates[typeCodes[data.type]]);
 		const allPriors = certificateNames.filter((entry) => {
-			 	return entry.includes(name)
+			 	return entry.indexOf(name) !== -1
 			 });
-		console.log(allPriors);
-		const highestIndex = allPriors.map(prior => parseInt(prior.split('-')[1]));
-		const newIndex = Math.max(...highestIndex) + 1;
-		name = name + '-' + newIndex;
-		const file = data.file[0];
-		console.log(file, data.type, name);
-		this.props.addCertificate(file, data.type, name);
-		this.props.actionComplete();
+		//console.log(allPriors.length);
+		if(allPriors.length === 0){
+			//console.log("noPriors", name);
+			const file = data.file[0];
+			// console.log(file, data.type, name);
+			const playerKeys = Object.keys(this.props.players);
+			let id, values;
+			for (var i = playerKeys.length - 1; i >= 0; i--) {
+				if (name === slug(this.props.players[playerKeys[i]].name)){
+					id = playerKeys[i];
+					values = this.props.players[playerKeys[i]];
+				}
+			}
+			this.props.addCertificate(file, data.type, name);
+			// console.log(data.type, id);
+			this.props.addCertToPlayer(data.type, id, values);
+			this.props.actionComplete();
+		} else {
+			//console.log("there are priors");
+			//console.log(allPriors);
+			const highestIndex = allPriors.map(prior => {
+				if(prior.indexOf('-') === -1){
+					// console.log('has no dash');
+					return 0;
+				} else {
+					return parseInt(prior.split('-')[1]);
+				}
+			});
+			//console.log(highestIndex);
+			const newIndex = Math.max(...highestIndex) + 1;
+			name = name + '-' + newIndex;
+			//console.log(name);
+			const file = data.file[0];
+			this.props.addCertificate(file, data.type, name);
+			this.props.actionComplete(); 
+		}
 	}
 	getAllCertificates(type){
 		let name = slug(this.props.players[this.props.playerID].name);
-		// const priorEntries = this.props.certificates[type][name];
-		// //console.log(priorEntries, type);
-		// if(true){
-			const allPriors = Object.keys(this.props.certificates[type]).filter((entry) => {
-			 	return entry.includes(name);
-			 });
-			return allPriors;
-		// }
+		const allPriors = Object.keys(this.props.certificates[type]).filter((entry) => {
+		 	return entry === name;
+		 });
+		return allPriors;
 	}
 	render(){
 		const { handleSubmit } = this.props;
@@ -107,8 +134,8 @@ class AddNewCertificate extends Component {
 						this.getAllCertificates('death') || this.getAllCertificates('birth') 
 							?
 						<div>
-							{this.getAllCertificates('birth') ? <ImageGallery type="birth" actionComplete={this.props.actionComplete} certNames={this.getAllCertificates('birth')}/> : ""}
-							{this.getAllCertificates('death') ? <ImageGallery type="death" actionComplete={this.props.actionComplete} certNames={this.getAllCertificates('death')}/> : ""}
+							{this.getAllCertificates('birth') ? <ImageGallery type="birth" actionComplete={this.props.actionComplete} playerID={this.props.playerID} certNames={this.getAllCertificates('birth')}/> : ""}
+							{this.getAllCertificates('death') ? <ImageGallery type="death" actionComplete={this.props.actionComplete} playerID={this.props.playerID} certNames={this.getAllCertificates('death')}/> : ""}
 						</div>
 							:
 						"No certificates to remove."
@@ -148,6 +175,6 @@ export default reduxForm({
 	validate, 
 	form: "AddNewCertificate"
 })(
-	connect(mapStateToProps, { addCertificate })(AddNewCertificate)
+	connect(mapStateToProps, { addCertificate, addCertToPlayer })(AddNewCertificate)
 );
 

@@ -2,15 +2,22 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 
-
 import Title from '../Bits/title';
 import Table from '../Sections/PlayerList';
+import InProgressTable from '../Sections/InProgressTable';
 import WorkArea from '../Sections/WorkArea';
 import EditPlayerForm from '../Bits/editPlayer';
+import EditInProgressForm from '../Bits/editInProgress';
 import Lightbox from '../Bits/certificationsLightbox';
 
+import AddInProgress from '../Sections/AddInProgress.js';
+
+
+import lensZoom from '../../functions/lensZoom';
+
+import { fetchInProgress } from '../../actions/inprogress_action.js';
 import { fetchHeadings, deleteHeading } from '../../actions/heading_actions';
-import { editForm } from '../../actions/edit_actions';
+import { editForm, editInProgressForm } from '../../actions/edit_actions';
 import { logOut } from '../../actions/signIn_actions.js';
 
 
@@ -22,8 +29,13 @@ class Edit extends Component {
 			categories: ["all"],
 			actionType: null,
 			toggleEditForm: false,
+			toggleInProgressForm: false,
       		editPlayerID: '',
-      		loggedIn: false
+      		loggedIn: false,
+      		lightboxOpen: false,
+      		thanksOpen: false,
+      		inProgressOpen: false,
+      		actionOpening: false,
 		}
 		this.chooseAction = this.chooseAction.bind(this);
 		this.actionComplete = this.actionComplete.bind(this);
@@ -31,21 +43,31 @@ class Edit extends Component {
 		this.onCloseEditForm = this.onCloseEditForm.bind(this);
 		this.logOut = this.logOut.bind(this)
 		this.deleteColumn = this.deleteColumn.bind(this)
-
+		this.toggleInProgress = this.toggleInProgress.bind(this);
+		this.openEditInProgress = this.openEditInProgress.bind(this);
+		this.onCloseForm = this.onCloseForm.bind(this);
 	}
+	componentWillUpdate(){}
 	chooseAction(e){
 		this.setState({
-			actionType : e.target.id
+			actionType : e.target.id,
+			actionOpening: e.target.id
 		});
+	}
+	toggleInProgress(type){
+		console.log(this.state.inProgressOpen, type);
+		this.setState({
+			inProgressOpen : type,
+		});	
 	}
 	actionComplete(){
 		this.setState({
 			actionType: null
-		})
+		});
 	}
 	openEditPlayer(event, rowIndex, data, keys){
 		//check whether user clicked on a pop up dot
-		if(Object.values(event.target.classList).includes('fa') === false){
+		if(Object.values(event.target.classList).indexOf('fa') === -1){
 		    this.props.editForm(keys[rowIndex]);
 		    this.setState({
 		      toggleEditForm: true,
@@ -53,70 +75,78 @@ class Edit extends Component {
 		    });
 		}
 	}
+	openEditInProgress(event, rowIndex, data, keys, type){
+		const info = {};
+		info.playerID = keys[rowIndex];
+		info.formType = type;
+	    this.props.editInProgressForm(info);
+	    this.setState({
+	      toggleInProgressForm: true,
+	      editPlayerID: keys[rowIndex],
+
+	    });
+	}
 	onCloseEditForm(){
 	    this.setState({
 	      toggleEditForm: false,
 	      editPlayerID: ''
 	    });
   	}
+  	onCloseForm(){
+	    this.setState({
+	      toggleInProgressForm: false,
+	      editPlayerID: ''
+	    });
+  	}
   	deleteColumn(id){
-  		const result = confirm("Delete Column?");
+  		const result = window.confirm("Delete Column?");
 		if (result) {
 	  		const headingKeys = Object.keys(this.props.headings);
 	  		const deleteKey = headingKeys.filter((key) => this.props.headings[key].name === id);
   			this.props.deleteHeading(deleteKey[0]);
   		}
   	}
+
+  	
   	openLightbox(certificates, playerName, type){
-  		// console.log(certificates, playerName, type);
-  		
   		//find out if there is more than one image
 	    let urls;
-	    if (type === "deathDate"){
-	      	urls = getImageCount("death");
-	    } else if(type === "birthDate"){
-	      	urls = getImageCount("birth")
-	    } 
-
-	    //add images to Lightbox
-	    for (var index = 0; index < urls.length; index++) {
-	      const img = document.createElement('img')
-	      img.setAttribute("src", urls[index]);
-	      const imageWrapper = document.getElementById('lightBoxImageWrapper')
-	      imageWrapper.appendChild(img);
-	    }
-
-	    //open LightBox
-	    const lightbox = document.getElementById('certLightbox');
-	    lightbox.classList.add('lightboxOn');      
-	    
+      	if (type === "deathDate"){
+        	urls = getImageCount("death");
+  			lensZoom(certificates, playerName, type, urls);
+      	} else if(type === "birthDate"){
+        	urls = getImageCount("birth");
+  			lensZoom(certificates, playerName, type, urls);
+      	} 
 
 	    function getImageCount(type){
-	    	const certificateNames = Object.keys(certificates[type])
-	      	const nameArray = certificateNames.map((cert) => { const name = cert.split('-'); return name[0] });
-	      	const imageCount = getOccurrence(nameArray, playerName);
-
-
-		    var fileNames = [];
-			var array = nameArray;
-			var element = playerName;
-			var idx = array.indexOf(element);
-			while (idx !== -1) {
-			  fileNames.push(certificateNames[idx]);
-			  idx = array.indexOf(element, idx + 1);
-			}
-
-	      let imageUrl =[];
-	      for (var index = 0; index < imageCount; index++) {
-	      	imageUrl.push(certificates[type][fileNames[index]].url);
-	      }
-	      return imageUrl;
-	    }
-
-	    function getOccurrence(array, value) {
-	        return array.filter((v) => (v === value)).length;
-	    }
- 
+	        const nameArray = Object.keys(certificates[type]).map((cert) => { const name = cert.split('-'); return name[0] });
+	        const imageCount = getOccurrences(nameArray, playerName);
+	        const fileNames = imageCount.map((i) => Object.keys(certificates[type])[i]);
+	        // console.log(fileNames);
+	        const imageUrls =[];
+          	for (var i = 0; i < fileNames.length; i++) {
+            	const imageUrl = certificates[type][fileNames[i]].url;
+            	imageUrls.push(imageUrl);
+          	}
+	        return imageUrls;
+	      	
+	      	function getOccurrences(array, value) {
+	          //return array.filter((v) => (v === value)).length;
+	          	var count = 0;
+				var indexesArray = [];
+				var pos = array.indexOf(value);
+				indexesArray.push(pos);
+				while (pos !== -1) {
+				  count++;
+				  pos = array.indexOf(value, pos + 1);
+				  if(pos !== -1){
+				  	indexesArray.push(pos);
+				  }
+				}
+				return indexesArray;
+	      	}
+  		}
   	}
   	logOut(){
 		this.props.logOut();
@@ -138,11 +168,16 @@ class Edit extends Component {
 			      	</div>
 		      	</section>
 		      	<section className="selectAction flexMe">
-		      		<button className="actionType button" id="addPlayer" onClick={this.chooseAction}>Add a Player</button>
+		      		<button 
+		      			className="actionType button" 
+		      			id="addPlayer" 
+		      			onClick={this.chooseAction}>
+		      				Add a Player
+		      		</button>
 		      		<button className="actionType button" id="addColumn" onClick={this.chooseAction}>Add a Column</button>
 		      		<button className="actionType button" id="editButton" onClick={this.chooseAction}>Edit Buttons</button>
 			    </section>
-			    <WorkArea action={this.state.actionType} actionComplete={this.actionComplete}/>
+			    <WorkArea action={this.state.actionType} actionComplete={this.actionComplete} playerNames={this.props.players}/>
 	      		<Table 
 	      			categories={this.state.categories}
 	      	 		deathPage={this.state.deathPage}
@@ -152,6 +187,34 @@ class Edit extends Component {
 	      	 		isEditPage={true}/>
 	      	 	<Lightbox edit={true} />
 	      	 	{ this.state.toggleEditForm ? <EditPlayerForm actionComplete={this.onCloseEditForm} /> : "" }
+	      	 	{ this.state.toggleInProgressForm ? <EditInProgressForm type={this.state.formType} actionComplete={this.onCloseForm} /> : "" }
+	      	 	<div id="editInProgress">
+	      	 		<div>
+		      	 		<h2>Find</h2>
+			      		<button className="actionType button" id="addInProgress" onClick={() => this.toggleInProgress('find')}>Add Find Entry</button>
+						{this.state.inProgressOpen === 'find' ? <AddInProgress type={'find'} open={this.state.inProgressOpen} actionComplete={() => this.toggleInProgress(false)}/> : ''}	
+			      		<InProgressTable 
+			      			openEditForm = {this.openEditInProgress}
+			      			type={'find'}/>
+		      		</div>
+		      		<div>
+			      		<h2>Get</h2>
+			      		<button className="actionType button" id="addInProgress" onClick={() => this.toggleInProgress('get')}>Add Get Entry</button>
+						{this.state.inProgressOpen === 'get' ? <AddInProgress type={'get'} open={this.state.inProgressOpen} actionComplete={() => this.toggleInProgress(false)}/> : ''}	
+			      		<InProgressTable 
+			      			openEditForm = {this.openEditInProgress}
+			      			type={'get'}/>
+			      	</div>
+	      	 	</div>
+	      	 	<div id="editThanks">
+	      	 		<h2>Thanks</h2>
+	      	 		<button className="actionType button" id="addThanks" onClick={() => this.toggleInProgress('thanks')}>Add Thanks</button>
+					{this.state.inProgressOpen === 'thanks' ? <AddInProgress type={'thanks'} open={this.state.inProgressOpen} actionComplete={() => this.toggleInProgress(false)}/> : ''}				
+					<InProgressTable 
+			      			openEditForm = {this.openEditInProgress}
+			      			type={'thanks'}/>
+	      	 	</div>
+
 	      	</div>
 	    );
 	}
@@ -160,9 +223,9 @@ class Edit extends Component {
 function mapStateToProps(state){
 	return {
 		loggedIn: state.loggedIn.loggedIn,
-		headings: state.headings
-
+		headings: state.headings,
+		inProgress: state.inProgress,
 	}
 }
 
-export default connect(mapStateToProps, { fetchHeadings, editForm, logOut, deleteHeading })(Edit);
+export default connect(mapStateToProps, { fetchInProgress, fetchHeadings, editForm, editInProgressForm, logOut, deleteHeading })(Edit);

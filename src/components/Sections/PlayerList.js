@@ -3,14 +3,20 @@ import { connect } from 'react-redux';
 import { Table, Column }  from 'fixed-data-table-2';
 
 
-import { fetchPlayers, sortPlayers, filterPlayers } from '../../actions/player_actions.js';
+import { clearPlayers, fetchPlayers, sortPlayers, filterPlayers } from '../../actions/player_actions.js';
 import { fetchHeadings, changeWidth } from '../../actions/heading_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
-//import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
 import { fetchCertificates } from '../../actions/certificate_actions.js';
+//import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
 
-import { TextCell, NameCell, SortHeaderCell } from '../Bits/cells.js'
-import ScrollToggle from '../Bits/scrollWithArrows.js';
+import { TextCell, NameCell } from '../Bits/cells.js'
+import SortHeaderCell from '../Bits/cells.js'
+import Controls from '../Bits/controls.js';
+
+import sortPlayerKeys from '../../functions/sortPlayerKeys';
+import getAge from '../../functions/getAge';
+import slug from '../../functions/slug';
+
 
 import 'fixed-data-table-2/dist/fixed-data-table.min.css';
 import './playerList.css';
@@ -19,7 +25,7 @@ import './playerList.css';
 class SortExample extends Component {
   constructor(props) {
     super(props);
-    //createCertificateObject()
+    
   	this.props.fetchPlayers();
   	this.props.fetchHeadings();
     this.props.fetchButtons();
@@ -48,6 +54,7 @@ class SortExample extends Component {
     this.onKeyDown = this.onKeyDown.bind(this);
     this._rowClassNameGetter= this._rowClassNameGetter.bind(this);
     this.onScrollToggle = this.onScrollToggle.bind(this)
+    this.onClearFilterSearch = this.onClearFilterSearch.bind(this);
 
   }
   componentDidMount(){
@@ -72,16 +79,22 @@ class SortExample extends Component {
       }
     });
   }	
-  updateDimensions() {
-      if(window.innerWidth < 767){
-        let update_width  = window.innerWidth-40;
-        let update_height = window.innerHeight-150;
-        this.setState({ width: update_width, height: update_height });
-      } else {
-        let update_width  = window.innerWidth-80;
-        let update_height = window.innerHeight-150;
-        this.setState({ width: update_width, height: update_height });
-      }
+  updateDimensions(){
+    if ((window.innerWidth < 767) && (window.innerWidth > window.innerHeight)){
+      //if it is mobile landscape
+      let update_width  = window.innerWidth-40;
+      let update_height = window.innerHeight*3;
+      this.setState({ width: update_width, height: update_height });
+    } else if(window.innerWidth < 767){
+      //if it is mobile
+      let update_width  = window.innerWidth-40;
+      let update_height = window.innerHeight-150;
+      this.setState({ width: update_width, height: update_height });
+    } else {
+      let update_width  = window.innerWidth-80;
+      let update_height = window.innerHeight-150;
+      this.setState({ width: update_width, height: update_height });
+    }
   }
   onFilter(input, changedColumn){
     const players = this.props.players.list;
@@ -142,6 +155,17 @@ class SortExample extends Component {
     this.setState({
       scrollWithArrows: status,
       maxColumn: headingLength - 1,
+    });
+  }
+  onClearFilterSearch(){
+    const searchInputs = document.getElementsByClassName('search');
+    for (var i = searchInputs.length - 1; i >= 0; i--) {
+      searchInputs[i].value = '';
+    }
+    this.props.clearPlayers();
+    this.setState({
+      colLocked: [],
+      colSortDirs: {},
     });
   }
   onKeyDown(e){
@@ -207,14 +231,14 @@ class SortExample extends Component {
       if(Object.keys(this.state.colLocked).length === 0){
         //console.log("because there is nothing in the filtered search", Object.keys(this.state.colLocked).length, this.state.colLocked)
         //then return all of the players
-        playersKeys = Object.keys(players);
+        playersKeys = sortPlayerKeys('name', 'DESC', Object.keys(players), players);
         //unless it is the death page
         if(this.props.deathPage){
-         // console.log("this is the death page");
+        // console.log("this is the death page");
           //then just return the dead players
           playersKeys = this.isDeathPage(playersKeys, players)      
         }
-      } else {
+      } else { 
        // console.log("because the search is too specific", Object.keys(this.state.colLocked).length, this.state.colLocked)
         //if there is something in the search fields
         //return "none"
@@ -228,11 +252,10 @@ class SortExample extends Component {
           playersKeys = this.isDeathPage(playersKeys, players)      
       }
     }    
-    // console.log(playersKeys);
   	return playersKeys;
   }
   onColumnResizeEndCallback(newColumnWidth, columnKey) {
-    if(location.pathname === '/edit'){
+    if(window.location.pathname === '/edit'){
       const headingKeys = Object.keys(this.props.headings)
       const headingNames = Object.values(this.props.headings).map((headingObject) => { return headingObject.name })
       const columnID = headingKeys[headingNames.indexOf(columnKey)];
@@ -273,8 +296,8 @@ class SortExample extends Component {
     //if this is NOT the all page
     const rowHeadingsObjectsFinal = [];
     let possibleRowHeadings = Object.values(this.props.headings);
-    if (location.pathname.indexOf('results') !== -1) {
-      if(location.pathname.indexOf('all') === -1){
+    if (window.location.pathname.indexOf('results') !== -1) {
+      if(window.location.pathname.indexOf('all') === -1){
         //if the pathname does not include the word all
         //for each row heading if it's name is in the list of rowHeadingsChosen than push the whole item into the final array
         possibleRowHeadings.map((possibleRowHeading) => {
@@ -285,7 +308,12 @@ class SortExample extends Component {
         });
       } else {
         //if this IS the /results/all page
-        rowHeadingsObjectsFinal.push(...possibleRowHeadings);
+        possibleRowHeadings.map((possibleRowHeading) => {
+          if(rowHeadingsChosen.indexOf(possibleRowHeading.name) !== -1){
+            rowHeadingsObjectsFinal.push(possibleRowHeading);
+          }
+          return true;
+        });
       }
     } else {
       //if this IS anything but the results page
@@ -329,16 +357,17 @@ class SortExample extends Component {
     if (rowsCount !== 0){
       return (
         <div> 
-          <ScrollToggle numheadings={headings.length} onToggle={this.onScrollToggle}/>
+          <Controls numheadings={headings.length} onToggle={this.onScrollToggle} onClear={this.onClearFilterSearch}/>
           <Table
             rowHeight={40}
             rowsCount={rowsCount}
-            headerHeight={70}
+            headerHeight={86}
             rowClass
             rowClassNameGetter={this._rowClassNameGetter}
             onColumnResizeEndCallback={this.onColumnResizeEndCallback}
             onRowClick={this.onRowClick}
             isColumnResizing={false}
+            touchScrollEnabled={true}
             scrollToRow={this.state.currentRowIndex}
             scrollToColumn={this.state.currentColumnIndex}
             width={this.state.width}
@@ -461,4 +490,4 @@ function mapStateToProps(state){
 }
 
 
-export default connect(mapStateToProps, { fetchPlayers, sortPlayers, filterPlayers, fetchHeadings, fetchButtons, fetchCertificates, changeWidth})(SortExample);
+export default connect(mapStateToProps, { clearPlayers, fetchPlayers, sortPlayers, filterPlayers, fetchHeadings, fetchButtons, fetchCertificates, changeWidth})(SortExample);

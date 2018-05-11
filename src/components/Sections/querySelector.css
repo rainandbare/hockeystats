@@ -9,6 +9,12 @@ div.home section.querySelector{
     box-shadow: 4px -2px 0px 2px #F29C39;
 }
 
+@media (max-width:1000px){
+	div.home section.querySelector{
+		padding: 20px 75px 20px 20px;
+	}
+}
+
 ul.queryOptions{
 	margin-top: 25px;
 	justify-content: flex-start;

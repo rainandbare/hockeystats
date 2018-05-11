@@ -8,6 +8,8 @@ import QuerySelector from '../Sections/QuerySelector.js';
 import DeathAverage from '../Bits/deathAverage.js';
 import Lightbox from '../Bits/certificationsLightbox';
 
+import lensZoom from '../../functions/lensZoom';
+
 import { fetchHeadings } from '../../actions/heading_actions.js';
 import { createCertificateObject } from '../../actions/certificate_actions.js';
 
@@ -22,10 +24,10 @@ class Results extends Component {
 
 	}
 	componentWillMount(){
-		this.findPathName(location.pathname);
+		this.findPathName(window.location.pathname);
 	}
 	findPathName(path){
-		if (path.includes('results')) {
+		if (path.indexOf('results') !== -1) {
 			//find out what categories the user requested
 			const splitPath = path.split('/results/');
 			splitPath.shift();
@@ -49,57 +51,45 @@ class Results extends Component {
 	}
 	nothingHappens(){
 		//nothing happens here
-	}
+	}	
 	openLightbox(certificates, playerName, type){
   		//find out if there is more than one image
 	    let urls;
-	    if (type === "deathDate"){
-	      urls = getImageCount("death");
-	    } else if(type === "birthDate"){
-	      urls = getImageCount("birth")
-	    } 
-
-	    //add images to Lightbox
-	    for (var index = 0; index < urls.length; index++) {
-	      const img = document.createElement('img')
-	      img.setAttribute("src", urls[index]);
-	      const imageWrapper = document.getElementById('lightBoxImageWrapper')
-	      imageWrapper.appendChild(img);
-	    }
-
-	    //open LightBox
-	    const lightbox = document.getElementById('certLightbox');
-	    lightbox.classList.add('lightboxOn');      
-	    
+      	if (type === "deathDate"){
+        	urls = getImageCount("death");
+  			lensZoom(certificates, playerName, type, urls);
+      	} else if(type === "birthDate"){
+        	urls = getImageCount("birth");
+  			lensZoom(certificates, playerName, type, urls);
+      	} 
 
 	    function getImageCount(type){
-	      const nameArray = Object.keys(certificates[type]).map((cert) => { const name = cert.split('-'); return name[0] });
-	      const imageCount = getOccurrence( nameArray, playerName);
+	        const nameArray = Object.keys(certificates[type]).map((cert) => { const name = cert.split('-'); return name[0] });
+	        const imageCount = getOccurrence(nameArray, playerName);
 
-	      let imageUrl =[];
-	      if(imageCount === 1){
-	        imageUrl.push(certificates[type][playerName].url);
-	      } else {
-
-	       
-	        for (var index = 0; index < imageCount; index++) {
-	          let multiImageUrl;
-	          if(index === 0){
-	            multiImageUrl = certificates[type][playerName].url;
-	          } else {
-	            multiImageUrl = certificates[type][playerName + "-" + (index + 1)].url
+	        let imageUrl =[];
+	        console.log(imageCount);
+	        if(imageCount === 1){
+	        	console.log(certificates[type])
+	          imageUrl.push(certificates[type][playerName].url);
+	        } else {
+	          for (var index = 0; index < imageCount; index++) {
+	            let multiImageUrl;
+	            if(index === 0){
+	              multiImageUrl = certificates[type][playerName].url;
+	            } else { 
+	              	multiImageUrl = certificates[type][playerName + "-" + index].url
+	            }
+	          
+	            imageUrl.push(multiImageUrl)
 	          }
-	        
-	          imageUrl.push(multiImageUrl)
 	        }
-	      }
-	      return imageUrl;
-	    }
+	        return imageUrl;
+      	}
+      	function getOccurrence(array, value) {
+          return array.filter((v) => (v === value)).length;
+      	}
 
-	    function getOccurrence(array, value) {
-	        return array.filter((v) => (v === value)).length;
-	    }
- 
   	}
 	render() {
 	    return (

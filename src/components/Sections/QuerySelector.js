@@ -27,18 +27,26 @@ class QuerySelector extends Component {
 		const newButton = buttonsAll[e.target.name].buttonLabel;
 		const currentButtons = this.state.buttons;
 
+		//if the newButton is in the list of buttons already, take it out (toggle off)
 		if(currentButtons.indexOf(newButton) !== -1){
 			const position = currentButtons.indexOf(newButton);
 			currentButtons.splice(position, 1);
+		} else if((currentButtons[0] === 'all') && (newButton !== 'all')){
+			//if the current category is all and a different category is pressed
+			//remove all from current list and add the newbutton
+				const all = currentButtons.indexOf('all');
+				currentButtons.splice(all, 1);
+				currentButtons.push(newButton);
 		} else {
+			//otherwise put it in
 			currentButtons.push(newButton);
 		}
+
 		let nextSetOfButtons = currentButtons;
-		
-		if(nextSetOfButtons.includes('all')){
+		if(nextSetOfButtons.indexOf('all') !== -1){
 			nextSetOfButtons = ["all"];
 			$('input').prop('checked', false); 
-			$('input.all').prop('checked', true)
+			$('input.all').prop('checked', true);
 		}
 		this.setState({
 			buttons: nextSetOfButtons,
@@ -74,7 +82,7 @@ class QuerySelector extends Component {
 										id={key} 
 										className={buttons[key]['buttonLabel']} 
 										onChange={(e) => this.onSelectionChange(e)}
-										checked={buttonsSelected.includes(buttons[key]['buttonLabel']) ? 'checked' : ''}
+										checked={buttonsSelected.indexOf(buttons[key]['buttonLabel']) !== -1 ? 'checked' : ''}
 								/>
 								<label htmlFor={key}>Toggle</label>
 							</li>

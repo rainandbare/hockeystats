@@ -7,12 +7,11 @@ import './workArea.css'
 
 class WorkArea extends Component {
 	render(){
-
 		switch(this.props.action){
 		case "addPlayer":
 			return(
 				<section className="workarea">
-					<AddNewPlayer actionComplete={this.props.actionComplete} />
+					<AddNewPlayer playersNames={this.props.playersNames} actionComplete={this.props.actionComplete} />
 				</section>
 			);
 		case "addColumn":
@@ -32,9 +31,7 @@ class WorkArea extends Component {
 				<section>
 				</section>
 			);
-	}
-
-		
+		}
 	}
 }
 

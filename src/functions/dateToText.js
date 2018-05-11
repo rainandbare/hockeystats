@@ -6,9 +6,9 @@ export default (date) => {
 	let formattedDate = '';
 	if(date !== ''){
 		const currentDate = new Date(date);
-		const day = currentDate.getDate();
-		const month = currentDate.getMonth(); 
-		const year = currentDate.getFullYear();
+		const day = currentDate.getUTCDate();
+		const month = currentDate.getUTCMonth(); 
+		const year = currentDate.getUTCFullYear();
 		formattedDate = monthNames[month] + " " + day + ", " + year;
 	}
 

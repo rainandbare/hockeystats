@@ -7,6 +7,7 @@ import { editReducer } from './edit_reducer';
 import { certificateReducer } from './certificate_reducer.js';
 import { searchReducer } from './search_reducer.js';
 import { authReducer } from './auth_reducer.js'; 
+import { inProgressReducer } from './inprogress_reducer';
 
 
 const rootReducer = combineReducers({
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
    certificates: certificateReducer,
    searchTerm: searchReducer, 
    editPlayer: editReducer,
-   loggedIn: authReducer
+   loggedIn: authReducer,
+   inProgress: inProgressReducer
 });
 
 export default rootReducer;

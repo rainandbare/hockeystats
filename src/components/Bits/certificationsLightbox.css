@@ -19,6 +19,11 @@
     position: relative;
     min-width: 400px;
 }
+@media (max-width: 440px){
+  .lightboxAndClose {
+    min-width: 300px;
+  }
+}
 
 #certLightbox.lightboxOn{
 	visibility: visible;
@@ -27,12 +32,17 @@
 
 .closeLightbox{
 	position: absolute;
-    top: 0px;
-    right: 5px;
-    font-size: 40px;
-	color: black;
-    cursor: pointer;
+  top: 0px;
+  right: 5px;
+  font-size: 40px;
+	color: #EC2B2B;
+  cursor: pointer;
+  opacity: 0;
 }
+.closeLightbox.show{
+  opacity: 1;
+}
+
 #lightBoxImageWrapper img{
     display: block;
     margin: 0 auto;
@@ -50,4 +60,48 @@ div.removeCertificate{
 
 div.removeCertificate button{
     width: 200px;
+}
+
+.imageWrapper  {
+  position: relative;
+  cursor: zoom-in;
+}
+/*.img-zoom-lens {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+}
+.img-zoom-result {
+  set the size of the result div:
+  border: 1px solid red;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  position: absolute;
+  left: -75px;
+  top: -75px;
+}*/
+
+.img-magnifier-glass {
+  position: absolute;
+  border: 3px solid #000;
+  border-radius: 50%;
+  cursor: none;
+  /*Set the size of the magnifier glass:*/
+  width: 400px;
+  height: 400px;
+}
+
+#loading{
+  color: white;
+  font-size: 30px;
+}
+
+/*#loading .svg-loader-container{
+    width: 90px;
+    margin: 0 auto;
+}*/
+
+#loading.hide{
+  display: none;
 }

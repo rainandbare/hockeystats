@@ -2,31 +2,35 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 
 import { connect } from 'react-redux';
-import { addPlayer } from '../../actions/player_actions.js';
+import { addPlayer, fetchPlayers } from '../../actions/player_actions.js';
 import PlayerForm from '../Bits/playerForm';
 
 
+let playerNames = [];
 
 class AddPlayerForm extends Component {
+  	componentWillMount(){
+  		this.props.fetchPlayers();
+		playerNames = this.props.players.list.map(player => player.name);
+  	}
 	onSubmit(values){
-		if(values.nickName === ''){
-			values.name = values.lastName + ', ' + values.firstName
-		} else {
-			values.name = values.lastName + ', ' + values.firstName + ' "' + values.nickName + '"'
-		}
+		values.age = '';
+		//if player is deceased then 
+		//get the age of the player 
+		//and input it into the values array
 
-		const newPlayer = {};
-		const headings = this.props.headings
-		const headingsKeys = Object.keys(headings);
-
-		headingsKeys.map((headingKey) => {
-			if(values[headings[headingKey].name]){
-				newPlayer[headings[headingKey].name] = values[headings[headingKey].name];
-			} else {
-				newPlayer[headings[headingKey].name] = '';
-			}
-			return newPlayer;
-		})
+		// const newPlayer = {};
+		// const headings = this.props.headings
+		// const headingsKeys = Object.keys(headings);
+		// headingsKeys.map((headingKey) => {
+		// 	if(values[headings[headingKey].name]){
+		// 		newPlayer[headings[headingKey].name] = values[headings[headingKey].name];
+		// 	} else {
+		// 		newPlayer[headings[headingKey].name] = '';
+		// 	}
+		// 	return newPlayer;
+		// })
+		// console.log(values)
 
 		this.props.addPlayer(values);
 		this.props.actionComplete();
@@ -51,6 +55,9 @@ class AddPlayerForm extends Component {
 function validate(values){
 	const errors = {};
 
+	if(playerNames.indexOf(values.name) !== -1){
+		errors.name = "There is already a player by that name - please add an initial or a number.";
+	}
 
 	if (!values.status) {
 		errors.status = "Choose player's status.";
@@ -75,7 +82,8 @@ function validate(values){
 
 function mapStateToProps(state){
 	return {
-		headings: state.headings
+		headings: state.headings,
+		players: state.players
 	}
 }
 
@@ -84,5 +92,5 @@ export default reduxForm({
 	validate,
 	form: "AddNewPlayer"
 })(
-	connect(mapStateToProps, { addPlayer })(AddPlayerForm)
+	connect(mapStateToProps, { addPlayer, fetchPlayers })(AddPlayerForm)
 );

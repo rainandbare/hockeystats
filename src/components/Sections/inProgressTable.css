@@ -1,0 +1,11 @@
+.inProgressTable{
+	font-size: 12px;
+}
+
+.inProgressTable.get{
+	color: #105504;
+}
+
+.inProgressTable.find{
+	color: #EC2B2B;
+}

@@ -3,6 +3,7 @@ export const FETCH_PLAYERS = 'FETCH_PLAYERS';
 export const DELETE_PLAYER = 'DELETE_PLAYER';
 export const SORT_PLAYERS = 'SORT_PLAYERS';
 export const FILTER_PLAYERS = 'FILTER_PLAYERS';
+export const CLEAR_PLAYERS = 'CLEAR_PLAYERS';
 
 export const FETCH_HEADINGS = 'FETCH_HEADINGS';
 export const ADD_HEADINGS = 'ADD_HEADINGS';
@@ -17,8 +18,12 @@ export const ADD_CERTIFICATE = 'ADD_CERTIFICATE'
 export const UPDATE_SEARCH = 'UPDATE_SEARCH';
 
 export const EDIT_FORM = 'EDIT_FORM';
+export const EDIT_INPROGRESS_FORM = 'EDIT_INPROGRESS_FORM';
+
 
 export const LOG_OUT = 'LOG_OUT';
 export const LOG_IN = 'LOG_IN';
 export const LOG_IN_FAILED = 'LOG_IN_FAILED';
+
+export const FETCH_INPROGRESS = "FETCH_INPROGRESS";
 

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
-import { editPlayer, deletePlayer } from '../../actions/player_actions.js';
+import { fetchPlayers, editPlayer, deletePlayer } from '../../actions/player_actions.js';
 
 import PlayerForm from './playerForm';
 import ManageCertificates from '../Sections/ManageCertificates';
+import getAge from '../../functions/getAge';
 
 
 class EditPlayerForm extends Component {
@@ -24,11 +25,20 @@ class EditPlayerForm extends Component {
 	  	this.props.initialize(playerData);
 	}
 	onSubmit(values){
+		//if player is deceased then 
+		if(values.status === 'DECEASED'){
+			const calcPlayerAge = getAge(values.birthDate, values.deathDate);
+			values.age = calcPlayerAge;
+		}
+		//get the age of the player 
+		//and input it into the values array
+
 		this.props.editPlayer(values, this.props.playerID);
+		//console.log(values);
 		this.props.actionComplete();
 	}
 	onDelete(){
-		const result = confirm("Delete Player?");
+		const result = window.confirm("Delete Player?");
 		if (result) {
 			this.props.deletePlayer(this.props.playerID);
 			this.props.actionComplete();
@@ -82,7 +92,12 @@ function validate(values){
 	if (!values.birthDate) {
 		errors.birthDate = "Enter the players Birth Date.";
 	}
-
+	if (values.deathDate && values.status !== "DECEASED"){
+		errors.deathDate = "You have entered a death date but the player's status is not DECEASED. Please change one or the other.";
+	}
+	if ((values.deathDate === "") && (values.status === "DECEASED")){
+		errors.deathDate = "You have not entered a death date for the DECEASED player.";
+	}
 	return errors;
 }
 
@@ -100,5 +115,5 @@ export default reduxForm({
 	validate,
 	form: "EditPlayer"
 })(
-	connect(mapStateToProps, { editPlayer, deletePlayer })(EditPlayerForm)
+	connect(mapStateToProps, { editPlayer, deletePlayer, fetchPlayers })(EditPlayerForm)
 );

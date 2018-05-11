@@ -28,9 +28,19 @@ div.editPlayerForm{
     bottom: 0;
     left: 0;
     right: 0;
-    z-index: 99;
+    z-index: 999;
    	background: rgba(0,0,0,0.7);
     padding: 80px;
 	overflow: scroll;
-
+}
+.radioButtons{
+    width: 292px;
+    display: flex;
+    margin: 0 auto;
+}
+.radioButtons div.form label{
+    width: initial;
+}
+.radioButtons div.form input{
+    width: 25px;
 }

@@ -11,7 +11,7 @@ class Placeholder extends Component {
 	    return (
 	      <div className="placeholder">
 	     	<h1>COMING <span className="reg"> </span> SOON</h1>
-	     	<h3>Fall/Winter 2017</h3>
+	     	<h3>Spring 2018</h3>
 	      </div>
 	    );
 	}

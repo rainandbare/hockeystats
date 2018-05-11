@@ -13,13 +13,16 @@ button.button{
 	width: 150px;
 	padding: 14px 5px;
 	transition: all 0.2s ease;
+    margin-bottom: 10px;
 }
 button.button:hover{
 	background: #105504;
 	color: white;
 	border-color: #105504;
 }
-
+button.button:active{
+    background: #7CA67F;
+}
 /*.editDeclaration{
     width: 400px;
     background: linear-gradient(270deg, rgba(247,255,250,1) 0%, rgba(16,85,4,1) 58%, rgba(16,85,4,1) 100%); 
@@ -72,15 +75,22 @@ section.workarea button.button.cancel:hover{
     background: #3700DD;
     color: white;
 }
+section.workarea button.button.cancel:active{
+    background: RGBA(55, 0, 221, 0.5);
+    color: white;
+}
 
-section.workarea button.button.deletePlayer{
-    margin: 10px calc(40% + 20px) 0;
+section.workarea button.button.redText{
     border: 2px solid #EC2B2B;
     color: #EC2B2B;
 }
 
-section.workarea button.button.deletePlayer:hover{
+section.workarea button.button.redText:hover{
     background: #EC2B2B;
+    color: white;
+}
+section.workarea button.button.redText:active{
+    background: RGBA(236, 43, 43, 0.5);
     color: white;
 }
 
@@ -92,10 +102,30 @@ section.workarea section.querySelector li, .sortableHelper {
     margin: 10px 0;
     font-size: 20px;
 }
+section.workarea section.querySelector li, .sortableHelper{
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+section.workarea section.querySelector li button:not(.delete), .sortableHelper button:not(.delete){
+    font-size: 13px;
+    width: 50px;
+    font-size: 12px;
+    padding: 3px 10px;
+    background: white;
+    margin-left: 40px;
+}
+section.workarea section.querySelector li button:not(.delete):hover{
+    background:  #7CA67F;
+    cursor: pointer;
+}
 section.workarea button.go {
     display: none;
 } 
-
+.addButtonForm div.form{
+    width: 50%;
+}
 button.delete {
     color: #EC2B2B;
     display: inline-block;

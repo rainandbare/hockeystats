@@ -16,8 +16,8 @@ class DeleteButton extends Component {
 			console.log('missed');
 			return
 		}
-		if (Object.values(target.classList).includes('disabled') === false){
-			var result = confirm("Delete Button?");
+		if (Object.values(target.classList).indexOf('disabled') === -1 ){
+			var result = window.confirm("Delete Button?");
 			if (result) {
 				console.log(target.id)
 				const buttonIndex = Object.values(this.props.buttons).map(button => button.buttonName).indexOf(target.id);
