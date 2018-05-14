@@ -98,6 +98,18 @@ export function addCertificate(file, type, nameFormatted) {
 	}
 }
 
+export function transferCertificate(type, nameFormatted, imageUrl, oldPlayerSlug){
+	//add new certificate reference in database with new player name
+	return dispatch => { 
+			database.ref('certificates/' + type + "/" + nameFormatted).set({
+				url : imageUrl
+			});
+			database.ref('certificates/' + type ).child(oldPlayerSlug).remove();
+
+		};
+
+}
+
 export function removeCertificate(playerSlug, fullUrl, type){
 		const typeCodesReversed = {
 			'birth':'B' ,

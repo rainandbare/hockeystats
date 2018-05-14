@@ -2,10 +2,13 @@ import React, { Component } from 'react';
 import { reduxForm } from 'redux-form';
 import { connect } from 'react-redux';
 import { fetchPlayers, editPlayer, deletePlayer } from '../../actions/player_actions.js';
+import { transferCertificate } from '../../actions/certificate_actions.js';
 
 import PlayerForm from './playerForm';
 import ManageCertificates from '../Sections/ManageCertificates';
 import getAge from '../../functions/getAge';
+import slug from '../../functions/slug';
+
 
 
 class EditPlayerForm extends Component {
@@ -15,6 +18,7 @@ class EditPlayerForm extends Component {
 			addCertificate : false,
 			removeCertificate: false
 		}
+		this.getCertificates = this.getCertificates.bind(this);
 		this.onAddCertificate = this.onAddCertificate.bind(this);
 	}
 	componentDidMount() {
@@ -25,6 +29,31 @@ class EditPlayerForm extends Component {
 	  	this.props.initialize(playerData);
 	}
 	onSubmit(values){
+		//if original name is different from submitted name
+		const originalPlayerName = this.props.players.list[this.props.playerID].name;
+		const newPlayerName = values.name;
+		if (originalPlayerName !== newPlayerName){
+		//go get the certificates attached to the original name
+			const certificates = {};
+			certificates.birth = this.getCertificates('birth', originalPlayerName);
+			certificates.death = this.getCertificates('death', originalPlayerName);	
+			const certsPairs = [];
+			Object.keys(certificates).map(function(key) {
+				const playerCertsCollection = {};
+				if (certificates[key].length > 0){
+					certificates[key].map((url) => {
+						playerCertsCollection['type'] = key;
+						playerCertsCollection['url'] = url;
+			  			certsPairs.push(playerCertsCollection);
+					});
+				}
+			});
+			certsPairs.map((pair) => {
+				this.props.transferCertificate(pair.type, slug(newPlayerName), pair.url, slug(originalPlayerName));
+			});
+		}
+
+
 		//if player is deceased then 
 		if(values.status === 'DECEASED'){
 			const calcPlayerAge = getAge(values.birthDate, values.deathDate);
@@ -48,6 +77,17 @@ class EditPlayerForm extends Component {
 		this.setState ({
 			addCertificate : true
 		});
+	}
+	getCertificates(type, originalPlayerName){
+		let name = slug(originalPlayerName);
+		const allPriors = Object.keys(this.props.certificates[type]).filter((entry) => {
+			const entrySplit = entry.split('-');
+		 	return entrySplit[0] === name;
+		 });
+		const urls = allPriors.map((prior) => {
+			return this.props.certificates[type][prior].url;
+		});
+		return urls;
 	}
 	render(){
 		const { handleSubmit } = this.props;
@@ -106,7 +146,8 @@ function mapStateToProps(state){
 	return {
 		headings: state.headings,
 		players: state.players,
-		playerID: state.editPlayer.playerID
+		playerID: state.editPlayer.playerID,
+		certificates: state.certificates,
 	}
 }
 
@@ -115,5 +156,5 @@ export default reduxForm({
 	validate,
 	form: "EditPlayer"
 })(
-	connect(mapStateToProps, { editPlayer, deletePlayer, fetchPlayers })(EditPlayerForm)
+	connect(mapStateToProps, { editPlayer, deletePlayer, fetchPlayers, transferCertificate })(EditPlayerForm)
 );

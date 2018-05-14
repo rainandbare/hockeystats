@@ -12,7 +12,7 @@ export default (certificates, playerName, type, urls) => {
           var loading = document.getElementById('loading'); 
           loading.setAttribute('class', "hide");
           var close = document.getElementById('closeLightbox'); 
-          close.classList.add('class', "show");
+          close.classList.add("show");
         }
         const id = "myimage" + index;
         img.setAttribute('id', id);

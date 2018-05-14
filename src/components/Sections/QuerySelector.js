@@ -89,8 +89,8 @@ class QuerySelector extends Component {
 						);
 					})
 				}
-					<button className="go"><Link onClick={this.props.findPathName} to={`/results/${url}`}>GO</Link></button>
 				</ul>
+					<Link className="button" onClick={this.props.findPathName} to={`/results/${url}`}>GO</Link>
 			</section>
 		);
 	}

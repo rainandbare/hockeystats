@@ -85,10 +85,8 @@ button{
     width: 100%;
     outline: none;
 }
-button.go{
-	padding-top: 25px;
-}
-button a{
+
+a.button{
 	color: #F29C39;
 	text-decoration: none;
 	padding: 6px;
@@ -97,11 +95,12 @@ button a{
 	width: 125px;
 	display: block;
 	transition: all 0.2s ease;
-	margin: 0 auto;
+	margin: 25px 0 0;
 	font-size: 20px;
+	text-align: center;
 	float: right;
 }
-button a:hover {
+a.button:hover {
 	color: black;
 	background-color: #F29C39
 }

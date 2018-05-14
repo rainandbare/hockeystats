@@ -48,6 +48,10 @@ input.search {
     user-select: none !important;
 }
 
+.fixedDataTableCellGroupLayout_cellGroupWrapper {
+    background: RGBA(242, 156, 57, 1.00) !important;
+}
+
 
 .retired{
     color: #EC2B2B;

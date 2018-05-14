@@ -418,10 +418,9 @@ section.workarea{
 	div.home section.querySelector{
 		padding: 0px;
 	}
-	button.go {
-		padding-bottom: 20px;
-	}
-	button.go a{
+	
+	a.button{
+		margin: 25px auto 20px;
 		float: none;
 		text-align: center
 	}

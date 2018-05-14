@@ -102,7 +102,8 @@ class AddNewCertificate extends Component {
 	getAllCertificates(type){
 		let name = slug(this.props.players[this.props.playerID].name);
 		const allPriors = Object.keys(this.props.certificates[type]).filter((entry) => {
-		 	return entry === name;
+			const entrySplit = entry.split('-');
+		 	return entrySplit[0] === name;
 		 });
 		return allPriors;
 	}
