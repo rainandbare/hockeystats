@@ -64,7 +64,7 @@ class QuerySelector extends Component {
 		const url = buttonsSelected.join('-');
 		return(
 			
-			<section className="querySelector">
+			<section className="querySelector clearfix">
 				<ul className="queryOptions flexMe">
 				{ sortedKeys.map((key) => {
 						return(
