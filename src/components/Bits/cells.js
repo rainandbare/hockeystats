@@ -18,7 +18,10 @@ export default class SortHeaderCell extends Component {
   constructor(props) {
     super(props);
     this.onSortChange = this.onSortChange.bind(this);
-    this.onFilter = this.onFilter.bind(this)
+    this.onFilter = this.onFilter.bind(this);
+    
+    this.timeout = null;
+
   }
      // {children} {sortDir ? (sortDir === SortTypes.DESC ? '↓' : '↑') : ''} 
 
@@ -47,30 +50,35 @@ export default class SortHeaderCell extends Component {
 
           { date
             ?
-            <input type="number" className="search" onChange={this.onFilter} placeholder="Search by Year"/>
+            <input type="number" className="search" onKeyUp={this.onFilter} placeholder="Search by Year"/>
             :
-            <input type="text" className="search" onChange={this.onFilter} placeholder="Search"/>
+            <input type="text" className="search" onKeyUp={this.onFilter} placeholder="Search"/>
           }
 
         </Cell>
 
     );
   }
-  onFilter(e){
-     if (this.props.onFilter) {
-      this.props.onFilter(e.target.value, this.props.columnKey)
-    }
+  onFilter(e){    
+     //only  trigger filter if a certain number of milliseconds have passed and no new changes have been made to the input
+       clearTimeout(this.timeout);
+       // Make a new timeout set to go off in 300ms
+       const term = e.target.value;
+       const columnKey = this.props.columnKey;
+       this.timeout = setTimeout(() => {
+           if (this.props.onFilter) {
+               this.props.onFilter(term, columnKey)
+             }
+       }, 300);
   }
 
   onSortChange(e) {
     e.preventDefault();
-
     if (this.props.onSortChange) {
       this.props.onSortChange( this.props.columnKey, this.props.sortDir ? reverseSortDirection(this.props.sortDir) : SortTypes.DESC, this.props.playersKeys);
     }
   }
 }
-// module.exports.SortHeaderCell = SortHeaderCell;
 
 export class TextCell extends Component {
   render() {

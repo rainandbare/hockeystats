@@ -47,6 +47,7 @@ class EditPlayerForm extends Component {
 			  			certsPairs.push(playerCertsCollection);
 					});
 				}
+				return;
 			});
 			certsPairs.map((pair) => {
 				this.props.transferCertificate(pair.type, slug(newPlayerName), pair.url, slug(originalPlayerName));

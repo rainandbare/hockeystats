@@ -14,8 +14,8 @@ import SortHeaderCell from '../Bits/cells.js'
 import Controls from '../Bits/controls.js';
 
 import sortPlayerKeys from '../../functions/sortPlayerKeys';
-import getAge from '../../functions/getAge';
-import slug from '../../functions/slug';
+// import getAge from '../../functions/getAge';
+// import slug from '../../functions/slug';
 
 
 import 'fixed-data-table-2/dist/fixed-data-table.min.css';
@@ -97,23 +97,24 @@ class SortExample extends Component {
     }
   }
   onFilter(input, changedColumn){
+    
     const players = this.props.players.list;
     let locked = this.state.colLocked;
     let columnKey = changedColumn;
     let term = input;
-      // --------------------------DO I NEED THIS-----------------------
-      let playersKeys = Object.keys(players);
-      let previousTermLength = 0;
-   
-      if(locked[columnKey] !== undefined){
-        previousTermLength = locked[columnKey].length;
-      }
+    let playersKeys = Object.keys(players);
+    let previousTermLength = 0;
 
-      //if there are other locked columns
-      if((Object.keys(locked).length > 0) && (previousTermLength < term.length)){
-        //filter altered playersKeys
-        playersKeys = this.getPlayerKeys(players);
-      }
+    if(locked[columnKey] !== undefined){
+      previousTermLength = locked[columnKey].length;
+    }
+
+    //if there are other locked columns
+    if((Object.keys(locked).length > 0) && (previousTermLength < term.length)){
+      //filter altered playersKeys
+      playersKeys = this.getPlayerKeys(players);
+    }
+
     //CLEAN UP LOCKED ARRAY 
     //erase current deleted term from locked array
     locked[columnKey] = term;  
@@ -150,6 +151,7 @@ class SortExample extends Component {
     this.setState({
       colLocked: locked
     });
+
   }
   onScrollToggle(status, headingLength){
     this.setState({

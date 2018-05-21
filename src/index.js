@@ -36,11 +36,10 @@ ReactDOM.render(
 						<Route exact path="/results" render={() => (<Redirect to="/results/all"/>)}/>
 						<Route path="/edit" component={ Edit } />
 						<Route path="/intro" component={ Intro }/>
-						<Route path="/home" component={ Home } />
 						<Route path='/login' component={ Login } />
 						<Route path='/in-progress' component={ InProgress } />
 						<Route path='/thanks' component={ Thanks } />
-						<Route path="/" component={ Placeholder } />
+						<Route path="/" component={ Home } />
 					</Switch>
 				</main>
 				<Footer />

@@ -87,7 +87,7 @@ class AddNewCertificate extends Component {
 					// console.log('has no dash');
 					return 0;
 				} else {
-					return parseInt(prior.split('-')[1]);
+					return parseInt(prior.split('-')[1], 10);
 				}
 			});
 			//console.log(highestIndex);

@@ -9,7 +9,7 @@ class Header extends Component {
 			<div>
 				<header>
 					<div>
-						<Link to="/home"><FontAwesome name="home"/></Link>
+						<Link to="/"><FontAwesome name="home"/></Link>
 					</div>
 					<div className="menuLinks">
 						<Link to="/intro">Intro</Link>
