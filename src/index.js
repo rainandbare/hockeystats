@@ -9,7 +9,7 @@ import Header from './components/Sections/Header';
 import Footer from './components/Sections/Footer';
 import Home from './components/Pages/Home';
 import Intro from './components/Pages/Intro';
-import Placeholder from './components/Pages/Placeholder';
+// import Placeholder from './components/Pages/Placeholder';
 import Login from './components/Pages/Login';
 import Thanks from './components/Pages/Thanks';
 import InProgress from './components/Pages/InProgress';

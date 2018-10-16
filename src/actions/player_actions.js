@@ -44,13 +44,13 @@ function sortPlayerIndexes(columnKey, sortDir, keysArray, players){
     var sortIndexes = sortKeysArray.slice();
 
 	sortIndexes.sort(function(indexA, indexB) {
-		var valueA = players[indexA][columnKey].replace(/['"]+/g, '');
-    	var valueB = players[indexB][columnKey].replace(/['"]+/g, '');
+		var valueA = players[indexA][columnKey];
+    	var valueB = players[indexB][columnKey];
  		if(typeof valueA === 'string'){
-            valueA = valueA.toLowerCase();
+            valueA = valueA.toLowerCase().replace(/['"]+/g, '');
         }
         if(typeof valueB === 'string'){
-            valueB = valueB.toLowerCase();
+            valueB = valueB.toLowerCase().replace(/['"]+/g, '');
         }
 	    if (sortDir === SortTypes.ASC) {
 		  	if(valueA === "" || valueA === null || valueA === undefined) return -1;

@@ -10,9 +10,12 @@ let playerNames = [];
 
 class AddPlayerForm extends Component {
   	componentWillMount(){
-  		this.props.fetchPlayers();
-		playerNames = this.props.players.list.map(player => player.name);
-  	}
+		this.props.fetchPlayers();
+		   Object.entries(this.props.players.list).map(player => player[1].name);
+		  }
+	// componentWillReceiveProps(){
+
+	// }
 	onSubmit(values){
 		values.age = '';
 		//if player is deceased then 
@@ -30,7 +33,6 @@ class AddPlayerForm extends Component {
 		// 	}
 		// 	return newPlayer;
 		// })
-		// console.log(values)
 
 		this.props.addPlayer(values);
 		this.props.actionComplete();

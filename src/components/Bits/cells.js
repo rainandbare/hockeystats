@@ -103,7 +103,7 @@ export class TextCell extends Component {
       <Cell {...props} 
       className={keys.indexOf('none') !== -1 ? "noPlayers" : currentColumn === columnKey ? statusClass + " active-column" : statusClass}
       >
-        { keys.indexOf('none') !== -1 ? "-" : date ? dateToText(data[keys[rowIndex]][columnKey]) : data[keys[rowIndex]][columnKey] }
+        { keys.indexOf('none') !== -1 ? "-" : date && data[keys[rowIndex]][columnKey] ? dateToText(data[keys[rowIndex]][columnKey]) : data[keys[rowIndex]][columnKey] }
         { 
           keys.indexOf('none') !== -1
           ? "" 

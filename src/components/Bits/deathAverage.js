@@ -20,13 +20,13 @@ class DeathAverage extends Component {
 		let playersAgeSum = keys.filter((index) => { return players[index].status === "DECEASED";})
 							.map((index) => { return parseFloat(this.getAge(players[index].birthDate, players[index].deathDate)) });
 					
-		console.log(playersAgeSum.length);
+		// console.log(playersAgeSum.length);
 		if(playersAgeSum.length > 0){
 			//console.log(playersAgeSum);
 			let addEmUp = playersAgeSum.filter(a => a === a); 
 			let deathAverage = addEmUp.reduce(function(sum, a) { return sum + a; },0)/addEmUp.length;
-			console.log(addEmUp.length);
-			return deathAverage.toFixed(1);
+			// console.log(deathAverage);
+			return deathAverage.toFixed(2);
 		} else {
 			return deathAverage;
 		}
@@ -41,8 +41,8 @@ class DeathAverage extends Component {
 	    return age;
 	}
 	render(){
-		const dataIn = this.props.players.list.length;
-		if(dataIn > 0){
+		const dataIn = Object.keys(this.props.players.list);
+		if (dataIn.length > 0){
 			const deathAverage = this.getDeathAverage();
 			return(
 				<section className="deathAverage">

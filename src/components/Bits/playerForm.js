@@ -5,7 +5,8 @@ import './playerForm.css'
 
 class PlayerForm extends Component {
 	renderField(field){
-		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
+		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}${field.className != undefined ? field.className : ''}`
+		//console.log(field.className);
 		return(
 			<div className={className} key={field.key}>
 				<label>{field.label}: </label>
@@ -40,9 +41,6 @@ class PlayerForm extends Component {
 			</div>
 		);
 	}	
-
-
-
 	render(){
 		const headings = this.props.headings;
 		const headingsKeys = Object.keys(this.props.headings); 
@@ -55,7 +53,7 @@ class PlayerForm extends Component {
 						<Field
 							key="playerName"
 							name="name"
-							label="Player Name (commonly known & last name first)"
+							label="Player Name"
 							type="text"
 							component={this.renderField}
 						/>
@@ -65,28 +63,108 @@ class PlayerForm extends Component {
 					return;
 				} else if (headings[a].name === 'status'){
 					return (
-						<div className="radioButtons" key="status">	
-							<Field
-								name="status"
-								label="Active"
-								type="radio"
-								value="ACTIVE"
-								component={this.renderField}
-							/>
-							<Field
-								name="status"
-								label="Retired"
-								type="radio"
-								value="RETIRED"
-								component={this.renderField}
-							/>
-							<Field
-								name="status"
-								label="Deceased"
-								type="radio"
-								value="DECEASED"
-								component={this.renderField}
-							/>
+						<div className="radioWrapper" key="status">
+							<h4 className="label">Status:</h4>
+							<div className="radioButtons" >	
+								<Field
+									name="status"
+									label="Active"
+									type="radio"
+									value="ACTIVE"
+									component={this.renderField}
+								/>
+								<Field
+									name="status"
+									label="Retired"
+									type="radio"
+									value="RETIRED"
+									component={this.renderField}
+								/>
+								<Field
+									name="status"
+									label="Deceased"
+									type="radio"
+									value="DECEASED"
+									component={this.renderField}
+								/>
+							</div>
+						</div>
+					);
+				} else if (headings[a].name === 'nHLDebutGameType'){
+					return (
+						<div className="radioWrapper" key="nHLDebutGameType">
+							<h4 className="label">NHL Debut Game Type:</h4>
+							<div className="radioButtons" >	
+								<Field
+									name="nHLDebutGameType"
+									label="REG"
+									type="radio"
+									value="REG"
+									component={this.renderField}
+								/>
+								<Field
+									name="nHLDebutGameType"
+									label="PO"
+									type="radio"
+									value="PO"
+									component={this.renderField}
+								/>
+							</div>
+						</div>
+					);
+				} else if ((headings[a].name === 'birthCountry') || (headings[a].name === 'deathCountry')){
+					return (
+						<div className="radioWrapper" key={headings[a].name}>
+							<h4 className="label">{headings[a].label}:</h4>
+							<div className="radioButtons">	
+								<Field
+									name={headings[a].name}
+									label="Canada"
+									type="radio"
+									value="Canada"
+									component={this.renderField}
+								/>
+								<Field
+									name={headings[a].name}
+									label="United States"
+									type="radio"
+									value="United States"
+									component={this.renderField}
+								/>
+								<Field
+									name={headings[a].name}
+									label="Or"
+									className="otherInput"
+									type="input"
+									value="other"
+									component={this.renderField}
+								/>
+							</div>
+						</div>
+					);
+				} else if (headings[a].name === 'nHLDebutSeason'){
+					const currentDate = new Date();
+					const currentYear = `${currentDate.getFullYear() - 1}-${currentDate.getFullYear()}`;
+					return (
+						<div className="radioWrapper" key={headings[a].name}>
+							<h4 className="label">{headings[a].label}:</h4>
+							<div className="radioButtons">	
+								<Field
+									name={headings[a].name}
+									label={currentYear}
+									type="radio"
+									value={currentYear}
+									component={this.renderField}
+								/>
+								<Field
+									name={headings[a].name}
+									label="Or"
+									className="otherInput"
+									type="input"
+									value="other"
+									component={this.renderField}
+								/>
+							</div>
 						</div>
 					);
 				} else {

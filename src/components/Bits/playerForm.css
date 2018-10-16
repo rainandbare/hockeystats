@@ -1,13 +1,20 @@
 div.form label{
-	width: 40%;
     display: inline-block;
+}
+
+div.form label, div.radioWrapper h4.label{
+    width: 40%;
+    font-weight: 400 !important;
     text-align: right;
     margin: 10px;
 }
 
+div.radioWrapper{
+    display: flex;
+}
+
 .workarea form{
 	font-size: 16px;
-
 }
 
 .red-text{
@@ -34,13 +41,20 @@ div.editPlayerForm{
 	overflow: scroll;
 }
 .radioButtons{
-    width: 292px;
-    display: flex;
-    margin: 0 auto;
+    width: 300px;
+    display: inline-block;
+
 }
+
+/*.radioButtons div.form{
+    display: inline-block;
+}*/
 .radioButtons div.form label{
     width: initial;
 }
 .radioButtons div.form input{
     width: 25px;
+}
+.radioButtons div.form.otherInput input{
+    width: 150px;
 }
