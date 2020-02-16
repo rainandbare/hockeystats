@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "nhl-players-f43b3"
+    "default": "nhl-players-f43b3",
+    "live": "nhl-players-f43b3"
   }
 }
