@@ -68,9 +68,8 @@ class Results extends Component {
 	        const imageCount = getOccurrence(nameArray, playerName);
 
 	        let imageUrl =[];
-	        console.log(imageCount);
 	        if(imageCount === 1){
-	        	console.log(certificates[type])
+						console.log(certificates[type])
 	          imageUrl.push(certificates[type][playerName].url);
 	        } else {
 	          for (var index = 0; index < imageCount; index++) {

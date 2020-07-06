@@ -6,7 +6,6 @@ import './playerForm.css'
 class PlayerForm extends Component {
 	renderField(field){
 		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}${field.className != undefined ? field.className : ''}`
-		//console.log(field.className);
 		return(
 			<div className={className} key={field.key}>
 				<label>{field.label}: </label>
@@ -23,11 +22,34 @@ class PlayerForm extends Component {
 		);
 		
 	}
+	renderEitherOr(fieldOptions, defaultOption){
+		return (
+			<div className="radioWrapper" key={fieldOptions.name}>
+				<h4 className="label">{fieldOptions.label}:</h4>
+				<div className="radioButtons">
+					<Field
+						name={fieldOptions.name}
+						label={defaultOption}
+						type="radio"
+						value={defaultOption}
+						component={this.renderField}
+					/>
+					<Field
+						name={fieldOptions.name}
+						label="Or"
+						className="otherInput"
+						type="input"
+						value="other"
+						component={this.renderField}
+					/>
+				</div>
+			</div>
+		);
+	}
 	renderSelectField(field){
 
 		const className = `form ${field.meta.touched && field.meta.error ? 'has-danger' : ''}`
 		return(
-
 			<div className={className} key={field.key}>
 				<label>{field.label}: </label>
 				<input 
@@ -61,6 +83,35 @@ class PlayerForm extends Component {
 				);
 				} else if (headings[a].name === 'age'){
 					return;
+				} else if (headings[a].name === 'position') {
+					return (
+						<div className="radioWrapper" key="position">
+							<h4 className="label">Position:</h4>
+							<div className="radioButtons">
+								<Field
+									name="position"
+									label="goaltender"
+									type="radio"
+									value="goaltender"
+									component={this.renderField}
+								/>
+								<Field
+									name="position"
+									label="forward"
+									type="radio"
+									value="forward"
+									component={this.renderField}
+								/>
+								<Field
+									name="position"
+									label="defenceman"
+									type="radio"
+									value="defenceman"
+									component={this.renderField}
+								/>
+							</div>
+						</div>
+					);
 				} else if (headings[a].name === 'status'){
 					return (
 						<div className="radioWrapper" key="status">
@@ -144,29 +195,10 @@ class PlayerForm extends Component {
 					);
 				} else if (headings[a].name === 'nHLDebutSeason'){
 					const currentDate = new Date();
-					const currentYear = `${currentDate.getFullYear() - 1}-${currentDate.getFullYear()}`;
-					return (
-						<div className="radioWrapper" key={headings[a].name}>
-							<h4 className="label">{headings[a].label}:</h4>
-							<div className="radioButtons">	
-								<Field
-									name={headings[a].name}
-									label={currentYear}
-									type="radio"
-									value={currentYear}
-									component={this.renderField}
-								/>
-								<Field
-									name={headings[a].name}
-									label="Or"
-									className="otherInput"
-									type="input"
-									value="other"
-									component={this.renderField}
-								/>
-							</div>
-						</div>
-					);
+					const currentYear = `${currentDate.getFullYear()}-${currentDate.getFullYear() + 1}`;
+					return this.renderEitherOr(headings[a], currentYear);
+				} else if (headings[a].name === 'reasonCareerEnded') {
+					return this.renderEitherOr(headings[a], 'ACTIVE');
 				} else {
 					return (
 					<Field

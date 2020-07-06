@@ -22,17 +22,6 @@ class AddPlayerForm extends Component {
 		//get the age of the player 
 		//and input it into the values array
 
-		// const newPlayer = {};
-		// const headings = this.props.headings
-		// const headingsKeys = Object.keys(headings);
-		// headingsKeys.map((headingKey) => {
-		// 	if(values[headings[headingKey].name]){
-		// 		newPlayer[headings[headingKey].name] = values[headings[headingKey].name];
-		// 	} else {
-		// 		newPlayer[headings[headingKey].name] = '';
-		// 	}
-		// 	return newPlayer;
-		// })
 
 		this.props.addPlayer(values);
 		this.props.actionComplete();
@@ -56,11 +45,9 @@ class AddPlayerForm extends Component {
 
 function validate(values){
 	const errors = {};
-
 	if(playerNames.indexOf(values.name) !== -1){
 		errors.name = "There is already a player by that name - please add an initial or a number.";
 	}
-
 	if (!values.status) {
 		errors.status = "Choose player's status.";
 	}
@@ -92,6 +79,12 @@ function mapStateToProps(state){
 
 export default reduxForm({
 	validate,
+	initialValues: { 
+									goals: 0, 
+									assists: 0,
+									points: 0,
+									penalties: 0,
+	 							},
 	form: "AddNewPlayer"
 })(
 	connect(mapStateToProps, { addPlayer, fetchPlayers })(AddPlayerForm)

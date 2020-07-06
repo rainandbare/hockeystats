@@ -87,9 +87,15 @@ div.legend{
 		position: relative;
 	left: -8px;
 }
+div.legend li {
+	max-width: 210px;
+}
 div.legend h6{
 	margin: 0 5px 0 0px;
 	padding-right: 5px;
 	border-right: 2px solid black;
 
+}
+div.legend .certDot{
+	margin-left: 0;
 }

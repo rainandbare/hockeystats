@@ -53,7 +53,6 @@ class Edit extends Component {
 		});
 	}
 	toggleInProgress(type) {
-		console.log(this.state.inProgressOpen, type);
 		this.setState({
 			inProgressOpen: type
 		});
@@ -105,7 +104,6 @@ class Edit extends Component {
 			this.props.deleteHeading(deleteKey[0]);
 		}
 	}
-
 	openLightbox(certificates, playerName, type) {
 		//find out if there is more than one image
 		let urls;
@@ -220,58 +218,6 @@ class Edit extends Component {
 				) : (
 					''
 				)}
-				<div id='editInProgress'>
-					{/* <div>
-						<h2>Find</h2>
-						<button
-							className='actionType button'
-							id='addInProgress'
-							onClick={() => this.toggleInProgress('find')}
-						>
-							Add Find Entry
-						</button>
-						{this.state.inProgressOpen === 'find' ? (
-							<AddInProgress
-								type={'find'}
-								open={this.state.inProgressOpen}
-								actionComplete={() =>
-									this.toggleInProgress(false)
-								}
-							/>
-						) : (
-							''
-						)}
-						<InProgressTable
-							openEditForm={this.openEditInProgress}
-							type={'find'}
-						/>
-					</div> */}
-					{/* <div>
-						<h2>Get</h2>
-						<button
-							className='actionType button'
-							id='addInProgress'
-							onClick={() => this.toggleInProgress('get')}
-						>
-							Add Get Entry
-						</button>
-						{this.state.inProgressOpen === 'get' ? (
-							<AddInProgress
-								type={'get'}
-								open={this.state.inProgressOpen}
-								actionComplete={() =>
-									this.toggleInProgress(false)
-								}
-							/>
-						) : (
-							''
-						)}
-						<InProgressTable
-							openEditForm={this.openEditInProgress}
-							type={'get'}
-						/>
-					</div> */}
-				</div>
 				<div id='editThanks'>
 					<h2>Thanks</h2>
 					<button

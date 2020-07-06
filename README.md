@@ -10,6 +10,10 @@ An editable database of all the NHL Players that have ever played.
 * [ Firebase ](https://firebase.google.com/) 
 * [ Fixed Data Table 2 ](https://github.com/schrodinger/fixed-data-table-2)
 
+
+## To Use
+`npm start`
+
 ## Authors
 
 * **Suzette McCanny** - *Initial work* - [Suzette McCanny](https://github.com/)

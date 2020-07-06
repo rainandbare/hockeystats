@@ -35,6 +35,7 @@ class Controls extends Component {
               <li className="active">Active</li>
               <li className="retired">Retired</li>
               <li className="deceased">Deceased</li>
+              <li><span className="certDot"><span aria-hidden="true" className="fa fa-circle"></span></span> = Click on grey dot to view extra birth or death info (articles, certificates)</li>
             </ul>
         </div>
       </div>
