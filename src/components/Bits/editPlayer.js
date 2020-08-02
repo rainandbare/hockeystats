@@ -38,23 +38,28 @@ class EditPlayerForm extends Component {
 			certificates.birth = this.getCertificates('birth', originalPlayerName);
 			certificates.death = this.getCertificates('death', originalPlayerName);	
 			const certsPairs = [];
-			Object.keys(certificates).map(function(key) {
-				const playerCertsCollection = {};
+			Object.keys(certificates).forEach(function(key) {
 				if (certificates[key].length > 0){
-					certificates[key].map((url) => {
-						playerCertsCollection['type'] = key;
-						playerCertsCollection['url'] = url;
-			  			certsPairs.push(playerCertsCollection);
+					const playerCertsCollection = certificates[key].map((url, i) => {
+						const suffix = i !== 0 ? `-${i}` : '';
+						return {
+							type: key,
+							url,
+							suffix
+						}
 					});
+					certsPairs.push(...playerCertsCollection);
 				}
-				return;
 			});
-			certsPairs.map((pair) => {
-				this.props.transferCertificate(pair.type, slug(newPlayerName), pair.url, slug(originalPlayerName));
+			certsPairs.forEach((pair) => {
+				this.props.transferCertificate(
+						pair.type, 
+						slug(newPlayerName) + pair.suffix, 
+						pair.url, slug(originalPlayerName) + 
+						pair.suffix
+				);
 			});
 		}
-
-
 		//if player is deceased then 
 		if(values.status === 'DECEASED'){
 			const calcPlayerAge = getAge(values.birthDate, values.deathDate);
@@ -62,9 +67,7 @@ class EditPlayerForm extends Component {
 		}
 		//get the age of the player 
 		//and input it into the values array
-
 		this.props.editPlayer(values, this.props.playerID);
-		//console.log(values);
 		this.props.actionComplete();
 	}
 	onDelete(){

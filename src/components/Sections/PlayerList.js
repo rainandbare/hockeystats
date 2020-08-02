@@ -11,15 +11,12 @@ import {
 import { fetchHeadings, changeWidth } from '../../actions/heading_actions.js';
 import { fetchButtons } from '../../actions/button_actions.js';
 import { fetchCertificates } from '../../actions/certificate_actions.js';
-//import { fetchCertificates, createCertificateObject } from '../../actions/certificate_actions.js';
 
 import { TextCell, NameCell } from '../Bits/cells.js';
 import SortHeaderCell from '../Bits/cells.js';
 import Controls from '../Bits/controls.js';
 
 import sortPlayerKeys from '../../functions/sortPlayerKeys';
-// import getAge from '../../functions/getAge';
-// import slug from '../../functions/slug';
 
 import 'fixed-data-table-2/dist/fixed-data-table.min.css';
 import './playerList.css';
@@ -379,6 +376,7 @@ class SortExample extends Component {
 	}
 	render() {
 		const players = this.props.players.list;
+		// console.log(players)
 		const headings = this.adjustHeadingsPerUrl(
 			this.props.headings,
 			this.props.buttons

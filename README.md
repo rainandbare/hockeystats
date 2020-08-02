@@ -14,6 +14,10 @@ An editable database of all the NHL Players that have ever played.
 ## To Use
 `npm start`
 
+## To Publish
+`npm run build`
+`firebase deploy`
+
 ## Authors
 
 * **Suzette McCanny** - *Initial work* - [Suzette McCanny](https://github.com/)

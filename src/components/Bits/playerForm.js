@@ -142,27 +142,7 @@ class PlayerForm extends Component {
 						</div>
 					);
 				} else if (headings[a].name === 'nHLDebutGameType'){
-					return (
-						<div className="radioWrapper" key="nHLDebutGameType">
-							<h4 className="label">NHL Debut Game Type:</h4>
-							<div className="radioButtons" >	
-								<Field
-									name="nHLDebutGameType"
-									label="REG"
-									type="radio"
-									value="REG"
-									component={this.renderField}
-								/>
-								<Field
-									name="nHLDebutGameType"
-									label="PO"
-									type="radio"
-									value="PO"
-									component={this.renderField}
-								/>
-							</div>
-						</div>
-					);
+					return this.renderEitherOr(headings[a], 'REG');
 				} else if ((headings[a].name === 'birthCountry') || (headings[a].name === 'deathCountry')){
 					return (
 						<div className="radioWrapper" key={headings[a].name}>
@@ -195,7 +175,7 @@ class PlayerForm extends Component {
 					);
 				} else if (headings[a].name === 'nHLDebutSeason'){
 					const currentDate = new Date();
-					const currentYear = `${currentDate.getFullYear()}-${currentDate.getFullYear() + 1}`;
+					const currentYear = `${currentDate.getFullYear() - 1}-${currentDate.getFullYear()}`;
 					return this.renderEitherOr(headings[a], currentYear);
 				} else if (headings[a].name === 'reasonCareerEnded') {
 					return this.renderEitherOr(headings[a], 'ACTIVE');
