@@ -1,4 +1,4 @@
-import { FETCH_CERTIFICATES } from './action_types';
+import { FETCH_CERTIFICATES, LOADING } from './action_types';
 import * as firebase from 'firebase';
 
 import slug from '../functions/slug.js';
@@ -91,8 +91,13 @@ export function addCertificate(file, type, nameFormatted) {
 	const certStorageRef = storage.ref(filepath);
 	return dispatch => { certStorageRef.put(file).then(function(snapshot){
   		if (snapshot.state === "success"){
+				console.log('uploaded')
   			const imageUrl = snapshot.downloadURL;
-  			database.ref('certificates/' + typeCodes[type] + '/' + nameFormatted).set({ url : imageUrl });
+				database.ref('certificates/' + typeCodes[type] + '/' + nameFormatted).set({ url : imageUrl });
+				dispatch({
+					type: LOADING,
+					payload: false
+				})
   		}
 	});
 	}
@@ -105,7 +110,6 @@ export function transferCertificate(type, nameFormatted, imageUrl, oldPlayerSlug
 				url : imageUrl
 			});
 			database.ref('certificates/' + type ).child(oldPlayerSlug).remove();
-
 		};
 
 }

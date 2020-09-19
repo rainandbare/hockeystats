@@ -13,7 +13,7 @@ export const FETCH_BUTTONS = 'FETCH_BUTTONS';
 export const ADD_BUTTON = 'ADD_BUTTON';
 
 export const FETCH_CERTIFICATES = 'FETCH_CERTIFICATES';
-export const ADD_CERTIFICATE = 'ADD_CERTIFICATE'
+export const ADD_CERTIFICATES = 'ADD_CERTIFICATES'
 
 export const UPDATE_SEARCH = 'UPDATE_SEARCH';
 
@@ -27,3 +27,4 @@ export const LOG_IN_FAILED = 'LOG_IN_FAILED';
 
 export const FETCH_INPROGRESS = "FETCH_INPROGRESS";
 
+export const LOADING = 'LOADING';
