@@ -19,7 +19,7 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
-    "jquery": "^3.2.1",
+    "jquery": "^3.5.0",
     "react-scripts": "3.4.3"
   },
   "scripts": {
